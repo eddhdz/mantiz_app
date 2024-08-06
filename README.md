@@ -1,16 +1,17 @@
-# mantiz
+# Mantiz
 
 A new Flutter project.
 
-## Getting Started
+## Manejo de ramas
+### Ramas principales
+- main: Versión estable y libre de errores, funcionando en producción.
+- develop: Versión para tabajar nuevas caracteristicas.
+### Ramas de apoyo
+- feature: Extiende de la rama __develop__ y contiene nuevas funcionalidades o mejoras, siempre se integra a __develop__
+- release: Extiende de la rama __develop__ y se usara para pruebas finales y corregir errores menores, se integra a __develop__
+- hotfix: Extiende de la rama __develop__ y se usara para corregir errores criticos que se presentaron en producción, se integra a __develop__
+## Manejo de commits
+  
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
