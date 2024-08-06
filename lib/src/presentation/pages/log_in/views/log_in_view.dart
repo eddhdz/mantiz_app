@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/presentation/global/widgets/buttons/general_button.dart';
 
 import '../../../global/colors.dart';
+import '../../../global/widgets/buttons/general_button.dart';
 
 class LogInView extends StatefulWidget {
   const LogInView({super.key});
