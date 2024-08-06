@@ -54,7 +54,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: blueGlobalColor,
+      backgroundColor: blueStrongGlobalColor,
       body: Center(
         child: Text('MANTIZ'),
       ),

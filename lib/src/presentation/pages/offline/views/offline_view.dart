@@ -34,7 +34,7 @@ class OfflineView extends StatelessWidget {
             GeneralButton(
               text: 'Intentar de nuevo',
               textColor: Colors.black,
-              color: blueGlobalColor,
+              color: blueStrongGlobalColor,
               onPressed: () async {
                 final injector = Injector.of(context);
                 final connectivityRepository = injector.connectivityRepository;
