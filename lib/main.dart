@@ -8,11 +8,12 @@ import 'src/presentation/routes/app_routes.dart';
 import 'src/presentation/routes/routes.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(Injector(
       connectivityRepository: ConnectivityRepositoryImpl(Connectivity()),
-      authenticationRepository: AuthenticationRepositoryImpl(),
+      authenticationRepository: AuthenticationRepositoryImpl(const FlutterSecureStorage()),
       child: const MyApp()));
 }
 
