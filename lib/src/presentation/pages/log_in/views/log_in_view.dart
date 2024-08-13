@@ -98,11 +98,11 @@ class _LogInViewState extends State<LogInView> {
                                           Radius.circular(10)))),
                               onChanged: (text) {
                                 _password =
-                                    text.replaceAll(' ', '').toLowerCase();
+                                    text.replaceAll(' ', '');
                               },
                               validator: (value) {
                                 value =
-                                    value?.replaceAll(' ', '').toLowerCase() ??
+                                    value?.replaceAll(' ', '') ??
                                         '';
                                 if (value.length < 7) {
                                   return 'Invalid Password';
@@ -158,6 +158,7 @@ class _LogInViewState extends State<LogInView> {
           SignInFailure.notFound: 'Not Found',
           SignInFailure.unauthorized: 'Invalid password',
           SignInFailure.unknown: 'Error',
+          SignInFailure.network: 'No internet'
         }[failure];
 
         ScaffoldMessenger.of(context)

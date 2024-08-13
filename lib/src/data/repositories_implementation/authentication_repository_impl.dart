@@ -2,6 +2,7 @@ import '../../domain/either.dart';
 import '../../domain/enums.dart';
 import '../../domain/models/user_model.dart';
 import '../../domain/repositories/authentication_repository.dart';
+import '../services/remote/authentication_api.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -9,9 +10,11 @@ const _key = 'sessionId';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final FlutterSecureStorage _secureStorage;
+  final AuthenticationApi _authenticationApi;
 
   AuthenticationRepositoryImpl(
     this._secureStorage,
+    this._authenticationApi,
   );
 
   @override
@@ -30,17 +33,17 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     String userName,
     String password,
   ) async {
-    await Future.delayed(const Duration(seconds: 3));
-
-    if (userName != 'test') {
-      return Either.left(SignInFailure.notFound);
-    }
-    if (password != '1234567') {
-      return Either.left(SignInFailure.unauthorized);
-    }
-
-    await _secureStorage.write(key: _key, value: '1');
-
-    return Either.right(User());
+    final loginResult = await _authenticationApi.createSessionWithLogIn(
+      username: userName,
+      password: password,
+    );
+    return loginResult.when(
+      (failure) {
+        return Either.left(failure);
+      },
+      (newuserToken) {
+        return Either.right(User());
+      },
+    );
   }
 }
