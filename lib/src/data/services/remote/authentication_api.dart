@@ -13,17 +13,19 @@ class AuthenticationApi {
     required String username,
     required String password,
   }) async {
-    final result = await _http.request('', method: HttpMethod.post, body: {
-      "id": 1,
-      "username": username,
-      "password": password,
-      "encryptcode": "dc4514e898db7048305716fa928d61dc",
-      "platform": "Web Chrome",
-      "versionplatform": "1.0",
-      "versionapp": "1.0",
-      "token": "",
-      "createdat": "2024-06-11 12:57"
-    });
+    final result = await _http.request('/api/users/v1/mysql/profiles/signin',
+        method: HttpMethod.post,
+        body: {
+          "id": 1,
+          "username": username,
+          "password": password,
+          "encryptcode": "dc4514e898db7048305716fa928d61dc",
+          "platform": "Web Chrome",
+          "versionplatform": "1.0",
+          "versionapp": "1.0",
+          "token": "",
+          "createdat": "2024-06-11 12:57"
+        });
 
     return result.when(
       (failure) {

@@ -17,7 +17,7 @@ class Http {
 
   Http(this._client, this._baseUrl);
 
-  Future<Either<HttpFailure, String>> request(
+  Future<Either<HttpFailure, dynamic>> request(
     String path, {
     HttpMethod method = HttpMethod.get,
     Map<String, String> headers = const {},
@@ -115,8 +115,3 @@ class Http {
     }
   }
 }
-
-
-
-
-
