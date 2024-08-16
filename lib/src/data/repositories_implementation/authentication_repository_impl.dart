@@ -10,6 +10,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   Future<bool> get isSignedIn {
-    return Future.value(false);
+    return Future.value(true);
   }
 }
