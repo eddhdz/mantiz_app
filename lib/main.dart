@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/data/http/http.dart';
 
 import 'src/data/repositories_implementation/authentication_repository_impl.dart';
 import 'src/data/repositories_implementation/connectivity_repository_impl.dart';
@@ -17,9 +18,10 @@ void main() {
       connectivityRepository: ConnectivityRepositoryImpl(Connectivity()),
       authenticationRepository: AuthenticationRepositoryImpl(
         const FlutterSecureStorage(),
-        AuthenticationApi(
+        AuthenticationApi(Http(
           http.Client(),
-        ),
+          'http://172.168.10.20:17504/api/users/v1/mysql/profiles/signin',
+        )),
       ),
       child: const MyApp()));
 }
