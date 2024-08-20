@@ -32,6 +32,16 @@ class InitialFloatingButton extends StatelessWidget {
         SpeedDialChild(
             backgroundColor: blueNeutralGlobalColor,
             child: const Icon(
+              Icons.add,
+              color: blackPanter,
+            ),
+            label: 'Añadir ticket',
+            onTap: () async {
+              print('Aqui toy!!!');
+            }),
+        SpeedDialChild(
+            backgroundColor: blueNeutralGlobalColor,
+            child: const Icon(
               Icons.power_settings_new_rounded,
               color: blackPanter,
             ),

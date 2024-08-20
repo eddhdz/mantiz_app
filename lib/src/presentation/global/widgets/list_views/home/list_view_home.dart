@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mantiz/main.dart';
+import 'package:mantiz/src/presentation/global/widgets/buttons/button_box_horizontal.dart';
 
-import '../../../../../domain/models/branch_office_model.dart';
-import '../../../../../domain/models/maintenances_model.dart';
-import '../../../../../domain/models/who_partner_created_model.dart';
+import '../../../../../domain/enums.dart';
+import '../../../../../domain/models/models.dart';
 import '../../../colors.dart';
 import '../../texts/general_text.dart';
+
+part 'card_list_view_home.dart';
 
 class ListViewHome extends StatefulWidget {
   const ListViewHome({super.key});
@@ -23,66 +26,38 @@ class _ListViewHomeState extends State<ListViewHome> {
   bool _isLoading = false;
 
   Future<void> _loadAllTickets() async {
-    setState(() {
-      _isLoading = true;
-      _currentMaxIndex = 0;
-      _allTickets = [];
-      _visibleTickets = [];
-    });
+    final result = await Injector.of(context).homeRepository.loadMaintenances();
 
-    for (var item = 1; item < 100; item++) {
-      BranchOfficeModel branchOfficeModel = BranchOfficeModel(
-          id: 1,
-          fkSubcompany: 1,
-          description: 'CMT Juan Escutia',
-          location:
-              'Manuel González Cossío 7500, Churubusco, 31120 Chihuahua, Chih.',
-          latitud: '28.680731',
-          longitud: '-106.115810',
-          imagen: null,
-          clave: 'M020',
-          subcompany: 'Carne Mart',
-          uuidBO: 'c4ca4238a0b923820dcc509a6f75849b');
-
-      WhoPartnerCreatedModel whoPartnerCreatedModel = WhoPartnerCreatedModel(
-          idProfile: 2,
-          fullname: 'Enrique   Bachir Lazo',
-          email: 'ebachir@ecosat.com.mx',
-          phone: '6144275780',
-          userToken: 'c81e728d9d4c2f636f067f89cc14862c',
-          typeUser: 'Partner',
-          typeRole: 'Administrador');
-
-      MaintenancesModel model = MaintenancesModel(
-          id: 5,
-          fkTypeMaintenance: 1,
-          fkPLC: null,
-          fkCBO: 1,
-          fkStatusMaintenance: 1,
-          customer: 'Bafar',
-          folio: item,
-          viewFolio: '00000000000$item',
-          description: 'Falla en puerta',
-          area: 'Desarrolladores',
-          reason: 'La puerta del patio no funciona',
-          photoevidence: 'Un chingo de letras y números',
-          status: 'Creado',
-          type: 'Correctivo',
-          createdAt: DateTime.parse('2024-08-06T12:58:20.000Z'),
-          statusUpdateAt: null,
-          branchOfficeModel: branchOfficeModel,
-          whoPartnerCreatedModel: whoPartnerCreatedModel,
-          whoCustomerCreatedModel: null,
-          whoPartnerUpdatedModel: null,
-          whoCustomerUpdatedModel: null);
-
-      _allTickets.add(model);
+    if (!mounted) {
+      return;
     }
 
-    setState(() {
-      _visibleTickets = _allTickets.take(_itemsPerPage).toList();
-      _currentMaxIndex = _itemsPerPage;
-      _isLoading = false;
+    result.when((failure) {
+      final message = {
+        GeneralFailure.noData: 'No information',
+        GeneralFailure.unknown: 'Error',
+        GeneralFailure.network: 'No Internet',
+        GeneralFailure.clientError: 'Client side connection failure',
+        GeneralFailure.serverError: 'Server side connection failure',
+      }[failure];
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message!)));
+    }, (maintenances) {
+      setState(() {
+        _isLoading = true;
+        _currentMaxIndex = 0;
+        _allTickets = [];
+        _visibleTickets = [];
+      });
+
+      _allTickets = maintenances;
+
+      setState(() {
+        _visibleTickets = _allTickets.take(_itemsPerPage).toList();
+        _currentMaxIndex = _itemsPerPage;
+        _isLoading = false;
+      });
     });
   }
 
@@ -104,112 +79,14 @@ class _ListViewHomeState extends State<ListViewHome> {
     });
   }
 
-  Widget cardTicket(MaintenancesModel maintenance) {
-    return Wrap(children: <Widget>[
-      Column(children: <Widget>[
-        GestureDetector(
-          onTap: () {},
-          child: SizedBox(
-              child: Card(
-            elevation: 7,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            color: blueExtraLightGlobalColor,
-            child: Column(children: <Widget>[
-              //! Folio ...
-              Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(children: <Widget>[
-                    const SizedBox(width: 5),
-                    GeneralText(
-                        mensaje: 'Folio:',
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 14,
-                        weight: FontWeight.bold,
-                        color: blackPanter),
-                    GeneralText(
-                        mensaje: maintenance.viewFolio,
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 14,
-                        weight: FontWeight.normal,
-                        color: blackPanter),
-                    const SizedBox(width: 5),
-                  ])),
-
-              //! Título ...
-              Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(children: <Widget>[
-                    const SizedBox(width: 5),
-                    GeneralText(
-                        mensaje: 'Título:',
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 14,
-                        weight: FontWeight.bold,
-                        color: blackPanter),
-                    GeneralText(
-                        mensaje: maintenance.description,
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 14,
-                        weight: FontWeight.normal,
-                        color: blackPanter),
-                    const SizedBox(width: 5),
-                  ])),
-
-              //! Cliente y estatus ...
-              Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(children: <Widget>[
-                    const SizedBox(width: 5),
-                    GeneralText(
-                        mensaje: 'Cliente:',
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 14,
-                        weight: FontWeight.bold,
-                        color: blackPanter),
-                    GeneralText(
-                        mensaje: maintenance.customer,
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 14,
-                        weight: FontWeight.normal,
-                        color: blackPanter),
-                    Expanded(child: Container()),
-                    GeneralText(
-                        mensaje: 'Estatus:',
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 14,
-                        weight: FontWeight.bold,
-                        color: blackPanter),
-                    GeneralText(
-                        mensaje: maintenance.status,
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 14,
-                        weight: FontWeight.normal,
-                        color: blackPanter),
-                    const SizedBox(width: 5),
-                  ])),
-            ]),
-          )),
-        )
-      ])
-    ]);
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    _loadAllTickets();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadAllTickets();
+    });
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -233,20 +110,40 @@ class _ListViewHomeState extends State<ListViewHome> {
     var screenSize = MediaQuery.of(context).size;
 
     return Stack(children: <Widget>[
-      RefreshIndicator(
-        color: blueLightGlobalColor,
-        onRefresh: () => _loadAllTickets(),
-        child: ListView.builder(
-            controller: _scrollController,
-            itemCount: _visibleTickets.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Wrap(children: <Widget>[
-                Column(children: <Widget>[
-                  SizedBox(child: cardTicket(_visibleTickets[index])),
-                ])
-              ]);
-            }),
-      ),
+      (_allTickets.isEmpty)
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                    child: ButtonBoxHorizontal(buttons: [
+                  FloatingButtonPropertiesModel(
+                      icon: Icons.replay_outlined,
+                      backGround: blueLightGlobalColor,
+                      foreGround: whiteGlobalColor,
+                      onPressed: () async {
+                        await _loadAllTickets();
+                      },
+                      label: 'Recargar pantalla',
+                      heroTag: 'btnAddTicket'),
+                ]))
+              ],
+            )
+          : RefreshIndicator(
+              color: blueLightGlobalColor,
+              onRefresh: () => _loadAllTickets(),
+              child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: _scrollController,
+                  itemCount: _visibleTickets.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Wrap(children: <Widget>[
+                      Column(children: <Widget>[
+                        SizedBox(child: cardTicket(_visibleTickets[index])),
+                      ])
+                    ]);
+                  }),
+            ),
       (_isLoading)
           ? Positioned(
               bottom: 40,

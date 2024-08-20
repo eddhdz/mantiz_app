@@ -11,9 +11,11 @@ class ButtonBoxHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+        alignment: Alignment.center,
         height: 60,
         child: ListView.builder(
+            shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemCount: buttons.length,
             itemBuilder: (_, int index) {
