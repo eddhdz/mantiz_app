@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../http/http.dart';
+
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class AuthenticationApi {
   final Http _http;
@@ -13,6 +17,11 @@ class AuthenticationApi {
     required String username,
     required String password,
   }) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    final versionPlatform = await mobileVersion();
+    final platform = Platform.isIOS ? 'iOS' : 'Android';
+
     final result = await _http.request('/api/users/v1/mysql/profiles/signin',
         method: HttpMethod.post,
         body: {
@@ -20,9 +29,9 @@ class AuthenticationApi {
           "username": username,
           "password": password,
           "encryptcode": "dc4514e898db7048305716fa928d61dc",
-          "platform": "Web Chrome",
-          "versionplatform": "1.0",
-          "versionapp": "1.0",
+          "platform": platform,
+          "versionplatform": versionPlatform,
+          "versionapp": packageInfo.version,
           "token": "",
           "createdat": "2024-06-11 12:57"
         });
@@ -44,5 +53,19 @@ class AuthenticationApi {
         return Either.right(newUserToken);
       },
     );
+  }
+
+  Future<String> mobileVersion() async {
+    final deviceInfoPlugin = DeviceInfoPlugin();
+
+    if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
+      return iosInfo.systemVersion;
+    }
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+      return androidInfo.version.release;
+    }
+    return '';
   }
 }

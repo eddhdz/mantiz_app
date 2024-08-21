@@ -16,6 +16,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(Injector(
       connectivityRepository: ConnectivityRepositoryImpl(Connectivity()),
       authenticationRepository: AuthenticationRepositoryImpl(
