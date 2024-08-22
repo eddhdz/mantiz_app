@@ -97,13 +97,10 @@ class _LogInViewState extends State<LogInView> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10)))),
                               onChanged: (text) {
-                                _password =
-                                    text.replaceAll(' ', '');
+                                _password = text.replaceAll(' ', '');
                               },
                               validator: (value) {
-                                value =
-                                    value?.replaceAll(' ', '') ??
-                                        '';
+                                value = value?.replaceAll(' ', '') ?? '';
                                 if (value.length < 7) {
                                   return 'Invalid Password';
                                 }
@@ -156,7 +153,7 @@ class _LogInViewState extends State<LogInView> {
         });
         final message = {
           SignInFailure.notFound: 'Not Found',
-          SignInFailure.unauthorized: 'Invalid password',
+          SignInFailure.unauthorized: 'Invalid credentials',
           SignInFailure.unknown: 'Error',
           SignInFailure.network: 'No internet'
         }[failure];
@@ -164,7 +161,7 @@ class _LogInViewState extends State<LogInView> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(message!)));
       },
-      (user) {
+      (userInfo) {
         Navigator.pushReplacementNamed(context, Routes.home);
       },
     );

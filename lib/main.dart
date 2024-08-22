@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/data/services/remote/ports.dart';
 
 import 'src/data/http/http.dart';
 import 'src/data/repositories_implementation/authentication_repository_impl.dart';
@@ -23,7 +22,7 @@ void main() {
         const FlutterSecureStorage(),
         AuthenticationApi(Http(
           http.Client(),
-          '${BaseUrl.baseUrl}${Ports.apiUsersPort}',
+          BaseUrl.baseUrl,
         )),
       ),
       child: const MyApp()));
