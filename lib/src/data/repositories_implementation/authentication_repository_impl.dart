@@ -29,7 +29,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<SignInFailure, User>> signIn(
+  Future<Either<SignInFailure, String>> signIn(
     String userName,
     String password,
   ) async {
@@ -41,8 +41,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       (failure) {
         return Either.left(failure);
       },
-      (newuserToken) {
-        return Either.right(User());
+      (profileUser) {
+        return Either.right(profileUser);
       },
     );
   }

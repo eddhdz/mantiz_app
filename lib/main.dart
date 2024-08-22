@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/data/services/remote/ports.dart';
 
 import 'src/data/http/http.dart';
 import 'src/data/repositories_implementation/authentication_repository_impl.dart';
@@ -16,13 +15,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(Injector(
       connectivityRepository: ConnectivityRepositoryImpl(Connectivity()),
       authenticationRepository: AuthenticationRepositoryImpl(
         const FlutterSecureStorage(),
         AuthenticationApi(Http(
           http.Client(),
-          '${BaseUrl.baseUrl}${Ports.apiUsersPort}',
+          BaseUrl.baseUrl,
         )),
       ),
       child: const MyApp()));
