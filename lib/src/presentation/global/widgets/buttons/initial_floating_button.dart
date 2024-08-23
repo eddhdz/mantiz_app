@@ -26,9 +26,7 @@ class InitialFloatingButton extends StatelessWidget {
               color: blackPanter,
             ),
             label: 'Perfil de Usuario',
-            onTap: () async {
-              print('Aqui toy!!!');
-            }),
+            onTap: () async {}),
         SpeedDialChild(
             backgroundColor: blueNeutralGlobalColor,
             child: const Icon(
@@ -36,9 +34,7 @@ class InitialFloatingButton extends StatelessWidget {
               color: blackPanter,
             ),
             label: 'Añadir ticket',
-            onTap: () async {
-              print('Aqui toy!!!');
-            }),
+            onTap: () async {}),
         SpeedDialChild(
             backgroundColor: blueNeutralGlobalColor,
             child: const Icon(
@@ -46,9 +42,7 @@ class InitialFloatingButton extends StatelessWidget {
               color: blackPanter,
             ),
             label: 'Salir',
-            onTap: () async {
-              print('Aqui tañien!!!');
-            }),
+            onTap: () async {}),
       ],
     );
   }

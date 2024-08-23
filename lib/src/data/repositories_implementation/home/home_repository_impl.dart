@@ -5,7 +5,7 @@ import '../../../domain/repositories/home/home_repository.dart';
 import '../../services/remote/home/home_api.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
-  HomeApi _homeApi;
+  final HomeApi _homeApi;
 
   HomeRepositoryImpl(this._homeApi);
 

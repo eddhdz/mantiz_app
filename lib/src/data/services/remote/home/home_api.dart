@@ -28,7 +28,7 @@ class HomeApi {
         return Either.left(GeneralFailure.unknown);
       }
     }, (responseBody) {
-      List<MaintenancesModel> _maintenances = [];
+      List<MaintenancesModel> maintenances = [];
 
       final json = Map<String, dynamic>.from(jsonDecode(responseBody));
 
@@ -141,10 +141,10 @@ class HomeApi {
             whoPartnerUpdatedModel: whoPartnerUpdatedModel,
             whoCustomerUpdatedModel: whoCustomerUpdatedModel);
 
-        _maintenances.add(maintenancesModel);
+        maintenances.add(maintenancesModel);
       }
 
-      return Either.right(_maintenances);
+      return Either.right(maintenances);
     });
   }
 }

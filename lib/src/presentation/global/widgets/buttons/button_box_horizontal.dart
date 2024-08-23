@@ -5,9 +5,9 @@ import '../../colors.dart';
 import '../texts/general_text.dart';
 
 class ButtonBoxHorizontal extends StatelessWidget {
-  List<FloatingButtonPropertiesModel> buttons;
+  final List<FloatingButtonPropertiesModel> buttons;
 
-  ButtonBoxHorizontal({super.key, required this.buttons});
+  const ButtonBoxHorizontal({super.key, required this.buttons});
 
   @override
   Widget build(BuildContext context) {

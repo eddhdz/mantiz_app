@@ -18,7 +18,7 @@ Widget cardTicket(MaintenancesModel maintenance) {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Row(children: <Widget>[
                   const SizedBox(width: 5),
-                  GeneralText(
+                  const GeneralText(
                       mensaje: 'Folio:',
                       maxLines: 1,
                       overFlow: TextOverflow.ellipsis,
@@ -40,7 +40,7 @@ Widget cardTicket(MaintenancesModel maintenance) {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Row(children: <Widget>[
                   const SizedBox(width: 5),
-                  GeneralText(
+                  const GeneralText(
                       mensaje: 'Título:',
                       maxLines: 1,
                       overFlow: TextOverflow.ellipsis,
@@ -62,7 +62,7 @@ Widget cardTicket(MaintenancesModel maintenance) {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Row(children: <Widget>[
                   const SizedBox(width: 5),
-                  GeneralText(
+                  const GeneralText(
                       mensaje: 'Cliente:',
                       maxLines: 1,
                       overFlow: TextOverflow.ellipsis,
@@ -77,7 +77,7 @@ Widget cardTicket(MaintenancesModel maintenance) {
                       weight: FontWeight.normal,
                       color: blackPanter),
                   Expanded(child: Container()),
-                  GeneralText(
+                  const GeneralText(
                       mensaje: 'Estatus:',
                       maxLines: 1,
                       overFlow: TextOverflow.ellipsis,

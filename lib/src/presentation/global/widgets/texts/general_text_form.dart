@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
 
 class GeneralTextForm extends StatelessWidget {
-  String label;
-  bool enable;
-  Color objectsColor;
-  Color textColor;
-  String? Function(String?)? validator;
-  ValueChanged<String> onChange;
+  final String label;
+  final bool enable;
+  final Color objectsColor;
+  final Color textColor;
+  final bool obscureText;
+  final String? Function(String?)? validator;
+  final ValueChanged<String> onChange;
+  final TextEditingController controller;
 
-  GeneralTextForm(
+  const GeneralTextForm(
       {super.key,
       required this.label,
       required this.enable,
       required this.objectsColor,
       required this.textColor,
+      required this.obscureText,
       required this.validator,
-      required this.onChange});
+      required this.onChange,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) => validator!(value),
       onChanged: (value) => onChange(value),
-      obscureText: true,
+      obscureText: obscureText,
       enabled: enable,
       cursorColor: objectsColor,
+      controller: controller,
       keyboardType: TextInputType.emailAddress,
       style: TextStyle(
         color: textColor,
