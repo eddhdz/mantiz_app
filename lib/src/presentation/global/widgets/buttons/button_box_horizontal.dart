@@ -5,15 +5,17 @@ import '../../colors.dart';
 import '../texts/general_text.dart';
 
 class ButtonBoxHorizontal extends StatelessWidget {
-  List<FloatingButtonPropertiesModel> buttons;
+  final List<FloatingButtonPropertiesModel> buttons;
 
-  ButtonBoxHorizontal({super.key, required this.buttons});
+  const ButtonBoxHorizontal({super.key, required this.buttons});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+        alignment: Alignment.center,
         height: 60,
         child: ListView.builder(
+            shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemCount: buttons.length,
             itemBuilder: (_, int index) {

@@ -69,7 +69,7 @@ class AuthenticationApi {
       {required String token}) async {
     final result = await _http.request(
       '/api/mantiz/v1/mysql/login',
-      Ports.apiMantizPort,
+      Ports.mantizPort,
       method: HttpMethod.post,
       body: {"uuid": token},
     );

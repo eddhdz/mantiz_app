@@ -12,7 +12,7 @@ class MaintenancesModel {
   String description;
   String area;
   String reason;
-  String photoevidence;
+  String? photoevidence;
   String status;
   String type;
   DateTime createdAt;
