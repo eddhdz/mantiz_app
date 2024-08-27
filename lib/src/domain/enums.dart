@@ -10,3 +10,11 @@ enum HttpMethod {
   post,
   delete,
 }
+
+enum GeneralFailure {
+  noData,
+  unknown,
+  network,
+  clientError,
+  serverError,
+}

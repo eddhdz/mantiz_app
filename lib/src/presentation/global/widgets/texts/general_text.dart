@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GeneralText extends StatelessWidget {
-  String mensaje;
-  int maxLines;
-  TextOverflow overFlow;
-  double size;
-  FontWeight weight;
-  Color color;
+  final String mensaje;
+  final int maxLines;
+  final TextOverflow overFlow;
+  final double size;
+  final FontWeight weight;
+  final Color color;
 
-  GeneralText(
+  const GeneralText(
       {super.key,
       required this.mensaje,
       required this.maxLines,
