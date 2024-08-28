@@ -128,7 +128,9 @@ class HomeApi {
             description: ticket['description'],
             area: ticket['area'],
             reason: ticket['reason'],
-            photoevidence: ticket['photoevidence'],
+            photoevidence: (ticket['photoevidence'] != null)
+                ? ticket['photoevidence']
+                : null,
             status: ticket['status'],
             type: ticket['type'],
             createdAt: DateTime.parse(ticket['createdAt'].toString()),

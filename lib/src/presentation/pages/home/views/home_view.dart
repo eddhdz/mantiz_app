@@ -48,7 +48,8 @@ class _HomeViewState extends State<HomeView> {
               overFlow: TextOverflow.ellipsis,
               size: 17,
               weight: FontWeight.bold,
-              color: blackPanter)),
+              color: blackPanter,
+              align: TextAlign.center)),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 10),
