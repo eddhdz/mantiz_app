@@ -8,6 +8,7 @@ class GeneralText extends StatelessWidget {
   final double size;
   final FontWeight weight;
   final Color color;
+  final TextAlign align;
 
   const GeneralText(
       {super.key,
@@ -16,11 +17,13 @@ class GeneralText extends StatelessWidget {
       required this.overFlow,
       required this.size,
       required this.weight,
-      required this.color});
+      required this.color,
+      required this.align});
 
   @override
   Widget build(BuildContext context) {
     return Text(mensaje,
+        textAlign: align,
         maxLines: maxLines,
         overflow: overFlow,
         style: GoogleFonts.barlow(

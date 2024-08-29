@@ -3,6 +3,7 @@ import 'package:mantiz/src/data/repositories_implementation/home/home_repository
 import 'package:mantiz/src/data/services/remote/home/home_api.dart';
 import 'package:mantiz/src/domain/repositories/home/home_repository.dart';
 import 'package:mantiz/src/presentation/pages/home/views/home_view_vm.dart';
+import 'package:mantiz/src/presentation/pages/new_ticket/views/new_ticket_view_vm.dart';
 
 import 'src/data/http/http.dart';
 import 'src/data/repositories_implementation/authentication_repository_impl.dart';
@@ -22,7 +23,10 @@ import 'package:provider/provider.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: HomeViewVm())],
+      providers: [
+        ChangeNotifierProvider.value(value: HomeViewVm()),
+        ChangeNotifierProvider.value(value: NewTicketViewVM())
+      ],
       child: Injector(
           connectivityRepository: ConnectivityRepositoryImpl(Connectivity()),
           authenticationRepository: AuthenticationRepositoryImpl(
