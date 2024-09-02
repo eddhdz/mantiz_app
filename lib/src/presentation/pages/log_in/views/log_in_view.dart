@@ -97,14 +97,11 @@ class _LogInViewState extends State<LogInView> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10)))),
                               onChanged: (text) {
-                                _password =
-                                    text.replaceAll(' ', '');
+                                _password = text.replaceAll(' ', '');
                               },
                               validator: (value) {
-                                value =
-                                    value?.replaceAll(' ', '') ??
-                                        '';
-                                if (value.length < 7) {
+                                value = value?.replaceAll(' ', '') ?? '';
+                                if (value.length < 3) {
                                   return 'Invalid Password';
                                 }
                                 return null;

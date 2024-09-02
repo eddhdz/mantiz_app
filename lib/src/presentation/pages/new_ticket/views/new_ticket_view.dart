@@ -156,10 +156,14 @@ class _NewTicketViewState extends State<NewTicketView> {
                             });
 
                         if (yesOrNo != null) {
+                          await vm.vmInit();
+
                           if (yesOrNo) {
                             //! Abrimos cámara para tomar foto ...
+                            await vm.goToCamera();
                           } else {
                             //! Cargamos una imágen de la galería ...
+                            await vm.selectImage();
                           }
                         }
                       },
@@ -176,9 +180,12 @@ class _NewTicketViewState extends State<NewTicketView> {
                           shadowColor: blueExtraLightGlobalColor,
                           rounded: 1,
                           borderWidth: 2,
-                          widget: const Image(
-                              image: AssetImage('lib/src/assets/camera.png'),
-                              fit: BoxFit.scaleDown),
+                          widget: (vm.evidence == null)
+                              ? const Image(
+                                  image:
+                                      AssetImage('lib/src/assets/camera.png'),
+                                  fit: BoxFit.scaleDown)
+                              : Image.file(vm.evidence!, fit: BoxFit.scaleDown),
                           margin: const EdgeInsets.all(0))),
                   const SizedBox(width: 10),
                 ]))),

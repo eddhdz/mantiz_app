@@ -13,7 +13,7 @@ class HomeApi {
   Future<Either<GeneralFailure, List<MaintenancesModel>>>
       loadMaintenances() async {
     final result = await _http.request('/api/mantiz/v1/mysql/tickets',
-        method: HttpMethod.post, body: {'id': '0'});
+        method: HttpMethod.post, body: {'id': '1'});
 
     return result.when((failure) {
       if (failure.statusCode == null) {
