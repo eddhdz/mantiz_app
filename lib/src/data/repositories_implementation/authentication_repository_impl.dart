@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../domain/either.dart';
 import '../../domain/enums.dart';
 import '../../domain/models/user_model.dart';
@@ -42,6 +44,14 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         return Either.left(failure);
       },
       (profileUser) {
+        _secureStorage.write(
+          key: 'fkPartner',
+          value: jsonDecode(profileUser)['fkPartner'].toString(),
+        );
+        _secureStorage.write(
+          key: 'fkPartnerLicence',
+          value: jsonDecode(profileUser)['fkPartnerLicence'].toString(),
+        );
         return Either.right(profileUser);
       },
     );

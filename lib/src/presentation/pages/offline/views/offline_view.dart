@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../main.dart';
+import '../../../../domain/repositories/connectivity_repository.dart';
 import '../../../global/colors.dart';
 import '../../../global/widgets/buttons/general_button.dart';
 import '../../../routes/routes.dart';
+
+import 'package:provider/provider.dart';
 
 class OfflineView extends StatelessWidget {
   const OfflineView({super.key});
@@ -36,8 +39,11 @@ class OfflineView extends StatelessWidget {
               textColor: Colors.black,
               color: blueStrongGlobalColor,
               onPressed: () async {
-                final injector = Injector.of(context);
-                final connectivityRepository = injector.connectivityRepository;
+                final connectivityRepository =
+                    Provider.of<ConnectivityRepository>(
+                  context,
+                  listen: false,
+                );
                 final hasInternet = await connectivityRepository.hasInternet;
                 if (hasInternet) {
                   // ignore: use_build_context_synchronously

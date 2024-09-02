@@ -23,24 +23,30 @@ import 'package:provider/provider.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: HomeViewVm()),
-        ChangeNotifierProvider.value(value: NewTicketViewVM())
-      ],
-      child: Injector(
-          connectivityRepository: ConnectivityRepositoryImpl(Connectivity()),
-          authenticationRepository: AuthenticationRepositoryImpl(
-            const FlutterSecureStorage(),
-            AuthenticationApi(Http(
-              http.Client(),
-              BaseUrl.baseUrl,
-            )),
-          ),
-          homeRepository: HomeRepositoryImpl(HomeApi(Http(
+    providers: [
+      Provider<ConnectivityRepository>(
+        create: (_) => ConnectivityRepositoryImpl(Connectivity()),
+      ),
+      Provider<AuthenticationRepository>(
+        create: (_) => AuthenticationRepositoryImpl(
+          const FlutterSecureStorage(),
+          AuthenticationApi(Http(
             http.Client(),
             BaseUrl.baseUrl,
-          ))),
-          child: const MyApp())));
+          )),
+        ),
+      ),
+      ChangeNotifierProvider.value(value: HomeViewVm()),
+      ChangeNotifierProvider.value(value: NewTicketViewVM()),
+      Provider<HomeRepository>(
+        create: (_) => HomeRepositoryImpl(HomeApi(Http(
+          http.Client(),
+          BaseUrl.baseUrl,
+        ))),
+      ),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -58,27 +64,5 @@ class MyApp extends StatelessWidget {
         routes: appRoutes,
       ),
     );
-  }
-}
-
-class Injector extends InheritedWidget {
-  const Injector(
-      {super.key,
-      required super.child,
-      required this.connectivityRepository,
-      required this.authenticationRepository,
-      required this.homeRepository});
-
-  final ConnectivityRepository connectivityRepository;
-  final AuthenticationRepository authenticationRepository;
-  final HomeRepository homeRepository;
-
-  @override
-  // ignore: avoid_renaming_method_parameters
-  bool updateShouldNotify(_) => false;
-  static Injector of(BuildContext context) {
-    final injector = context.dependOnInheritedWidgetOfExactType<Injector>();
-    assert(injector != null, 'Injector could not be found');
-    return injector!;
   }
 }

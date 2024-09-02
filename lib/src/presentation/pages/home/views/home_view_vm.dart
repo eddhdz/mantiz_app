@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../main.dart';
 import '../../../../domain/enums.dart';
 import '../../../../domain/models/maintenances_model.dart';
+import '../../../../domain/repositories/home/home_repository.dart';
+
+import 'package:provider/provider.dart';
 
 class HomeViewVm with ChangeNotifier {
   List<MaintenancesModel> allTickets = [];
@@ -19,7 +21,8 @@ class HomeViewVm with ChangeNotifier {
     _visibleTickets = [];
     notifyListeners();
 
-    final result = await Injector.of(context).homeRepository.loadMaintenances();
+    final result = await Provider.of<HomeRepository>(context, listen: false)
+        .loadMaintenances();
 
     result.when((failure) {
       final message = {
