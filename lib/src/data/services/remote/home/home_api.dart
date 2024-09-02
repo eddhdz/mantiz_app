@@ -17,7 +17,7 @@ class HomeApi {
       '/api/mantiz/v1/mysql/tickets',
       Ports.mantizPort,
       method: HttpMethod.post,
-      body: {'id': '0'},
+      body: {'id': '1'},
     );
 
     return result.when((failure) {
@@ -133,7 +133,9 @@ class HomeApi {
             description: ticket['description'],
             area: ticket['area'],
             reason: ticket['reason'],
-            photoevidence: ticket['photoevidence'],
+            photoevidence: (ticket['photoevidence'] != null)
+                ? ticket['photoevidence']
+                : null,
             status: ticket['status'],
             type: ticket['type'],
             createdAt: DateTime.parse(ticket['createdAt'].toString()),

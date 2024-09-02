@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 //! imports locales ...
+import '../../../routes/routes.dart';
 import '../../colors.dart';
 
 //! paquetes implementados ...
@@ -17,7 +18,7 @@ class InitialFloatingButton extends StatelessWidget {
       iconTheme: const IconThemeData(color: blackPanter),
       backgroundColor: lockWidget,
       spaceBetweenChildren: 5,
-      closeManually: true,
+      closeManually: false,
       children: [
         SpeedDialChild(
             backgroundColor: blueNeutralGlobalColor,
@@ -34,7 +35,9 @@ class InitialFloatingButton extends StatelessWidget {
               color: blackPanter,
             ),
             label: 'Añadir ticket',
-            onTap: () async {}),
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.newTicket);
+            }),
         SpeedDialChild(
             backgroundColor: blueNeutralGlobalColor,
             child: const Icon(

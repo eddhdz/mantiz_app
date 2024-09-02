@@ -86,7 +86,7 @@ class AuthenticationApi {
       },
       (responseBody) {
         final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-        return Either.right(json['sessions'][0]['profile']);
+        return Either.right(jsonEncode(json['sessions'][0]));
       },
     );
   }

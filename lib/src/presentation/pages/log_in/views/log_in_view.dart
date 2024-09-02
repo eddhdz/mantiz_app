@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/main.dart';
-import 'package:mantiz/src/domain/enums.dart';
 
+import '../../../../domain/enums.dart';
+import '../../../../domain/repositories/authentication_repository.dart';
 import '../../../global/colors.dart';
 import '../../../global/widgets/buttons/general_button.dart';
 import '../../../routes/routes.dart';
+
+import 'package:provider/provider.dart';
 
 class LogInView extends StatefulWidget {
   const LogInView({super.key});
@@ -101,7 +103,7 @@ class _LogInViewState extends State<LogInView> {
                               },
                               validator: (value) {
                                 value = value?.replaceAll(' ', '') ?? '';
-                                if (value.length < 7) {
+                                if (value.length < 3) {
                                   return 'Invalid Password';
                                 }
                                 return null;
@@ -138,9 +140,9 @@ class _LogInViewState extends State<LogInView> {
     setState(() {
       _fetching = true;
     });
-    final result = await Injector.of(context)
-        .authenticationRepository
-        .signIn(_userName, _password);
+    final result =
+        await Provider.of<AuthenticationRepository>(context, listen: false)
+            .signIn(_userName, _password);
 
     if (!mounted) {
       return;

@@ -42,7 +42,8 @@ class ButtonBoxHorizontal extends StatelessWidget {
                             overFlow: TextOverflow.ellipsis,
                             size: 12,
                             weight: FontWeight.normal,
-                            color: whiteGlobalColor),
+                            color: whiteGlobalColor,
+                            align: TextAlign.center),
                         icon: Icon(button.icon),
                       ),
               );
