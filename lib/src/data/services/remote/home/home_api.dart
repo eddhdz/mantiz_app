@@ -17,7 +17,7 @@ class HomeApi {
       '/api/mantiz/v1/mysql/tickets',
       Ports.mantizPort,
       method: HttpMethod.post,
-      body: {'id': '0'},
+      body: {'id': '1'},
     );
 
     return result.when((failure) {

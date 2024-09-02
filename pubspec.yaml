@@ -38,14 +38,10 @@ dependencies:
   package_info_plus: ^8.0.2
   device_info_plus: ^10.1.2
   http: ^1.2.2
+  image_picker: ^1.1.2
   provider: ^6.1.2
 
 dev_dependencies:
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
