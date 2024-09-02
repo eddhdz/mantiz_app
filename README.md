@@ -19,6 +19,10 @@ A new Flutter project.
 - refactor: Refactorizacion de codigo sin cambios en la funcionalidad
 - test: Añadir o corregir pruebas
 - perf: Cambios que mejoran el rendimiento de la app
+###SecureStorage
+##Keys
+- fkPartner
+- fkPartnerLicence
   
 
 
