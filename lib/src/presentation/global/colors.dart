@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
 
+//! blues ...
 const Color blueNeutralGlobalColor = Color(0XFF529DD6);
 const Color blueStrongGlobalColor = Color(0XFF0D2D47);
 const Color blueLightGlobalColor = Color(0XFF3371A0);
+
+//! grays ...
+const Color lockWidget = Color(0XFFBFBFBF);
+
+//! darks ...
+const Color blackPanter = Color(0xFF000000);
+
+//! lights ...
+const Color whiteGlobalColor = Color(0XFFFFFFFF);
 const Color blueExtraLightGlobalColor = Color(0XFFD8ECFF);
 
-const Color whiteGlobalColor = Color(0XFFFFFFFF);
+//! reds ...
+const Color redPrincipal = Color(0XFFA1354B);
+
+//! orange ...
+const Color orangePrincipal = Color(0XFFFF5F18);
+
+//! greens ...
+const Color greenPrincipal = Color(0XFF2A8453);

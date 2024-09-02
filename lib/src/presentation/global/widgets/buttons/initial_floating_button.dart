@@ -1,0 +1,52 @@
+//! flutter ...
+import 'package:flutter/material.dart';
+
+//! imports locales ...
+import '../../../routes/routes.dart';
+import '../../colors.dart';
+
+//! paquetes implementados ...
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
+class InitialFloatingButton extends StatelessWidget {
+  const InitialFloatingButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SpeedDial(
+      icon: Icons.keyboard_control,
+      iconTheme: const IconThemeData(color: blackPanter),
+      backgroundColor: lockWidget,
+      spaceBetweenChildren: 5,
+      closeManually: false,
+      children: [
+        SpeedDialChild(
+            backgroundColor: blueNeutralGlobalColor,
+            child: const Icon(
+              Icons.account_circle,
+              color: blackPanter,
+            ),
+            label: 'Perfil de Usuario',
+            onTap: () async {}),
+        SpeedDialChild(
+            backgroundColor: blueNeutralGlobalColor,
+            child: const Icon(
+              Icons.add,
+              color: blackPanter,
+            ),
+            label: 'Añadir ticket',
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.newTicket);
+            }),
+        SpeedDialChild(
+            backgroundColor: blueNeutralGlobalColor,
+            child: const Icon(
+              Icons.power_settings_new_rounded,
+              color: blackPanter,
+            ),
+            label: 'Salir',
+            onTap: () async {}),
+      ],
+    );
+  }
+}
