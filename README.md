@@ -11,6 +11,14 @@ A new Flutter project.
 - release: Extiende de la rama __develop__ y se usara para pruebas finales y corregir errores menores, se integra a __develop__
 - hotfix: Extiende de la rama __develop__ y se usara para corregir errores criticos que se presentaron en producción, se integra a __develop__
 ## Manejo de commits
+### Palabras clave
+- feat: Nueva caracteristica para el usuario
+- fix: Correccion de errores
+- docs: Cambios relacionados con la documentacion
+- style: Cambios que no afectan la logica del codigo y solo lo visual
+- refactor: Refactorizacion de codigo sin cambios en la funcionalidad
+- test: Añadir o corregir pruebas
+- perf: Cambios que mejoran el rendimiento de la app
   
 
 
