@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mantiz/src/data/repositories_implementation/home/home_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/new_ticket/new_ticket_repository_impl.dart';
 import 'package:mantiz/src/data/services/remote/home/home_api.dart';
+import 'package:mantiz/src/data/services/remote/new_ticket/new_ticket_api.dart';
 import 'package:mantiz/src/domain/repositories/home/home_repository.dart';
+import 'package:mantiz/src/domain/repositories/new_ticket/new_ticket_repository.dart';
 import 'package:mantiz/src/presentation/pages/home/views/home_view_vm.dart';
 import 'package:mantiz/src/presentation/pages/new_ticket/views/new_ticket_view_vm.dart';
 
@@ -24,6 +27,12 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider.value(value: HomeViewVm()),
+      ChangeNotifierProvider.value(value: NewTicketViewVM()),
+      Provider<NewTicketRepository>(
+          create: (_) => NewTicketRepositoryImpl(
+              NewTicketApi(Http(http.Client(), BaseUrl.baseUrl)),
+              const FlutterSecureStorage())),
       Provider<ConnectivityRepository>(
         create: (_) => ConnectivityRepositoryImpl(Connectivity()),
       ),
@@ -36,13 +45,13 @@ void main() {
           )),
         ),
       ),
-      ChangeNotifierProvider.value(value: HomeViewVm()),
-      ChangeNotifierProvider.value(value: NewTicketViewVM()),
       Provider<HomeRepository>(
-        create: (_) => HomeRepositoryImpl(HomeApi(Http(
-          http.Client(),
-          BaseUrl.baseUrl,
-        ))),
+        create: (_) => HomeRepositoryImpl(
+            HomeApi(Http(
+              http.Client(),
+              BaseUrl.baseUrl,
+            )),
+            const FlutterSecureStorage()),
       ),
     ],
     child: const MyApp(),

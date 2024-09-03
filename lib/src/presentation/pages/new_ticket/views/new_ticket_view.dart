@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../domain/models/models.dart';
 import '../../../global/colors.dart';
@@ -10,6 +9,7 @@ import '../../../global/widgets/texts/general_text.dart';
 import '../../../global/widgets/texts/general_text_form.dart';
 
 import 'package:mantiz/src/presentation/pages/new_ticket/views/new_ticket_view_vm.dart';
+import 'package:provider/provider.dart';
 
 class NewTicketView extends StatefulWidget {
   const NewTicketView({super.key});
@@ -30,8 +30,7 @@ class _NewTicketViewState extends State<NewTicketView> {
     final vmInit = Provider.of<NewTicketViewVM>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      vmInit.loadCustomer();
-      vmInit.loadSucursal();
+      vmInit.loadCustomer(context);
     });
   }
 

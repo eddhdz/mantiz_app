@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../../../../domain/enums.dart';
 import '../../../../domain/models/models.dart';
+import '../../../../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../../../global/colors.dart';
 import '../photos/camera_gallery_service.dart';
+
+import 'package:provider/provider.dart';
 
 class NewTicketViewVM with ChangeNotifier {
   bool _isLoading = false;
@@ -76,21 +80,29 @@ class NewTicketViewVM with ChangeNotifier {
     }
   }
 
-  Future<void> loadCustomer() async {
+  Future<void> loadCustomer(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
     _customers = [];
-    for (var i = 0; i <= 3; i++) {
-      CustomerModel cus = CustomerModel(
-          id: i,
-          fkPartner: i + 5,
-          partner: 'gamesa-$i',
-          fkCustomer: 10,
-          customer: 'soy Gamesa-$i');
+    final result =
+        await Provider.of<NewTicketRepository>(context, listen: false)
+            .loadCustomers();
 
-      _customers.add(cus);
-    }
+    result.when((failure) {
+      final message = {
+        GeneralFailure.noData: 'No information',
+        GeneralFailure.unknown: 'Error',
+        GeneralFailure.network: 'No Internet',
+        GeneralFailure.clientError: 'Client side connection failure',
+        GeneralFailure.serverError: 'Server side connection failure',
+      }[failure];
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message!)));
+    }, (customers) {
+      _customers = customers;
+    });
 
     _selectedCustomer = _customers[0];
     _isLoading = false;
@@ -100,6 +112,8 @@ class NewTicketViewVM with ChangeNotifier {
   Future<void> customerSelectedAction(CustomerModel customer) async {
     _selectedCustomer = customer;
     notifyListeners();
+
+    //! Cargamos sucursales correspondientes al cliente seleccionado ...
   }
 
   Future<void> loadSucursal() async {
