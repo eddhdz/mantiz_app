@@ -1,3 +1,5 @@
+import 'package:mantiz/src/domain/models/branch_office_model.dart';
+
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/models/customer_model.dart';
@@ -13,6 +15,21 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
   NewTicketRepositoryImpl(this._newTicketApi, this._storage);
 
   @override
+  Future<Either<GeneralFailure, List<BranchOfficeModel>>> loadBranchs(
+      int fkCustomer) async {
+    final branchResult = await _newTicketApi.loadBranchs(fkCustomer);
+
+    return branchResult.when(
+      (failure) {
+        return Either.left(failure);
+      },
+      (branchs) {
+        return Either.right(branchs);
+      },
+    );
+  }
+
+  @override
   Future<Either<GeneralFailure, List<CustomerModel>>> loadCustomers() async {
     final partner = await _storage.read(key: 'fkPartnerLicence');
 
@@ -22,8 +39,8 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
       (failure) {
         return Either.left(failure);
       },
-      (maintenances) {
-        return Either.right(maintenances);
+      (customers) {
+        return Either.right(customers);
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../domain/models/general_text_properties_model.dart';
 import '../../../../domain/models/models.dart';
 import '../../../global/colors.dart';
 import '../../../global/customs/custom_dialog_question.dart';
@@ -77,14 +78,18 @@ class _NewTicketViewState extends State<NewTicketView> {
         Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: GeneralTextForm(
-                label: '',
-                enable: true,
-                objectsColor: blueLightGlobalColor,
-                textColor: blackPanter,
-                obscureText: false,
-                validator: null,
-                onChange: (value) {},
-                controller: titleController)),
+                properties: GeneralTextPropertiesModel(
+                    label: '',
+                    enable: true,
+                    objectsColor: blueLightGlobalColor,
+                    textColor: blackPanter,
+                    obscureText: false,
+                    validator: null,
+                    onChange: (value) {},
+                    controller: titleController,
+                    keyboard: TextInputType.text,
+                    minLines: 1,
+                    maxLines: 1))),
 
         //!
         const SizedBox(height: 5),
@@ -103,14 +108,18 @@ class _NewTicketViewState extends State<NewTicketView> {
         Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: GeneralTextForm(
-                label: '',
-                enable: true,
-                objectsColor: blueLightGlobalColor,
-                textColor: blackPanter,
-                obscureText: false,
-                validator: null,
-                onChange: (value) {},
-                controller: descriptionController)),
+                properties: GeneralTextPropertiesModel(
+                    label: '',
+                    enable: true,
+                    objectsColor: blueLightGlobalColor,
+                    textColor: blackPanter,
+                    obscureText: false,
+                    validator: null,
+                    onChange: (value) {},
+                    controller: descriptionController,
+                    keyboard: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 3))),
 
         //!
         const SizedBox(height: 5),
@@ -222,7 +231,7 @@ class _NewTicketViewState extends State<NewTicketView> {
               }).toList(),
               onChanged: (CustomerModel? value) {
                 if (value != null) {
-                  vm.customerSelectedAction(value);
+                  vm.customerSelectedAction(context, value);
                 }
               },
               decoration: const InputDecoration(
@@ -292,14 +301,18 @@ class _NewTicketViewState extends State<NewTicketView> {
         Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: GeneralTextForm(
-                label: '',
-                enable: true,
-                objectsColor: blueLightGlobalColor,
-                textColor: blackPanter,
-                obscureText: false,
-                validator: null,
-                onChange: (value) {},
-                controller: areaController)),
+                properties: GeneralTextPropertiesModel(
+                    label: '',
+                    enable: true,
+                    objectsColor: blueLightGlobalColor,
+                    textColor: blackPanter,
+                    obscureText: false,
+                    validator: null,
+                    onChange: (value) {},
+                    controller: areaController,
+                    keyboard: TextInputType.text,
+                    minLines: 1,
+                    maxLines: 1))),
 
         //!
         const SizedBox(height: 10),
