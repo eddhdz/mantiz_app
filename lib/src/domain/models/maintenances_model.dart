@@ -8,7 +8,7 @@ class MaintenancesModel {
   int fkStatusMaintenance;
   String customer;
   int folio;
-  String viewFolio;
+  int viewFolio;
   String description;
   String area;
   String reason;

@@ -44,6 +44,27 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         return Either.left(failure);
       },
       (profileUser) {
+        if (jsonDecode(profileUser)['fkCustomerProfile'] != null) {
+          _secureStorage.write(
+            key: 'Customer',
+            value: jsonDecode(profileUser)['fkCustomerProfile'].toString(),
+          );
+        }
+
+        if (jsonDecode(profileUser)['fkSupplierProfile'] != null) {
+          _secureStorage.write(
+            key: 'Supplier',
+            value: jsonDecode(profileUser)['fkSupplierProfile'].toString(),
+          );
+        }
+
+        if (jsonDecode(profileUser)['fkPartnerProfile'] != null) {
+          _secureStorage.write(
+            key: 'Partner',
+            value: jsonDecode(profileUser)['fkPartnerProfile'].toString(),
+          );
+        }
+
         _secureStorage.write(
           key: 'fkPartner',
           value: jsonDecode(profileUser)['fkPartner'].toString(),

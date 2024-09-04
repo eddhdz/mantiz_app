@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/models/general_text_properties_model.dart';
 import '../../../../domain/models/models.dart';
 import '../../../global/colors.dart';
 import '../../../global/customs/custom_dialog_question.dart';

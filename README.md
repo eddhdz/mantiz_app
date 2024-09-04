@@ -23,6 +23,9 @@ A new Flutter project.
 ### Keys
 - fkPartner
 - fkPartnerLicence
+- Partner(fkPartnerProfile)
+- Supplier(fkSupplierProfile)
+- Customer(fkCustomerProfile)
   
 
 
