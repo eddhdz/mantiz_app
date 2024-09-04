@@ -1,8 +1,6 @@
-import 'package:mantiz/src/domain/models/branch_office_model.dart';
-
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
-import '../../../domain/models/customer_model.dart';
+import '../../../domain/models/models.dart';
 import '../../../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../../services/remote/new_ticket/new_ticket_api.dart';
 
@@ -13,6 +11,17 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
   final NewTicketApi _newTicketApi;
 
   NewTicketRepositoryImpl(this._newTicketApi, this._storage);
+
+  @override
+  Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel model) async {
+    final saveResult = await _newTicketApi.saveTicket(model);
+
+    return saveResult.when((failure) {
+      return Either.left(failure);
+    }, (save) {
+      return Either.right(save);
+    });
+  }
 
   @override
   Future<Either<GeneralFailure, List<BranchOfficeModel>>> loadBranchs(

@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:mantiz/src/domain/models/branch_office_model.dart';
-
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
-import '../../../../domain/models/customer_model.dart';
+import '../../../../domain/models/models.dart';
 import '../../../http/http.dart';
 import '../ports.dart';
 
@@ -12,6 +10,45 @@ class NewTicketApi {
   final Http _http;
 
   NewTicketApi(this._http);
+
+  Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel model) async {
+    final result = await _http.request(
+      '/api/mantiz/v1/mysql/tickets/add',
+      Ports.mantizPort,
+      method: HttpMethod.post,
+      body: {
+        'id': model.id,
+        'fkTypeMaintenance': model.fkTypeMaintenance,
+        'fkPCL': model.fkPCL,
+        'fkCBO': model.fkCBO,
+        'fkStatusMaintenance': model.fkStatusMaintenance,
+        'folio': model.folio,
+        'description': model.description,
+        'area': model.area,
+        'reason': model.reason,
+        'photoevidence': model.photoevidence,
+        'createdAt': model.createdAt,
+        'createdByPartner': model.createdByPartner,
+        'createdByCustomer': model.createdByCustomer
+      },
+    );
+
+    return result.when((failure) {
+      if (failure.statusCode == null) {
+        return Either.left(GeneralFailure.noData);
+      } else if (failure.exception is NetworkException) {
+        return Either.left(GeneralFailure.network);
+      } else if (failure.statusCode! >= 400 && failure.statusCode! <= 499) {
+        return Either.left(GeneralFailure.clientError);
+      } else if (failure.statusCode! >= 500 && failure.statusCode! <= 599) {
+        return Either.left(GeneralFailure.serverError);
+      } else {
+        return Either.left(GeneralFailure.unknown);
+      }
+    }, (responseBody) {
+      return Either.right(true);
+    });
+  }
 
   Future<Either<GeneralFailure, List<BranchOfficeModel>>> loadBranchs(
       int fkCustomer) async {
