@@ -357,7 +357,18 @@ class _NewTicketViewState extends State<NewTicketView> {
                       const SizedBox(width: 30),
                       GeneralButton(
                           text: 'Cancelar',
-                          onPressed: () {},
+                          onPressed: () async {
+                            await vm.vmInit();
+
+                            if (!context.mounted) return;
+                            await vm.loadCustomer(context);
+
+                            titleController.text = descriptionController.text =
+                                areaController.text = '';
+
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop();
+                          },
                           color: blueLightGlobalColor,
                           textColor: blackPanter),
                       const Expanded(child: SizedBox()),
