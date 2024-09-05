@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../domain/models/models.dart';
 import '../../../global/colors.dart';
-import '../../../global/customs/custom_dialog_question.dart';
+import '../../../global/widgets/customs/custom_dialog_general.dart';
+import '../../../global/widgets/customs/custom_dialog_question.dart';
 import '../../../global/widgets/buttons/general_button.dart';
 import '../../../global/widgets/containers/rounded_container.dart';
 import '../../../global/widgets/texts/general_text.dart';
@@ -57,295 +58,352 @@ class _NewTicketViewState extends State<NewTicketView> {
               size: 15,
               weight: FontWeight.bold,
               color: blackPanter,
-              align: TextAlign.center)),
+              align: TextAlign.center),
+          actions: [
+            (vm.isLoading)
+                ? const Image(
+                    image: AssetImage('lib/src/assets/customs/Wait03@4x.gif'),
+                    fit: BoxFit.scaleDown)
+                : Container()
+          ]),
       body: SingleChildScrollView(
           child: SizedBox(
-              child: Column(children: <Widget>[
-        const Row(children: <Widget>[
-          //!
-          SizedBox(width: 10),
-          GeneralText(
-              mensaje: 'Título:',
-              maxLines: 1,
-              overFlow: TextOverflow.ellipsis,
-              size: 15,
-              weight: FontWeight.bold,
-              color: blackPanter,
-              align: TextAlign.start)
-        ]),
-        const SizedBox(height: 5),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: GeneralTextForm(
-                properties: GeneralTextPropertiesModel(
-                    label: '',
-                    enable: true,
-                    objectsColor: blueLightGlobalColor,
-                    textColor: blackPanter,
-                    obscureText: false,
-                    validator: null,
-                    onChange: (value) {},
-                    controller: titleController,
-                    keyboard: TextInputType.text,
-                    minLines: 1,
-                    maxLines: 1))),
+              child: Form(
+                  key: vm.formKey,
+                  child: Column(children: <Widget>[
+                    const Row(children: <Widget>[
+                      //!
+                      SizedBox(width: 10),
+                      GeneralText(
+                          mensaje: 'Título:',
+                          maxLines: 1,
+                          overFlow: TextOverflow.ellipsis,
+                          size: 15,
+                          weight: FontWeight.bold,
+                          color: blackPanter,
+                          align: TextAlign.start)
+                    ]),
+                    const SizedBox(height: 5),
+                    Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: GeneralTextForm(
+                            properties: GeneralTextPropertiesModel(
+                                label: '',
+                                enable: true,
+                                objectsColor: blueLightGlobalColor,
+                                textColor: blackPanter,
+                                obscureText: false,
+                                validator: (value) =>
+                                    vm.generalValidator(value),
+                                onChange: (value) => vm.onTitleChange(value),
+                                controller: titleController,
+                                keyboard: TextInputType.text,
+                                minLines: 1,
+                                maxLines: 1))),
 
-        //!
-        const SizedBox(height: 5),
-        const Row(children: <Widget>[
-          SizedBox(width: 10),
-          GeneralText(
-              mensaje: 'Descripción:',
-              maxLines: 1,
-              overFlow: TextOverflow.ellipsis,
-              size: 15,
-              weight: FontWeight.bold,
-              color: blackPanter,
-              align: TextAlign.left)
-        ]),
-        const SizedBox(height: 10),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: GeneralTextForm(
-                properties: GeneralTextPropertiesModel(
-                    label: '',
-                    enable: true,
-                    objectsColor: blueLightGlobalColor,
-                    textColor: blackPanter,
-                    obscureText: false,
-                    validator: null,
-                    onChange: (value) {},
-                    controller: descriptionController,
-                    keyboard: TextInputType.multiline,
-                    minLines: 1,
-                    maxLines: 3))),
+                    //!
+                    const SizedBox(height: 5),
+                    const Row(children: <Widget>[
+                      SizedBox(width: 10),
+                      GeneralText(
+                          mensaje: 'Descripción:',
+                          maxLines: 1,
+                          overFlow: TextOverflow.ellipsis,
+                          size: 15,
+                          weight: FontWeight.bold,
+                          color: blackPanter,
+                          align: TextAlign.left)
+                    ]),
+                    const SizedBox(height: 10),
+                    Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: GeneralTextForm(
+                            properties: GeneralTextPropertiesModel(
+                                label: '',
+                                enable: true,
+                                objectsColor: blueLightGlobalColor,
+                                textColor: blackPanter,
+                                obscureText: false,
+                                validator: (value) =>
+                                    vm.generalValidator(value),
+                                onChange: (value) =>
+                                    vm.onDescriptionChange(value),
+                                controller: descriptionController,
+                                keyboard: TextInputType.multiline,
+                                minLines: 1,
+                                maxLines: 3))),
 
-        //!
-        const SizedBox(height: 5),
-        const Row(children: <Widget>[
-          SizedBox(width: 10),
-          GeneralText(
-              mensaje: 'Evidencia:',
-              maxLines: 1,
-              overFlow: TextOverflow.ellipsis,
-              size: 15,
-              weight: FontWeight.bold,
-              color: blackPanter,
-              align: TextAlign.left)
-        ]),
-        const SizedBox(height: 10),
-        RoundedContainer(
-            containerPropertiesModel: ContainerPropertiesModel(
-                height: screenSize.height * 0.2,
-                width: screenSize.width,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                alignment: Alignment.center,
-                backColor: blueExtraLightGlobalColor,
-                borderColor: blueLightGlobalColor,
-                borderWidth: 2,
-                shadowColor: whiteGlobalColor,
-                rounded: 20,
-                widget: Row(children: [
-                  const SizedBox(width: 10),
-                  GeneralButton(
-                      text: 'Cargar evidencia',
-                      onPressed: () async {
-                        bool? yesOrNo = await showDialog(
-                            context: context,
-                            builder: (build) {
-                              return const CustomDialogQuestion(
-                                  title: 'Evidencia',
-                                  descriptions:
-                                      '¿Deseas tomar foto o cargar imágen?',
-                                  btnOk: 'Cámara',
-                                  btnNotOk: 'Galería',
-                                  altura: 200);
-                            });
+                    //!
+                    const SizedBox(height: 5),
+                    const Row(children: <Widget>[
+                      SizedBox(width: 10),
+                      GeneralText(
+                          mensaje: 'Evidencia:',
+                          maxLines: 1,
+                          overFlow: TextOverflow.ellipsis,
+                          size: 15,
+                          weight: FontWeight.bold,
+                          color: blackPanter,
+                          align: TextAlign.left)
+                    ]),
+                    const SizedBox(height: 10),
+                    RoundedContainer(
+                        containerPropertiesModel: ContainerPropertiesModel(
+                            height: screenSize.height * 0.2,
+                            width: screenSize.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            alignment: Alignment.center,
+                            backColor: blueExtraLightGlobalColor,
+                            borderColor: blueLightGlobalColor,
+                            borderWidth: 2,
+                            shadowColor: whiteGlobalColor,
+                            rounded: 20,
+                            widget: Row(children: [
+                              const SizedBox(width: 10),
+                              GeneralButton(
+                                  text: 'Cargar evidencia',
+                                  onPressed: () async {
+                                    bool? yesOrNo = await showDialog(
+                                        context: context,
+                                        builder: (build) {
+                                          return const CustomDialogQuestion(
+                                              title: 'Evidencia',
+                                              descriptions:
+                                                  '¿Deseas tomar foto o cargar imágen?',
+                                              btnOk: 'Cámara',
+                                              btnNotOk: 'Galería',
+                                              altura: 200);
+                                        });
 
-                        if (yesOrNo != null) {
-                          await vm.vmInit();
+                                    if (yesOrNo != null) {
+                                      await vm.vmInit();
 
-                          if (yesOrNo) {
-                            //! Abrimos cámara para tomar foto ...
-                            await vm.goToCamera();
-                          } else {
-                            //! Cargamos una imágen de la galería ...
-                            await vm.selectImage();
-                          }
-                        }
-                      },
-                      color: vm.evidenceColor,
-                      textColor: blackPanter),
-                  Expanded(child: Container()),
-                  RoundedContainer(
-                      containerPropertiesModel: ContainerPropertiesModel(
-                          height: screenSize.height * 0.15,
-                          width: screenSize.width * 0.3,
-                          alignment: Alignment.center,
-                          backColor: whiteGlobalColor,
-                          borderColor: greenPrincipal,
-                          shadowColor: blueExtraLightGlobalColor,
-                          rounded: 1,
-                          borderWidth: 2,
-                          widget: (vm.evidence == null)
-                              ? const Image(
-                                  image:
-                                      AssetImage('lib/src/assets/camera.png'),
-                                  fit: BoxFit.scaleDown)
-                              : Image.file(vm.evidence!, fit: BoxFit.scaleDown),
-                          margin: const EdgeInsets.all(0))),
-                  const SizedBox(width: 10),
-                ]))),
+                                      if (yesOrNo) {
+                                        //! Abrimos cámara para tomar foto ...
+                                        await vm.goToCamera();
+                                      } else {
+                                        //! Cargamos una imágen de la galería ...
+                                        await vm.selectImage();
+                                      }
+                                    }
+                                  },
+                                  color: vm.evidenceColor,
+                                  textColor: blackPanter),
+                              Expanded(child: Container()),
+                              RoundedContainer(
+                                  containerPropertiesModel:
+                                      ContainerPropertiesModel(
+                                          height: screenSize.height * 0.15,
+                                          width: screenSize.width * 0.3,
+                                          alignment: Alignment.center,
+                                          backColor: whiteGlobalColor,
+                                          borderColor: greenPrincipal,
+                                          shadowColor:
+                                              blueExtraLightGlobalColor,
+                                          rounded: 1,
+                                          borderWidth: 2,
+                                          widget: (vm.evidence == null)
+                                              ? const Image(
+                                                  image: AssetImage(
+                                                      'lib/src/assets/camera.png'),
+                                                  fit: BoxFit.scaleDown)
+                                              : Image.file(vm.evidence!,
+                                                  fit: BoxFit.scaleDown),
+                                          margin: const EdgeInsets.all(0))),
+                              const SizedBox(width: 10),
+                            ]))),
 
-        //!
-        const SizedBox(height: 5),
-        const Row(children: <Widget>[
-          SizedBox(width: 10),
-          GeneralText(
-              mensaje: 'Cliente:',
-              maxLines: 1,
-              overFlow: TextOverflow.ellipsis,
-              size: 15,
-              weight: FontWeight.bold,
-              color: blackPanter,
-              align: TextAlign.left)
-        ]),
-        const SizedBox(height: 5),
-        Container(
-            width: screenSize.width,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: DropdownButtonFormField<CustomerModel>(
-              value: vm.selectedCustomer,
-              items: vm.customers.map((CustomerModel customer) {
-                return DropdownMenuItem<CustomerModel>(
-                    value: customer,
-                    child: GeneralText(
-                        mensaje: '${customer.id} - ${customer.customer}',
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 15,
-                        weight: FontWeight.normal,
-                        color: blackPanter,
-                        align: TextAlign.start));
-              }).toList(),
-              onChanged: (CustomerModel? value) {
-                if (value != null) {
-                  vm.customerSelectedAction(context, value);
-                }
-              },
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                borderSide: BorderSide(width: 3, color: blueLightGlobalColor),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )),
-            )),
+                    //!
+                    const SizedBox(height: 5),
+                    const Row(children: <Widget>[
+                      SizedBox(width: 10),
+                      GeneralText(
+                          mensaje: 'Cliente:',
+                          maxLines: 1,
+                          overFlow: TextOverflow.ellipsis,
+                          size: 15,
+                          weight: FontWeight.bold,
+                          color: blackPanter,
+                          align: TextAlign.left)
+                    ]),
+                    const SizedBox(height: 5),
+                    Container(
+                        width: screenSize.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: DropdownButtonFormField<CustomerModel>(
+                          value: vm.selectedCustomer,
+                          items: vm.customers.map((CustomerModel customer) {
+                            return DropdownMenuItem<CustomerModel>(
+                                value: customer,
+                                child: GeneralText(
+                                    mensaje:
+                                        '${customer.id} - ${customer.customer}',
+                                    maxLines: 1,
+                                    overFlow: TextOverflow.ellipsis,
+                                    size: 15,
+                                    weight: FontWeight.normal,
+                                    color: blackPanter,
+                                    align: TextAlign.start));
+                          }).toList(),
+                          onChanged: (CustomerModel? value) {
+                            if (value != null) {
+                              vm.customerSelectedAction(context, value);
+                            }
+                          },
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 3, color: blueLightGlobalColor),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          )),
+                          validator: (value) => vm.validatorCustomer(value),
+                        )),
 
-        //!
-        const SizedBox(height: 5),
-        const Row(children: <Widget>[
-          SizedBox(width: 10),
-          GeneralText(
-              mensaje: 'Sucursal:',
-              maxLines: 1,
-              overFlow: TextOverflow.ellipsis,
-              size: 15,
-              weight: FontWeight.bold,
-              color: blackPanter,
-              align: TextAlign.left)
-        ]),
-        const SizedBox(height: 5),
-        Container(
-            width: screenSize.width,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: DropdownButtonFormField<BranchOfficeModel>(
-              value: vm.selectedBranch,
-              items: vm.branchs.map((BranchOfficeModel branch) {
-                return DropdownMenuItem<BranchOfficeModel>(
-                    value: branch,
-                    child: GeneralText(
-                        mensaje: '${branch.id} - ${branch.description}',
-                        maxLines: 1,
-                        overFlow: TextOverflow.ellipsis,
-                        size: 15,
-                        weight: FontWeight.normal,
-                        color: blackPanter,
-                        align: TextAlign.start));
-              }).toList(),
-              onChanged: (BranchOfficeModel? value) {
-                if (value != null) {
-                  vm.branchSelectedAction(value);
-                }
-              },
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                borderSide: BorderSide(width: 3, color: blueLightGlobalColor),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )),
-            )),
+                    //!
+                    const SizedBox(height: 5),
+                    const Row(children: <Widget>[
+                      SizedBox(width: 10),
+                      GeneralText(
+                          mensaje: 'Sucursal:',
+                          maxLines: 1,
+                          overFlow: TextOverflow.ellipsis,
+                          size: 15,
+                          weight: FontWeight.bold,
+                          color: blackPanter,
+                          align: TextAlign.left)
+                    ]),
+                    const SizedBox(height: 5),
+                    Container(
+                        width: screenSize.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: DropdownButtonFormField<BranchOfficeModel>(
+                          value: vm.selectedBranch,
+                          items: vm.branchs.map((BranchOfficeModel branch) {
+                            return DropdownMenuItem<BranchOfficeModel>(
+                                value: branch,
+                                child: GeneralText(
+                                    mensaje:
+                                        '${branch.id} - ${branch.description}',
+                                    maxLines: 1,
+                                    overFlow: TextOverflow.ellipsis,
+                                    size: 15,
+                                    weight: FontWeight.normal,
+                                    color: blackPanter,
+                                    align: TextAlign.start));
+                          }).toList(),
+                          onChanged: (BranchOfficeModel? value) {
+                            if (value != null) {
+                              vm.branchSelectedAction(value);
+                            }
+                          },
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 3, color: blueLightGlobalColor),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          )),
+                          validator: (value) => vm.validatorBranch(value),
+                        )),
 
-        //!
-        const SizedBox(height: 5),
-        const Row(children: <Widget>[
-          SizedBox(width: 10),
-          GeneralText(
-              mensaje: 'Área:',
-              maxLines: 1,
-              overFlow: TextOverflow.ellipsis,
-              size: 15,
-              weight: FontWeight.bold,
-              color: blackPanter,
-              align: TextAlign.left)
-        ]),
-        const SizedBox(height: 5),
-        Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: GeneralTextForm(
-                properties: GeneralTextPropertiesModel(
-                    label: '',
-                    enable: true,
-                    objectsColor: blueLightGlobalColor,
-                    textColor: blackPanter,
-                    obscureText: false,
-                    validator: null,
-                    onChange: (value) {},
-                    controller: areaController,
-                    keyboard: TextInputType.text,
-                    minLines: 1,
-                    maxLines: 1))),
+                    //!
+                    const SizedBox(height: 5),
+                    const Row(children: <Widget>[
+                      SizedBox(width: 10),
+                      GeneralText(
+                          mensaje: 'Área:',
+                          maxLines: 1,
+                          overFlow: TextOverflow.ellipsis,
+                          size: 15,
+                          weight: FontWeight.bold,
+                          color: blackPanter,
+                          align: TextAlign.left)
+                    ]),
+                    const SizedBox(height: 5),
+                    Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: GeneralTextForm(
+                            properties: GeneralTextPropertiesModel(
+                                label: '',
+                                enable: true,
+                                objectsColor: blueLightGlobalColor,
+                                textColor: blackPanter,
+                                obscureText: false,
+                                validator: (value) =>
+                                    vm.generalValidator(value),
+                                onChange: (value) => vm.onAreaChange(value),
+                                controller: areaController,
+                                keyboard: TextInputType.text,
+                                minLines: 1,
+                                maxLines: 1))),
 
-        //!
-        const SizedBox(height: 10),
-        RoundedContainer(
-            containerPropertiesModel: ContainerPropertiesModel(
-                height: 2,
-                width: screenSize.width,
-                alignment: Alignment.center,
-                backColor: lockWidget,
-                borderColor: lockWidget,
-                shadowColor: lockWidget,
-                rounded: 0,
-                borderWidth: 0,
-                widget: const SizedBox(),
-                margin: const EdgeInsets.all(0))),
+                    //!
+                    const SizedBox(height: 10),
+                    RoundedContainer(
+                        containerPropertiesModel: ContainerPropertiesModel(
+                            height: 2,
+                            width: screenSize.width,
+                            alignment: Alignment.center,
+                            backColor: lockWidget,
+                            borderColor: lockWidget,
+                            shadowColor: lockWidget,
+                            rounded: 0,
+                            borderWidth: 0,
+                            widget: const SizedBox(),
+                            margin: const EdgeInsets.all(0))),
 
-        //!
-        const SizedBox(height: 10),
-        Row(children: <Widget>[
-          const SizedBox(width: 30),
-          GeneralButton(
-              text: 'Cancelar',
-              onPressed: () {},
-              color: blueLightGlobalColor,
-              textColor: blackPanter),
-          const Expanded(child: SizedBox()),
-          GeneralButton(
-              text: 'Crear',
-              onPressed: () {},
-              color: greenPrincipal,
-              textColor: blackPanter),
-          const SizedBox(width: 30),
-        ])
-      ]))),
+                    //!
+                    const SizedBox(height: 10),
+                    Row(children: <Widget>[
+                      const SizedBox(width: 30),
+                      GeneralButton(
+                          text: 'Cancelar',
+                          onPressed: () {},
+                          color: blueLightGlobalColor,
+                          textColor: blackPanter),
+                      const Expanded(child: SizedBox()),
+                      GeneralButton(
+                          text: 'Crear',
+                          onPressed: () async {
+                            if (vm.formKey.currentState!.validate()) {
+                              String desc = '', url = '';
+
+                              await vm.saveTicket(context);
+
+                              if (vm.finishSave) {
+                                desc = 'Ticket guardado satisfactoriamente';
+                                url =
+                                    'lib/src/assets/customs/Information@4x.png';
+                              } else {
+                                desc =
+                                    'Ocurrió un error, vuelve a intentar el procedimiento';
+                                url = 'lib/src/assets/customs/Exception@4x.png';
+                              }
+
+                              if (!context.mounted) return;
+                              await showDialog(
+                                  context: context,
+                                  builder: (build) {
+                                    return CustomDialogGeneral(
+                                        descriptions: desc,
+                                        text: 'Ok',
+                                        urlImage: url,
+                                        altura: 260);
+                                  });
+
+                              await vm.vmInit();
+
+                              if (!context.mounted) return;
+                              await vm.loadCustomer(context);
+
+                              titleController.text = descriptionController
+                                  .text = areaController.text = '';
+                            } else {}
+                          },
+                          color: greenPrincipal,
+                          textColor: blackPanter),
+                      const SizedBox(width: 30),
+                    ])
+                  ])))),
     );
   }
 }

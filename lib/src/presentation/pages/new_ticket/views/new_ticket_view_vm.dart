@@ -11,6 +11,8 @@ import '../photos/camera_gallery_service.dart';
 import 'package:provider/provider.dart';
 
 class NewTicketViewVM with ChangeNotifier {
+  final formKey = GlobalKey<FormState>();
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -38,12 +40,20 @@ class NewTicketViewVM with ChangeNotifier {
   BranchOfficeModel? _selectedBranch;
   BranchOfficeModel? get selectedBranch => _selectedBranch;
 
+  bool _finishSave = false;
+  bool get finishSave => _finishSave;
+
+  String _title = '';
+  String _description = '';
+  String _area = '';
+
   Future<void> vmInit() async {
     _isLoading = false;
     _evidence = null;
     _evidenceColor = greenPrincipal;
     _base64Image = '';
     _rutaImage = '';
+    _finishSave = false;
 
     notifyListeners();
   }
@@ -54,10 +64,7 @@ class NewTicketViewVM with ChangeNotifier {
       _evidence = File(path);
       final bytes = await _evidence!.readAsBytes();
 
-      //! obtenemos la extensión de la imágen ...
-      String extention = _evidence!.path.split('.').last;
-
-      _base64Image = 'Data:image/$extention;base64,${base64Encode(bytes)}';
+      _base64Image = base64Encode(bytes);
       _evidenceColor = orangePrincipal;
 
       notifyListeners();
@@ -70,14 +77,59 @@ class NewTicketViewVM with ChangeNotifier {
       _evidence = File(path);
       final bytes = await _evidence!.readAsBytes();
 
-      //! obtenemos la extensión de la imágen ...
-      String extention = _evidence!.path.split('.').last;
-
-      _base64Image = 'Data:image/$extention;base64,${base64Encode(bytes)}';
+      _base64Image = base64Encode(bytes);
       _evidenceColor = orangePrincipal;
 
       notifyListeners();
     }
+  }
+
+  Future<void> saveTicket(BuildContext context) async {
+    _isLoading = true;
+    _finishSave = false;
+    notifyListeners();
+
+    SaveTicketModel model = SaveTicketModel(
+        id: 0,
+        fkTypeMaintenance: 1,
+        fkPCL: _selectedCustomer!.id,
+        fkCBO: _selectedBranch!.id,
+        fkStatusMaintenance: 1,
+        folio: 0,
+        description: _title,
+        area: _area,
+        reason: _description,
+        photoevidence: (_base64Image.isEmpty) ? null : _base64Image,
+        createdAt: DateTime.now(),
+        createdByPartner: null,
+        createdByCustomer: null);
+
+    final result =
+        await Provider.of<NewTicketRepository>(context, listen: false)
+            .saveTicket(model);
+
+    result.when((failure) {
+      final message = {
+        GeneralFailure.noData: 'No information',
+        GeneralFailure.unknown: 'Error',
+        GeneralFailure.network: 'No Internet',
+        GeneralFailure.clientError: 'Client side connection failure',
+        GeneralFailure.serverError: 'Server side connection failure',
+      }[failure];
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message!)));
+    }, (guardado) async {
+      if (guardado) {
+        _finishSave = true;
+
+        notifyListeners();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                'No se pudo determinar por quien fue creado el ticket <Partner, Supplier o Customer>')));
+      }
+    });
   }
 
   Future<void> loadCustomer(BuildContext context) async {
@@ -108,6 +160,7 @@ class NewTicketViewVM with ChangeNotifier {
 
     //! Cargamos sucursales correspondientes al cliente seleccionado ...
     if (_selectedCustomer != null) {
+      if (!context.mounted) return;
       await loadSucursal(context, _selectedCustomer!);
     } else {
       _isLoading = false;
@@ -117,9 +170,7 @@ class NewTicketViewVM with ChangeNotifier {
 
   Future<void> customerSelectedAction(
       BuildContext context, CustomerModel customer) async {
-    // _isLoading = true;
     _selectedCustomer = customer;
-    // notifyListeners();
 
     //! Cargamos sucursales correspondientes al cliente seleccionado ...
     if (_selectedCustomer != null) {
@@ -160,5 +211,41 @@ class NewTicketViewVM with ChangeNotifier {
   Future<void> branchSelectedAction(BranchOfficeModel branch) async {
     _selectedBranch = branch;
     notifyListeners();
+  }
+
+  String? validatorBranch(BranchOfficeModel? branch) {
+    if (branch == null) {
+      return 'Debe seleccionar al menos una sucursal en pantalla';
+    }
+
+    return null;
+  }
+
+  String? validatorCustomer(CustomerModel? customer) {
+    if (customer == null) {
+      return 'Debe seleccionar al menos un cliente en pantalla';
+    }
+
+    return null;
+  }
+
+  String? generalValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'El campo debe tener información';
+    }
+
+    return null;
+  }
+
+  void onTitleChange(String value) {
+    _title = value;
+  }
+
+  void onDescriptionChange(String value) {
+    _description = value;
+  }
+
+  void onAreaChange(String value) {
+    _area = value;
   }
 }

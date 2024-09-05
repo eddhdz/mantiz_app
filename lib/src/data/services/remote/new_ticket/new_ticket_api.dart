@@ -19,7 +19,7 @@ class NewTicketApi {
       body: {
         'id': model.id,
         'fkTypeMaintenance': model.fkTypeMaintenance,
-        'fkPCL': model.fkPCL,
+        'fkPLC': model.fkPCL,
         'fkCBO': model.fkCBO,
         'fkStatusMaintenance': model.fkStatusMaintenance,
         'folio': model.folio,
@@ -27,7 +27,7 @@ class NewTicketApi {
         'area': model.area,
         'reason': model.reason,
         'photoevidence': model.photoevidence,
-        'createdAt': model.createdAt,
+        'createdAt': model.createdAt.toIso8601String(),
         'createdByPartner': model.createdByPartner,
         'createdByCustomer': model.createdByCustomer
       },
@@ -82,7 +82,7 @@ class NewTicketApi {
 
         //!
         BranchOfficeModel branchOfficeModel = BranchOfficeModel(
-            id: int.parse(branchOffice['id'].toString()),
+            id: int.parse(item['id'].toString()),
             fkSubcompany: int.parse(branchOffice['fkSubcompany'].toString()),
             description: branchOffice['description'],
             location: branchOffice['location'],
@@ -91,7 +91,7 @@ class NewTicketApi {
             imagen: branchOffice['imagen'],
             clave: branchOffice['clave'],
             subcompany: branchOffice['subcompany'],
-            uuidBO: branchOffice['uuidBO']);
+            uuidBO: item['uuidBO']);
 
         branchs.add(branchOfficeModel);
       }

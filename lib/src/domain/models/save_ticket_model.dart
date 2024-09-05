@@ -10,8 +10,8 @@ class SaveTicketModel {
   final String reason;
   final String? photoevidence;
   final DateTime createdAt;
-  final int? createdByPartner;
-  final int? createdByCustomer;
+  int? createdByPartner;
+  int? createdByCustomer;
 
   SaveTicketModel(
       {required this.id,
@@ -27,6 +27,21 @@ class SaveTicketModel {
       required this.createdAt,
       required this.createdByPartner,
       required this.createdByCustomer});
+
+  SaveTicketModel.empty()
+      : id = 0,
+        fkTypeMaintenance = 0,
+        fkPCL = 0,
+        fkCBO = 0,
+        fkStatusMaintenance = 0,
+        folio = 0,
+        description = '',
+        area = '',
+        reason = '',
+        photoevidence = null,
+        createdAt = DateTime.now(),
+        createdByPartner = null,
+        createdByCustomer = null;
 
   factory SaveTicketModel.fromJson(Map<String, dynamic> json) {
     return SaveTicketModel(
