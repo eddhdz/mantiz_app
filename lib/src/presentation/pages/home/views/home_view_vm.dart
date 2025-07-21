@@ -50,7 +50,6 @@ class HomeViewVm with ChangeNotifier {
 
     _visibleTickets = allTickets
         .where((ticket) =>
-            ticket.viewFolio.toLowerCase().contains(value.toLowerCase()) ||
             ticket.description.toLowerCase().contains(value.toLowerCase()) ||
             ticket.customer.toLowerCase().contains(value.toLowerCase()) ||
             ticket.status.toLowerCase().contains(value.toLowerCase()))

@@ -11,13 +11,13 @@ class HomeApi {
 
   HomeApi(this._http);
 
-  Future<Either<GeneralFailure, List<MaintenancesModel>>>
-      loadMaintenances() async {
+  Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances(
+      int fkPartner) async {
     final result = await _http.request(
       '/api/mantiz/v1/mysql/tickets',
       Ports.mantizPort,
       method: HttpMethod.post,
-      body: {'id': '1'},
+      body: {'id': fkPartner},
     );
 
     return result.when((failure) {

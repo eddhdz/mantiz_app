@@ -1,5 +1,6 @@
 //! Flutter ...
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/domain/models/general_text_properties_model.dart';
 import 'package:mantiz/src/presentation/pages/home/views/home_view_vm.dart';
 
 //! imports locales ...
@@ -58,21 +59,25 @@ class _HomeViewState extends State<HomeView> {
             //! filtro ...
             const SizedBox(height: 15),
             GeneralTextForm(
-                label: 'Palabra clave ...',
-                enable: true,
-                objectsColor: blueNeutralGlobalColor,
-                textColor: blackPanter,
-                obscureText: false,
-                controller: controller,
-                validator: null,
-                onChange: (value) async {
-                  controller.text = value;
-                  if (controller.text.isEmpty) {
-                    await vm.loadAllTickets(context);
-                  } else {
-                    await vm.filterTickets(context, controller.text);
-                  }
-                }),
+                properties: GeneralTextPropertiesModel(
+                    label: 'Palabra clave ...',
+                    enable: true,
+                    objectsColor: blueNeutralGlobalColor,
+                    textColor: blackPanter,
+                    obscureText: false,
+                    validator: null,
+                    onChange: (value) async {
+                      controller.text = value;
+                      if (controller.text.isEmpty) {
+                        await vm.loadAllTickets(context);
+                      } else {
+                        await vm.filterTickets(context, controller.text);
+                      }
+                    },
+                    controller: controller,
+                    keyboard: TextInputType.text,
+                    minLines: 1,
+                    maxLines: 1)),
 
             //! lista de tickets ...
             const SizedBox(height: 10),

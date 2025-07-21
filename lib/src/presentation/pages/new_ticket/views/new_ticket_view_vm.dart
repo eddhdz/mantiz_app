@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../../../../domain/enums.dart';
 import '../../../../domain/models/models.dart';
+import '../../../../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../../../global/colors.dart';
 import '../photos/camera_gallery_service.dart';
+
+import 'package:provider/provider.dart';
 
 class NewTicketViewVM with ChangeNotifier {
   bool _isLoading = false;
@@ -76,55 +80,81 @@ class NewTicketViewVM with ChangeNotifier {
     }
   }
 
-  Future<void> loadCustomer() async {
+  Future<void> loadCustomer(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
     _customers = [];
-    for (var i = 0; i <= 3; i++) {
-      CustomerModel cus = CustomerModel(
-          id: i,
-          fkPartner: i + 5,
-          partner: 'gamesa-$i',
-          fkCustomer: 10,
-          customer: 'soy Gamesa-$i');
+    final result =
+        await Provider.of<NewTicketRepository>(context, listen: false)
+            .loadCustomers();
 
-      _customers.add(cus);
+    result.when((failure) {
+      final message = {
+        GeneralFailure.noData: 'No information',
+        GeneralFailure.unknown: 'Error',
+        GeneralFailure.network: 'No Internet',
+        GeneralFailure.clientError: 'Client side connection failure',
+        GeneralFailure.serverError: 'Server side connection failure',
+      }[failure];
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message!)));
+    }, (customers) {
+      _customers = customers;
+    });
+
+    _selectedCustomer = (_customers.isNotEmpty) ? _customers[0] : null;
+
+    //! Cargamos sucursales correspondientes al cliente seleccionado ...
+    if (_selectedCustomer != null) {
+      await loadSucursal(context, _selectedCustomer!);
+    } else {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    _selectedCustomer = _customers[0];
-    _isLoading = false;
-    notifyListeners();
   }
 
-  Future<void> customerSelectedAction(CustomerModel customer) async {
+  Future<void> customerSelectedAction(
+      BuildContext context, CustomerModel customer) async {
+    // _isLoading = true;
     _selectedCustomer = customer;
-    notifyListeners();
+    // notifyListeners();
+
+    //! Cargamos sucursales correspondientes al cliente seleccionado ...
+    if (_selectedCustomer != null) {
+      await loadSucursal(context, _selectedCustomer!);
+    }
   }
 
-  Future<void> loadSucursal() async {
+  Future<void> loadSucursal(
+      BuildContext context, CustomerModel customer) async {
     _isLoading = true;
     notifyListeners();
 
     _branchs = [];
-    for (int i = 0; i <= 3; i++) {
-      BranchOfficeModel branch = BranchOfficeModel(
-          id: i,
-          fkSubcompany: i + 20,
-          description: 'Soy el branch $i',
-          location: '100.25678',
-          latitud: '-45.876',
-          longitud: '8.873645',
-          imagen: null,
-          clave: '00000-$i',
-          subcompany: 'alguna',
-          uuidBO: 'lkuysfes8723kjhs-$i');
+    final result =
+        await Provider.of<NewTicketRepository>(context, listen: false)
+            .loadBranchs(customer.fkCustomer);
 
-      _branchs.add(branch);
-    }
+    result.when((failure) {
+      final message = {
+        GeneralFailure.noData: 'No information',
+        GeneralFailure.unknown: 'Error',
+        GeneralFailure.network: 'No Internet',
+        GeneralFailure.clientError: 'Client side connection failure',
+        GeneralFailure.serverError: 'Server side connection failure',
+      }[failure];
 
-    _selectedBranch = _branchs[0];
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message!)));
+    }, (branchs) {
+      _branchs = branchs;
+    });
+
+    _selectedBranch = (_branchs.isNotEmpty) ? _branchs[0] : null;
     _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> branchSelectedAction(BranchOfficeModel branch) async {

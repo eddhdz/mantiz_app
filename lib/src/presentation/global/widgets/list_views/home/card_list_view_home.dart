@@ -27,7 +27,7 @@ Widget cardTicket(MaintenancesModel maintenance) {
                       color: blackPanter,
                       align: TextAlign.left),
                   GeneralText(
-                      mensaje: maintenance.viewFolio,
+                      mensaje: maintenance.viewFolio.toString(),
                       maxLines: 1,
                       overFlow: TextOverflow.ellipsis,
                       size: 14,

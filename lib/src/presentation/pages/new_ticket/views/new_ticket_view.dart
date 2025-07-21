@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../domain/models/models.dart';
 import '../../../global/colors.dart';
@@ -10,6 +9,7 @@ import '../../../global/widgets/texts/general_text.dart';
 import '../../../global/widgets/texts/general_text_form.dart';
 
 import 'package:mantiz/src/presentation/pages/new_ticket/views/new_ticket_view_vm.dart';
+import 'package:provider/provider.dart';
 
 class NewTicketView extends StatefulWidget {
   const NewTicketView({super.key});
@@ -30,8 +30,7 @@ class _NewTicketViewState extends State<NewTicketView> {
     final vmInit = Provider.of<NewTicketViewVM>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      vmInit.loadCustomer();
-      vmInit.loadSucursal();
+      vmInit.loadCustomer(context);
     });
   }
 
@@ -78,14 +77,18 @@ class _NewTicketViewState extends State<NewTicketView> {
         Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: GeneralTextForm(
-                label: '',
-                enable: true,
-                objectsColor: blueLightGlobalColor,
-                textColor: blackPanter,
-                obscureText: false,
-                validator: null,
-                onChange: (value) {},
-                controller: titleController)),
+                properties: GeneralTextPropertiesModel(
+                    label: '',
+                    enable: true,
+                    objectsColor: blueLightGlobalColor,
+                    textColor: blackPanter,
+                    obscureText: false,
+                    validator: null,
+                    onChange: (value) {},
+                    controller: titleController,
+                    keyboard: TextInputType.text,
+                    minLines: 1,
+                    maxLines: 1))),
 
         //!
         const SizedBox(height: 5),
@@ -104,14 +107,18 @@ class _NewTicketViewState extends State<NewTicketView> {
         Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: GeneralTextForm(
-                label: '',
-                enable: true,
-                objectsColor: blueLightGlobalColor,
-                textColor: blackPanter,
-                obscureText: false,
-                validator: null,
-                onChange: (value) {},
-                controller: descriptionController)),
+                properties: GeneralTextPropertiesModel(
+                    label: '',
+                    enable: true,
+                    objectsColor: blueLightGlobalColor,
+                    textColor: blackPanter,
+                    obscureText: false,
+                    validator: null,
+                    onChange: (value) {},
+                    controller: descriptionController,
+                    keyboard: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 3))),
 
         //!
         const SizedBox(height: 5),
@@ -223,7 +230,7 @@ class _NewTicketViewState extends State<NewTicketView> {
               }).toList(),
               onChanged: (CustomerModel? value) {
                 if (value != null) {
-                  vm.customerSelectedAction(value);
+                  vm.customerSelectedAction(context, value);
                 }
               },
               decoration: const InputDecoration(
@@ -293,14 +300,18 @@ class _NewTicketViewState extends State<NewTicketView> {
         Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: GeneralTextForm(
-                label: '',
-                enable: true,
-                objectsColor: blueLightGlobalColor,
-                textColor: blackPanter,
-                obscureText: false,
-                validator: null,
-                onChange: (value) {},
-                controller: areaController)),
+                properties: GeneralTextPropertiesModel(
+                    label: '',
+                    enable: true,
+                    objectsColor: blueLightGlobalColor,
+                    textColor: blackPanter,
+                    obscureText: false,
+                    validator: null,
+                    onChange: (value) {},
+                    controller: areaController,
+                    keyboard: TextInputType.text,
+                    minLines: 1,
+                    maxLines: 1))),
 
         //!
         const SizedBox(height: 10),
