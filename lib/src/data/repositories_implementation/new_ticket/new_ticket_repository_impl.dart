@@ -14,6 +14,30 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
 
   @override
   Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel model) async {
+    final allStorage = await _storage.readAll();
+
+    //! En este punto nos falta saber si el ticket fue creado por un <Partner> o un <customer> ...
+    List<String> keys = ['Partner', 'Supplier', 'Customer'];
+    String? target;
+    int? valor;
+
+    for (var key in keys) {
+      if (allStorage.containsKey(key)) {
+        target = key;
+        valor = int.parse(allStorage[target].toString());
+
+        break;
+      }
+    }
+
+    if (target == 'Partner') {
+      model.createdByPartner = valor;
+    } else if (target == 'Customer') {
+      model.createdByCustomer = valor;
+    } else {
+      return Either.right(false);
+    }
+
     final saveResult = await _newTicketApi.saveTicket(model);
 
     return saveResult.when((failure) {

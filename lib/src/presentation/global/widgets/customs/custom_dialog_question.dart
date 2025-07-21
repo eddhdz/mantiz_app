@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
-import '../widgets/texts/general_text.dart';
+import '../../colors.dart';
+import '../texts/general_text.dart';
 
 class CustomDialogQuestion extends StatelessWidget {
   final String descriptions, btnOk, btnNotOk, title;
