@@ -10,7 +10,7 @@ class MaintenancesModel {
   int folio;
   int viewFolio;
   String description;
-  String area;
+  String? area;
   String reason;
   String? photoevidence;
   String status;
