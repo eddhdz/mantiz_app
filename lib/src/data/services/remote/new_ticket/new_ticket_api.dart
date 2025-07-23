@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
-import '../../../../domain/models/models.dart';
+import '../../../models/models.dart';
 import '../../../http/http.dart';
-import '../ports.dart';
 
 class NewTicketApi {
   final Http _http;
@@ -14,7 +13,6 @@ class NewTicketApi {
   Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel model) async {
     final result = await _http.request(
       '/api/mantiz/v1/mysql/tickets/add',
-      Ports.mantizPort,
       method: HttpMethod.post,
       body: {
         'id': model.id,
@@ -54,7 +52,6 @@ class NewTicketApi {
       int fkCustomer) async {
     final result = await _http.request(
       '/api/mantiz/v1/mysql/customers/branchoffices',
-      Ports.mantizPort,
       method: HttpMethod.post,
       body: {'fkCustomer': fkCustomer},
     );
@@ -104,7 +101,6 @@ class NewTicketApi {
       int fkPartnerLicence) async {
     final result = await _http.request(
       '/api/mantiz/v1/mysql/partners/licences/customers',
-      Ports.mantizPort,
       method: HttpMethod.post,
       body: {'fkPartnerLicence': fkPartnerLicence},
     );

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/repositories/authentication_repository.dart';
+import '../../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../../routes/routes.dart';
 import '../../../global/colors.dart';
-import '../../../../domain/repositories/connectivity_repository.dart';
+import '../../../../domain/repositories/connectivity/connectivity_repository.dart';
 
 import 'package:provider/provider.dart';
 

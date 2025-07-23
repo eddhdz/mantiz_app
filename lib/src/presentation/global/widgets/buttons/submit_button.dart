@@ -3,7 +3,7 @@ import 'package:mantiz/src/presentation/pages/log_in/controller/log_in_controlle
 import 'package:provider/provider.dart';
 
 import '../../../../domain/enums.dart';
-import '../../../../domain/repositories/authentication_repository.dart';
+import '../../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../../routes/routes.dart';
 import '../../colors.dart';
 import 'general_button.dart';

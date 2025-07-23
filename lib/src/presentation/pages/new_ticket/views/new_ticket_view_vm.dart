@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/enums.dart';
-import '../../../../domain/models/models.dart';
+import '../../../../data/models/models.dart';
 import '../../../../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../../../global/colors.dart';
 import '../photos/camera_gallery_service.dart';

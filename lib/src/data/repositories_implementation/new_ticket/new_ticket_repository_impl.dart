@@ -1,6 +1,6 @@
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
-import '../../../domain/models/models.dart';
+import '../../models/models.dart';
 import '../../../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../../services/remote/new_ticket/new_ticket_api.dart';
 

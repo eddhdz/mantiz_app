@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../domain/repositories/connectivity_repository.dart';
+import '../../../domain/repositories/connectivity/connectivity_repository.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 

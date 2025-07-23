@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
-import '../../../../domain/models/models.dart';
+import '../../../models/models.dart';
 import '../../../http/http.dart';
-import '../ports.dart';
 
 class HomeApi {
   final Http _http;
@@ -14,8 +13,7 @@ class HomeApi {
   Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances(
       int fkPartner) async {
     final result = await _http.request(
-      '/api/mantiz/v1/mysql/tickets',
-      Ports.mantizPort,
+      '/Api_Mantiz/api/mantiz/v1/mysql/tickets',
       method: HttpMethod.post,
       body: {'id': fkPartner},
     );

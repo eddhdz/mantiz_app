@@ -1,4 +1,4 @@
-import 'package:mantiz/src/domain/models/models.dart';
+import 'package:mantiz/src/data/models/models.dart';
 
 import '../../either.dart';
 import '../../enums.dart';

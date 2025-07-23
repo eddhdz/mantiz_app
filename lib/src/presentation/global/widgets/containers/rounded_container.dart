@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/models/models.dart';
+import '../../../../data/models/models.dart';
 
 class RoundedContainer extends StatelessWidget {
   final ContainerPropertiesModel containerPropertiesModel;

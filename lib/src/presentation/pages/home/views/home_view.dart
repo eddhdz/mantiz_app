@@ -1,6 +1,6 @@
 //! Flutter ...
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/domain/models/general_text_properties_model.dart';
+import 'package:mantiz/src/data/models/general_text_properties_model.dart';
 import 'package:mantiz/src/presentation/pages/home/views/home_view_vm.dart';
 
 //! imports locales ...
