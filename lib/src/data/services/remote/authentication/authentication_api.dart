@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../../../domain/either.dart';
-import '../../../domain/enums.dart';
-import '../../http/http.dart';
-import 'ports.dart';
+import '../../../../domain/either.dart';
+import '../../../../domain/enums.dart';
+import '../../../http/http.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -24,8 +23,7 @@ class AuthenticationApi {
     final platform = Platform.isIOS ? 'iOS' : 'Android';
 
     final result = await _http.request(
-      '/api/users/v1/mysql/profiles/signin',
-      Ports.apiUsersPort,
+      '/Users/api/users/v1/mysql/profiles/signin',
       method: HttpMethod.post,
       body: {
         "id": 1,
@@ -68,8 +66,7 @@ class AuthenticationApi {
   Future<Either<SignInFailure, String>> validateSession(
       {required String token}) async {
     final result = await _http.request(
-      '/api/mantiz/v1/mysql/login',
-      Ports.mantizPort,
+      '/Api_Mantiz/api/mantiz/v1/mysql/login',
       method: HttpMethod.post,
       body: {"uuid": token},
     );

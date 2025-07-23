@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../domain/models/models.dart';
+import '../../../../../data/models/models.dart';
 import '../../../colors.dart';
 import '../../texts/general_text.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/domain/models/general_text_properties_model.dart';
+import 'package:mantiz/src/data/models/general_text_properties_model.dart';
 
 class GeneralTextForm extends StatelessWidget {
   final GeneralTextPropertiesModel properties;

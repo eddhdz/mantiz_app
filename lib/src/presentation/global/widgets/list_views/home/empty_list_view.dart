@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../domain/models/floating_button_properties_model.dart';
+import '../../../../../data/models/floating_button_properties_model.dart';
 import '../../../../pages/home/views/home_view_vm.dart';
 import '../../../colors.dart';
 import '../../buttons/button_box_horizontal.dart';

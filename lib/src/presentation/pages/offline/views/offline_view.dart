@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/repositories/connectivity_repository.dart';
+import '../../../../domain/repositories/connectivity/connectivity_repository.dart';
 import '../../../global/colors.dart';
 import '../../../global/widgets/buttons/general_button.dart';
 import '../../../routes/routes.dart';

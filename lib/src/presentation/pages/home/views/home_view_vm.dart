@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../domain/enums.dart';
-import '../../../../domain/models/maintenances_model.dart';
+import '../../../../data/models/maintenances_model.dart';
 import '../../../../domain/repositories/home/home_repository.dart';
 
 import 'package:provider/provider.dart';

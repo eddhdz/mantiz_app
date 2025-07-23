@@ -1,6 +1,6 @@
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
-import '../../../domain/models/maintenances_model.dart';
+import '../../models/maintenances_model.dart';
 import '../../../domain/repositories/home/home_repository.dart';
 import '../../services/remote/home/home_api.dart';
 

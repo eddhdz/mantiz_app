@@ -1,0 +1,12 @@
+export 'package:mantiz/src/data/models/branch_office_model.dart';
+export 'package:mantiz/src/data/models/container_properties_model.dart';
+export 'package:mantiz/src/data/models/customer_model.dart';
+export 'package:mantiz/src/data/models/floating_button_properties_model.dart';
+export 'package:mantiz/src/data/models/general_text_properties_model.dart';
+export 'package:mantiz/src/data/models/maintenances_model.dart';
+export 'package:mantiz/src/data/models/save_ticket_model.dart';
+export 'package:mantiz/src/data/models/user_model.dart';
+export 'package:mantiz/src/data/models/who_customer_created_model.dart';
+export 'package:mantiz/src/data/models/who_customer_updated_model.dart';
+export 'package:mantiz/src/data/models/who_partner_created_model.dart';
+export 'package:mantiz/src/data/models/who_partner_updated_model.dart';

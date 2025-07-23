@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/models/models.dart';
+import '../../../../data/models/models.dart';
 import '../../../global/colors.dart';
 import '../../../global/widgets/customs/custom_dialog_general.dart';
 import '../../../global/widgets/customs/custom_dialog_question.dart';

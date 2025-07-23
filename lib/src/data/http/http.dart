@@ -18,8 +18,7 @@ class Http {
   Http(this._client, this._baseUrl);
 
   Future<Either<HttpFailure, dynamic>> request(
-    String path,
-    String port, {
+    String path, {
     HttpMethod method = HttpMethod.get,
     Map<String, String> headers = const {},
     Map<String, dynamic> body = const {},
@@ -27,7 +26,7 @@ class Http {
     Map<String, dynamic> logs = {};
     StackTrace? stackTrace;
     try {
-      Uri url = Uri.parse('$_baseUrl$port$path');
+      Uri url = Uri.parse('$_baseUrl$path');
       headers = {
         "Content-Type": "application/json",
         ...headers,
