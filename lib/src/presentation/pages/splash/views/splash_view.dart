@@ -35,6 +35,7 @@ class _SplashViewState extends State<SplashView> {
       listen: false,
     );
     final hasInternet = await connectivityRepository.hasInternet;
+    await Future.delayed(const Duration(seconds: 2));
 
     if (hasInternet) {
       final isSignedIn = await authenticationRepository.isSignedIn;
@@ -56,7 +57,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void _goTo(String routeName) {
-    Navigator.pushReplacementNamed(context, routeName);
+    Navigator.pushNamedAndRemoveUntil(context, routeName, (route) => false);
   }
 
   @override
@@ -64,7 +65,12 @@ class _SplashViewState extends State<SplashView> {
     return const Scaffold(
       backgroundColor: blueStrongGlobalColor,
       body: Center(
-        child: Text('MANTIZ'),
+        child: Text('MANTIZ',
+            style: TextStyle(
+              color: whiteGlobalColor,
+              fontSize: 40,
+              fontWeight: FontWeight.w400,
+            )),
       ),
     );
   }
