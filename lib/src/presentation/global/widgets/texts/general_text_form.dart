@@ -1,52 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/data/models/general_text_properties_model.dart';
 
 class GeneralTextForm extends StatelessWidget {
-  String label;
-  bool enable;
-  Color objectsColor;
-  Color textColor;
-  String? Function(String?)? validator;
-  ValueChanged<String> onChange;
+  final GeneralTextPropertiesModel properties;
 
-  GeneralTextForm(
-      {super.key,
-      required this.label,
-      required this.enable,
-      required this.objectsColor,
-      required this.textColor,
-      required this.validator,
-      required this.onChange});
+  const GeneralTextForm({super.key, required this.properties});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      validator: (value) => validator!(value),
-      onChanged: (value) => onChange(value),
-      obscureText: true,
-      enabled: enable,
-      cursorColor: objectsColor,
-      keyboardType: TextInputType.emailAddress,
+      validator: (value) => properties.validator!(value),
+      onChanged: (value) => properties.onChange(value),
+      obscureText: properties.obscureText,
+      enabled: properties.enable,
+      cursorColor: properties.objectsColor,
+      controller: properties.controller,
+      keyboardType: properties.keyboard,
+      minLines: properties.minLines,
+      maxLines: properties.maxLines,
+      textInputAction: TextInputAction.go,
       style: TextStyle(
-        color: textColor,
+        color: properties.textColor,
         fontWeight: FontWeight.bold,
         fontSize: 16,
       ),
       decoration: InputDecoration(
-        labelText: label,
+        labelText: properties.label,
         labelStyle: TextStyle(
-          color: textColor,
+          color: properties.textColor,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
-            color: objectsColor,
+            color: properties.objectsColor,
             width: 2.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
-            color: objectsColor,
+            color: properties.objectsColor,
             width: 3.0,
           ),
         ),

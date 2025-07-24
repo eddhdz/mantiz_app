@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/models/models.dart';
+import '../../../../data/models/models.dart';
 import '../../colors.dart';
 import '../texts/general_text.dart';
 
 class ButtonBoxHorizontal extends StatelessWidget {
-  List<FloatingButtonPropertiesModel> buttons;
+  final List<FloatingButtonPropertiesModel> buttons;
 
-  ButtonBoxHorizontal({super.key, required this.buttons});
+  const ButtonBoxHorizontal({super.key, required this.buttons});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+        alignment: Alignment.center,
         height: 60,
         child: ListView.builder(
+            shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemCount: buttons.length,
             itemBuilder: (_, int index) {
@@ -40,7 +42,8 @@ class ButtonBoxHorizontal extends StatelessWidget {
                             overFlow: TextOverflow.ellipsis,
                             size: 12,
                             weight: FontWeight.normal,
-                            color: whiteGlobalColor),
+                            color: whiteGlobalColor,
+                            align: TextAlign.center),
                         icon: Icon(button.icon),
                       ),
               );

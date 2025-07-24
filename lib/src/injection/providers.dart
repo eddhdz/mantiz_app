@@ -1,0 +1,55 @@
+import '../data/http/http.dart';
+import '../data/repositories_implementation/authentication/authentication_repository_impl.dart';
+import '../data/repositories_implementation/connectivity/connectivity_repository_impl.dart';
+import '../data/repositories_implementation/home/home_repository_impl.dart';
+import '../data/repositories_implementation/new_ticket/new_ticket_repository_impl.dart';
+import '../data/services/remote/authentication/authentication_api.dart';
+import '../data/services/remote/home/home_api.dart';
+import '../data/services/remote/new_ticket/new_ticket_api.dart';
+import '../domain/repositories/authentication/authentication_repository.dart';
+import '../domain/repositories/connectivity/connectivity_repository.dart';
+import '../domain/repositories/home/home_repository.dart';
+import '../domain/repositories/new_ticket/new_ticket_repository.dart';
+import '../presentation/constants/app_constants.dart';
+import '../presentation/pages/home/views/home_view_vm.dart';
+import '../presentation/pages/new_ticket/views/new_ticket_view_vm.dart';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
+
+List<SingleChildWidget> appProviders = [
+  ChangeNotifierProvider.value(value: HomeViewVm()),
+
+  ChangeNotifierProvider.value(value: NewTicketViewVM()),
+
+  Provider<NewTicketRepository>(
+      create: (_) => NewTicketRepositoryImpl(
+          NewTicketApi(Http(http.Client(), AppConstants.baseUrl)),
+          const FlutterSecureStorage())),
+  // Repositorio para conexion
+  Provider<ConnectivityRepository>(
+    create: (_) => ConnectivityRepositoryImpl(Connectivity()),
+  ),
+  // Repositorio LogIn
+  Provider<AuthenticationRepository>(
+    create: (_) => AuthenticationRepositoryImpl(
+      const FlutterSecureStorage(),
+      AuthenticationApi(Http(
+        http.Client(),
+        AppConstants.baseUrl,
+      )),
+    ),
+  ),
+
+  Provider<HomeRepository>(
+    create: (_) => HomeRepositoryImpl(
+        HomeApi(Http(
+          http.Client(),
+          AppConstants.baseUrl,
+        )),
+        const FlutterSecureStorage()),
+  ),
+];
