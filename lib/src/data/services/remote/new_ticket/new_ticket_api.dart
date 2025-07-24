@@ -12,7 +12,7 @@ class NewTicketApi {
 
   Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel model) async {
     final result = await _http.request(
-      '/api/mantiz/v1/mysql/tickets/add',
+      '/Api_Mantiz/api/mantiz/v1/mysql/tickets/add',
       method: HttpMethod.post,
       body: {
         'id': model.id,
@@ -51,7 +51,7 @@ class NewTicketApi {
   Future<Either<GeneralFailure, List<BranchOfficeModel>>> loadBranchs(
       int fkCustomer) async {
     final result = await _http.request(
-      '/api/mantiz/v1/mysql/customers/branchoffices',
+      '/Api_Mantiz/api/mantiz/v1/mysql/customers/branchoffices',
       method: HttpMethod.post,
       body: {'fkCustomer': fkCustomer},
     );
@@ -100,7 +100,7 @@ class NewTicketApi {
   Future<Either<GeneralFailure, List<CustomerModel>>> loadCustomers(
       int fkPartnerLicence) async {
     final result = await _http.request(
-      '/api/mantiz/v1/mysql/partners/licences/customers',
+      '/Api_Mantiz/api/mantiz/v1/mysql/partners/licences/customers',
       method: HttpMethod.post,
       body: {'fkPartnerLicence': fkPartnerLicence},
     );
