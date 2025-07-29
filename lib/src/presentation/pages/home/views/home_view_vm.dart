@@ -21,20 +21,18 @@ class HomeViewVm with ChangeNotifier {
     _visibleTickets = [];
     notifyListeners();
 
-    final result = await Provider.of<HomeRepository>(context, listen: false)
-        .loadMaintenances();
+    final result = await Provider.of<HomeRepository>(context, listen: false).loadMaintenances();
 
     result.when((failure) {
       final message = {
         GeneralFailure.noData: 'No information',
-        GeneralFailure.unknown: 'Error',
+        GeneralFailure.unknown: 'No records found',
         GeneralFailure.network: 'No Internet',
         GeneralFailure.clientError: 'Client side connection failure',
         GeneralFailure.serverError: 'Server side connection failure',
       }[failure];
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message!)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
     }, (maintenances) {
       _visibleTickets = allTickets = maintenances;
     });
