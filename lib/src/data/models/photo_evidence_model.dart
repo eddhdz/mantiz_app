@@ -3,7 +3,7 @@ class PhotoEvidenceModel {
   String uuidapp;
   String name;
   String type;
-  String url;
+  String? url;
 
   PhotoEvidenceModel({
     required this.uuid,
@@ -12,6 +12,13 @@ class PhotoEvidenceModel {
     required this.type,
     required this.url,
   });
+
+  PhotoEvidenceModel.onInit()
+      : uuid = '',
+        uuidapp = '',
+        name = '',
+        type = '',
+        url = '';
 
   factory PhotoEvidenceModel.fromJson(Map<String, dynamic> json) {
     return PhotoEvidenceModel(

@@ -1,3 +1,5 @@
+import 'package:mantiz/src/data/models/photo_evidence_model.dart';
+
 class SaveTicketModel {
   final int id;
   final int fkTypeMaintenance;
@@ -8,10 +10,10 @@ class SaveTicketModel {
   final String description;
   final String area;
   final String reason;
-  final String? photoevidence;
   final DateTime createdAt;
   int? createdByPartner;
   int? createdByCustomer;
+  String? photoevidence;
 
   SaveTicketModel(
       {required this.id,
@@ -23,10 +25,10 @@ class SaveTicketModel {
       required this.description,
       required this.area,
       required this.reason,
-      required this.photoevidence,
       required this.createdAt,
       required this.createdByPartner,
-      required this.createdByCustomer});
+      required this.createdByCustomer,
+      required this.photoevidence});
 
   SaveTicketModel.empty()
       : id = 0,
@@ -38,10 +40,10 @@ class SaveTicketModel {
         description = '',
         area = '',
         reason = '',
-        photoevidence = null,
         createdAt = DateTime.now(),
         createdByPartner = null,
-        createdByCustomer = null;
+        createdByCustomer = null,
+        photoevidence = null;
 
   factory SaveTicketModel.fromJson(Map<String, dynamic> json) {
     return SaveTicketModel(
@@ -54,15 +56,10 @@ class SaveTicketModel {
         description: json['description'],
         area: json['area'],
         reason: json['reason'],
-        photoevidence:
-            (json['photoevidence'] != null) ? json['photoevidence'] : null,
+        photoevidence: (json['photoevidence'] != null) ? json['photoevidence'] : null,
         createdAt: DateTime.parse(json['createdAt'].toString()),
-        createdByPartner: (json['createdByPartner'] != null)
-            ? int.parse(json['createdByPartner'].toString())
-            : null,
-        createdByCustomer: (json['createdByCustomer'] != null)
-            ? int.parse(json['createdByCustomer'].toString())
-            : null);
+        createdByPartner: (json['createdByPartner'] != null) ? int.parse(json['createdByPartner'].toString()) : null,
+        createdByCustomer: (json['createdByCustomer'] != null) ? int.parse(json['createdByCustomer'].toString()) : null);
   }
 
   Map<String, dynamic> toJson() => {

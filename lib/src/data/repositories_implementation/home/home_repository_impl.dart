@@ -20,8 +20,6 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances() async {
     final partner = await _storage.read(key: 'Partner');
 
-    var a = 1000;
-
     final homeResult = await _homeApi.loadMaintenances(int.parse(partner!));
 
     return homeResult.when(
@@ -57,7 +55,7 @@ class HomeRepositoryImpl implements HomeRepository {
               uuidapp: photoEvidence['uuidapp'],
               name: photoEvidence['name'],
               type: photoEvidence['type'],
-              url: photoEvidence['url'],
+              url: (photoEvidence['url'] != null) ? photoEvidence['url'] : '',
             );
           }
 

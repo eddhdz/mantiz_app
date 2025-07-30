@@ -52,20 +52,8 @@ class _NewTicketViewState extends State<NewTicketView> {
     return Scaffold(
       appBar: AppBar(
           title: const GeneralText(
-              mensaje: 'Nuevo ticket',
-              maxLines: 1,
-              overFlow: TextOverflow.ellipsis,
-              size: 15,
-              weight: FontWeight.bold,
-              color: blackPanter,
-              align: TextAlign.center),
-          actions: [
-            (vm.isLoading)
-                ? const Image(
-                    image: AssetImage('lib/src/assets/customs/Wait03@4x.gif'),
-                    fit: BoxFit.scaleDown)
-                : Container()
-          ]),
+              mensaje: 'Nuevo ticket', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.center),
+          actions: [(vm.isLoading) ? const Image(image: AssetImage('lib/src/assets/customs/Wait03@4x.gif'), fit: BoxFit.scaleDown) : Container()]),
       body: SingleChildScrollView(
           child: SizedBox(
               child: Form(
@@ -74,14 +62,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                     const Row(children: <Widget>[
                       //!
                       SizedBox(width: 10),
-                      GeneralText(
-                          mensaje: 'Título:',
-                          maxLines: 1,
-                          overFlow: TextOverflow.ellipsis,
-                          size: 15,
-                          weight: FontWeight.bold,
-                          color: blackPanter,
-                          align: TextAlign.start)
+                      GeneralText(mensaje: 'Título:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.start)
                     ]),
                     const SizedBox(height: 5),
                     Container(
@@ -93,8 +74,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                                 objectsColor: blueLightGlobalColor,
                                 textColor: blackPanter,
                                 obscureText: false,
-                                validator: (value) =>
-                                    vm.generalValidator(value),
+                                validator: (value) => vm.generalValidator(value),
                                 onChange: (value) => vm.onTitleChange(value),
                                 controller: titleController,
                                 keyboard: TextInputType.text,
@@ -106,13 +86,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                     const Row(children: <Widget>[
                       SizedBox(width: 10),
                       GeneralText(
-                          mensaje: 'Descripción:',
-                          maxLines: 1,
-                          overFlow: TextOverflow.ellipsis,
-                          size: 15,
-                          weight: FontWeight.bold,
-                          color: blackPanter,
-                          align: TextAlign.left)
+                          mensaje: 'Descripción:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
                     ]),
                     const SizedBox(height: 10),
                     Container(
@@ -124,10 +98,8 @@ class _NewTicketViewState extends State<NewTicketView> {
                                 objectsColor: blueLightGlobalColor,
                                 textColor: blackPanter,
                                 obscureText: false,
-                                validator: (value) =>
-                                    vm.generalValidator(value),
-                                onChange: (value) =>
-                                    vm.onDescriptionChange(value),
+                                validator: (value) => vm.generalValidator(value),
+                                onChange: (value) => vm.onDescriptionChange(value),
                                 controller: descriptionController,
                                 keyboard: TextInputType.multiline,
                                 minLines: 1,
@@ -137,14 +109,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                     const SizedBox(height: 5),
                     const Row(children: <Widget>[
                       SizedBox(width: 10),
-                      GeneralText(
-                          mensaje: 'Evidencia:',
-                          maxLines: 1,
-                          overFlow: TextOverflow.ellipsis,
-                          size: 15,
-                          weight: FontWeight.bold,
-                          color: blackPanter,
-                          align: TextAlign.left)
+                      GeneralText(mensaje: 'Evidencia:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
                     ]),
                     const SizedBox(height: 10),
                     RoundedContainer(
@@ -167,12 +132,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                                         context: context,
                                         builder: (build) {
                                           return const CustomDialogQuestion(
-                                              title: 'Evidencia',
-                                              descriptions:
-                                                  '¿Deseas tomar foto o cargar imágen?',
-                                              btnOk: 'Cámara',
-                                              btnNotOk: 'Galería',
-                                              altura: 200);
+                                              title: 'Evidencia', descriptions: '¿Deseas tomar foto o cargar imágen?', btnOk: 'Cámara', btnNotOk: 'Galería', altura: 200);
                                         });
 
                                     if (yesOrNo != null) {
@@ -191,25 +151,19 @@ class _NewTicketViewState extends State<NewTicketView> {
                                   textColor: blackPanter),
                               Expanded(child: Container()),
                               RoundedContainer(
-                                  containerPropertiesModel:
-                                      ContainerPropertiesModel(
-                                          height: screenSize.height * 0.15,
-                                          width: screenSize.width * 0.3,
-                                          alignment: Alignment.center,
-                                          backColor: whiteGlobalColor,
-                                          borderColor: greenPrincipal,
-                                          shadowColor:
-                                              blueExtraLightGlobalColor,
-                                          rounded: 1,
-                                          borderWidth: 2,
-                                          widget: (vm.evidence == null)
-                                              ? const Image(
-                                                  image: AssetImage(
-                                                      'lib/src/assets/camera.png'),
-                                                  fit: BoxFit.scaleDown)
-                                              : Image.file(vm.evidence!,
-                                                  fit: BoxFit.scaleDown),
-                                          margin: const EdgeInsets.all(0))),
+                                  containerPropertiesModel: ContainerPropertiesModel(
+                                      height: screenSize.height * 0.15,
+                                      width: screenSize.width * 0.3,
+                                      alignment: Alignment.center,
+                                      backColor: whiteGlobalColor,
+                                      borderColor: greenPrincipal,
+                                      shadowColor: blueExtraLightGlobalColor,
+                                      rounded: 1,
+                                      borderWidth: 2,
+                                      widget: (vm.evidence == null)
+                                          ? const Image(image: AssetImage('lib/src/assets/camera.png'), fit: BoxFit.scaleDown)
+                                          : Image.file(vm.evidence!, fit: BoxFit.scaleDown),
+                                      margin: const EdgeInsets.all(0))),
                               const SizedBox(width: 10),
                             ]))),
 
@@ -217,14 +171,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                     const SizedBox(height: 5),
                     const Row(children: <Widget>[
                       SizedBox(width: 10),
-                      GeneralText(
-                          mensaje: 'Cliente:',
-                          maxLines: 1,
-                          overFlow: TextOverflow.ellipsis,
-                          size: 15,
-                          weight: FontWeight.bold,
-                          color: blackPanter,
-                          align: TextAlign.left)
+                      GeneralText(mensaje: 'Cliente:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
                     ]),
                     const SizedBox(height: 5),
                     Container(
@@ -236,8 +183,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                             return DropdownMenuItem<CustomerModel>(
                                 value: customer,
                                 child: GeneralText(
-                                    mensaje:
-                                        '${customer.id} - ${customer.customer}',
+                                    mensaje: '${customer.id} - ${customer.customer}',
                                     maxLines: 1,
                                     overFlow: TextOverflow.ellipsis,
                                     size: 15,
@@ -252,8 +198,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                           },
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 3, color: blueLightGlobalColor),
+                            borderSide: BorderSide(width: 3, color: blueLightGlobalColor),
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           )),
                           validator: (value) => vm.validatorCustomer(value),
@@ -263,14 +208,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                     const SizedBox(height: 5),
                     const Row(children: <Widget>[
                       SizedBox(width: 10),
-                      GeneralText(
-                          mensaje: 'Sucursal:',
-                          maxLines: 1,
-                          overFlow: TextOverflow.ellipsis,
-                          size: 15,
-                          weight: FontWeight.bold,
-                          color: blackPanter,
-                          align: TextAlign.left)
+                      GeneralText(mensaje: 'Sucursal:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
                     ]),
                     const SizedBox(height: 5),
                     Container(
@@ -282,8 +220,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                             return DropdownMenuItem<BranchOfficeModel>(
                                 value: branch,
                                 child: GeneralText(
-                                    mensaje:
-                                        '${branch.id} - ${branch.description}',
+                                    mensaje: '${branch.id} - ${branch.description}',
                                     maxLines: 1,
                                     overFlow: TextOverflow.ellipsis,
                                     size: 15,
@@ -298,8 +235,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                           },
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 3, color: blueLightGlobalColor),
+                            borderSide: BorderSide(width: 3, color: blueLightGlobalColor),
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           )),
                           validator: (value) => vm.validatorBranch(value),
@@ -309,14 +245,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                     const SizedBox(height: 5),
                     const Row(children: <Widget>[
                       SizedBox(width: 10),
-                      GeneralText(
-                          mensaje: 'Área:',
-                          maxLines: 1,
-                          overFlow: TextOverflow.ellipsis,
-                          size: 15,
-                          weight: FontWeight.bold,
-                          color: blackPanter,
-                          align: TextAlign.left)
+                      GeneralText(mensaje: 'Área:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
                     ]),
                     const SizedBox(height: 5),
                     Container(
@@ -328,8 +257,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                                 objectsColor: blueLightGlobalColor,
                                 textColor: blackPanter,
                                 obscureText: false,
-                                validator: (value) =>
-                                    vm.generalValidator(value),
+                                validator: (value) => vm.generalValidator(value),
                                 onChange: (value) => vm.onAreaChange(value),
                                 controller: areaController,
                                 keyboard: TextInputType.text,
@@ -363,8 +291,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                             if (!context.mounted) return;
                             await vm.loadCustomer(context);
 
-                            titleController.text = descriptionController.text =
-                                areaController.text = '';
+                            titleController.text = descriptionController.text = areaController.text = '';
 
                             if (!context.mounted) return;
                             Navigator.of(context).pop();
@@ -378,27 +305,35 @@ class _NewTicketViewState extends State<NewTicketView> {
                             if (vm.formKey.currentState!.validate()) {
                               String desc = '', url = '';
 
-                              await vm.saveTicket(context);
-
-                              if (vm.finishSave) {
-                                desc = 'Ticket guardado satisfactoriamente';
-                                url =
-                                    'lib/src/assets/customs/Information@4x.png';
-                              } else {
-                                desc =
-                                    'Ocurrió un error, vuelve a intentar el procedimiento';
+                              //! Realizar primero el guardado de la imágen (obtener json correspondiente) ...
+                              if (vm.base64Image.isEmpty) {
+                                desc = 'Debes tener cargada una imágen.';
                                 url = 'lib/src/assets/customs/Exception@4x.png';
+                              } else {
+                                await vm.savePhoto(context);
+                                if (vm.finishSavePhoto) {
+                                  if (context.mounted) {
+                                    await vm.saveTicket(context);
+                                  }
+
+                                  if (vm.finishSaveTicket) {
+                                    desc = 'Ticket guardado satisfactoriamente';
+                                    url = 'lib/src/assets/customs/Information@4x.png';
+                                  } else {
+                                    desc = 'Ocurrió un error al guardar el ticket, vuelve a intentar el procedimiento';
+                                    url = 'lib/src/assets/customs/Exception@4x.png';
+                                  }
+                                } else {
+                                  desc = 'Ocurrió un error al guardar la foto, vuelve a intentar el procedimiento';
+                                  url = 'lib/src/assets/customs/Exception@4x.png';
+                                }
                               }
 
                               if (!context.mounted) return;
                               await showDialog(
                                   context: context,
                                   builder: (build) {
-                                    return CustomDialogGeneral(
-                                        descriptions: desc,
-                                        text: 'Ok',
-                                        urlImage: url,
-                                        altura: 260);
+                                    return CustomDialogGeneral(descriptions: desc, text: 'Ok', urlImage: url, altura: 260);
                                   });
 
                               await vm.vmInit();
@@ -406,8 +341,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                               if (!context.mounted) return;
                               await vm.loadCustomer(context);
 
-                              titleController.text = descriptionController
-                                  .text = areaController.text = '';
+                              titleController.text = descriptionController.text = areaController.text = '';
                             } else {}
                           },
                           color: greenPrincipal,

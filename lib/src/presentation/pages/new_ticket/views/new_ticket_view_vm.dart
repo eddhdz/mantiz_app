@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 
+import '../../../../data/models/photo_evidence_model.dart';
+import '../../../../data/models/save_photo_model.dart';
 import '../../../../domain/enums.dart';
 import '../../../../data/models/models.dart';
 import '../../../../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../../../global/colors.dart';
 import '../photos/camera_gallery_service.dart';
 
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NewTicketViewVM with ChangeNotifier {
@@ -40,8 +42,14 @@ class NewTicketViewVM with ChangeNotifier {
   BranchOfficeModel? _selectedBranch;
   BranchOfficeModel? get selectedBranch => _selectedBranch;
 
-  bool _finishSave = false;
-  bool get finishSave => _finishSave;
+  PhotoEvidenceModel? _photoEvidenceModel;
+  PhotoEvidenceModel? get photoEvidenceModel => _photoEvidenceModel;
+
+  bool _finishSaveTicket = false;
+  bool get finishSaveTicket => _finishSaveTicket;
+
+  bool _finishSavePhoto = false;
+  bool get finishSavePhoto => _finishSavePhoto;
 
   String _title = '';
   String _description = '';
@@ -53,7 +61,8 @@ class NewTicketViewVM with ChangeNotifier {
     _evidenceColor = greenPrincipal;
     _base64Image = '';
     _rutaImage = '';
-    _finishSave = false;
+    _finishSaveTicket = false;
+    _finishSavePhoto = false;
 
     notifyListeners();
   }
@@ -84,12 +93,49 @@ class NewTicketViewVM with ChangeNotifier {
     }
   }
 
-  Future<void> saveTicket(BuildContext context) async {
+  Future<void> savePhoto(BuildContext context) async {
     _isLoading = true;
-    _finishSave = false;
+    _finishSavePhoto = false;
     notifyListeners();
 
-    SaveTicketModel model = SaveTicketModel(
+    SavePhotoModel photo = SavePhotoModel(
+      uuidapp: '97b290acab82d5937fb87a28b06181a3',
+      uuid: null,
+      name: '.jpeg',
+      type: 'JPEG',
+      url: null,
+      im64: _base64Image,
+      createdAt: DateTime.now(),
+    );
+
+    final result = await Provider.of<NewTicketRepository>(context, listen: false).savePhoto(photo);
+
+    result.when((failure) {
+      final message = {
+        GeneralFailure.noData: 'No information',
+        GeneralFailure.unknown: 'Error',
+        GeneralFailure.network: 'No Internet',
+        GeneralFailure.clientError: 'Client side connection failure',
+        GeneralFailure.serverError: 'Server side connection failure',
+      }[failure];
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
+    }, (photo) async {
+      if (photo.uuid.isNotEmpty) {
+        _photoEvidenceModel = photo;
+        _finishSavePhoto = true;
+
+        notifyListeners();
+      }
+    });
+  }
+
+  Future<void> saveTicket(BuildContext context) async {
+    _isLoading = true;
+    _finishSaveTicket = false;
+    notifyListeners();
+
+    SaveTicketModel ticket = SaveTicketModel(
         id: 0,
         fkTypeMaintenance: 1,
         fkPCL: _selectedCustomer!.id,
@@ -99,14 +145,12 @@ class NewTicketViewVM with ChangeNotifier {
         description: _title,
         area: _area,
         reason: _description,
-        photoevidence: (_base64Image.isEmpty) ? null : _base64Image,
+        photoevidence: jsonEncode(_photoEvidenceModel),
         createdAt: DateTime.now(),
         createdByPartner: null,
         createdByCustomer: null);
 
-    final result =
-        await Provider.of<NewTicketRepository>(context, listen: false)
-            .saveTicket(model);
+    final result = await Provider.of<NewTicketRepository>(context, listen: false).saveTicket(ticket);
 
     result.when((failure) {
       final message = {
@@ -117,17 +161,14 @@ class NewTicketViewVM with ChangeNotifier {
         GeneralFailure.serverError: 'Server side connection failure',
       }[failure];
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message!)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
     }, (guardado) async {
       if (guardado) {
-        _finishSave = true;
+        _finishSaveTicket = true;
 
         notifyListeners();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                'No se pudo determinar por quien fue creado el ticket <Partner, Supplier o Customer>')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo determinar por quien fue creado el ticket <Partner, Supplier o Customer>')));
       }
     });
   }
@@ -137,9 +178,7 @@ class NewTicketViewVM with ChangeNotifier {
     notifyListeners();
 
     _customers = [];
-    final result =
-        await Provider.of<NewTicketRepository>(context, listen: false)
-            .loadCustomers();
+    final result = await Provider.of<NewTicketRepository>(context, listen: false).loadCustomers();
 
     result.when((failure) {
       final message = {
@@ -150,8 +189,7 @@ class NewTicketViewVM with ChangeNotifier {
         GeneralFailure.serverError: 'Server side connection failure',
       }[failure];
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message!)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
     }, (customers) {
       _customers = customers;
     });
@@ -168,8 +206,7 @@ class NewTicketViewVM with ChangeNotifier {
     }
   }
 
-  Future<void> customerSelectedAction(
-      BuildContext context, CustomerModel customer) async {
+  Future<void> customerSelectedAction(BuildContext context, CustomerModel customer) async {
     _selectedCustomer = customer;
 
     //! Cargamos sucursales correspondientes al cliente seleccionado ...
@@ -178,15 +215,12 @@ class NewTicketViewVM with ChangeNotifier {
     }
   }
 
-  Future<void> loadSucursal(
-      BuildContext context, CustomerModel customer) async {
+  Future<void> loadSucursal(BuildContext context, CustomerModel customer) async {
     _isLoading = true;
     notifyListeners();
 
     _branchs = [];
-    final result =
-        await Provider.of<NewTicketRepository>(context, listen: false)
-            .loadBranchs(customer.fkCustomer);
+    final result = await Provider.of<NewTicketRepository>(context, listen: false).loadBranchs(customer.fkCustomer);
 
     result.when((failure) {
       final message = {
@@ -197,8 +231,7 @@ class NewTicketViewVM with ChangeNotifier {
         GeneralFailure.serverError: 'Server side connection failure',
       }[failure];
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message!)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
     }, (branchs) {
       _branchs = branchs;
     });
