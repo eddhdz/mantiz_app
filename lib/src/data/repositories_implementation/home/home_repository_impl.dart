@@ -17,7 +17,8 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl(this._homeApi, this._storage);
 
   @override
-  Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances() async {
+  Future<Either<GeneralFailure, List<MaintenancesModel>>>
+      loadMaintenances() async {
     final partner = await _storage.read(key: 'Partner');
 
     final homeResult = await _homeApi.loadMaintenances(int.parse(partner!));
@@ -33,7 +34,8 @@ class HomeRepositoryImpl implements HomeRepository {
 
         for (var ticket in json['maintenances'] as List) {
           //! branchoffice ...
-          var branchOffice = Map<String, dynamic>.from(jsonDecode(ticket['branchoffice']));
+          var branchOffice =
+              Map<String, dynamic>.from(jsonDecode(ticket['branchoffice']));
           BranchOfficeModel branchOfficeModel = BranchOfficeModel(
               id: int.parse(branchOffice['id'].toString()),
               fkSubcompany: int.parse(branchOffice['fkSubcompany'].toString()),
@@ -49,7 +51,8 @@ class HomeRepositoryImpl implements HomeRepository {
           //! PhotoEvidence ...
           PhotoEvidenceModel? photoEvidenceModel;
           if (ticket['photoevidence'] != null) {
-            var photoEvidence = Map<String, dynamic>.from(jsonDecode(ticket['photoevidence']));
+            var photoEvidence =
+                Map<String, dynamic>.from(jsonDecode(ticket['photoevidence']));
             photoEvidenceModel = PhotoEvidenceModel(
               uuid: photoEvidence['uuid'],
               uuidapp: photoEvidence['uuidapp'],
@@ -62,7 +65,8 @@ class HomeRepositoryImpl implements HomeRepository {
           //! whopartnercreated ...
           WhoPartnerCreatedModel? whoPartnerCreatedModel;
           if (ticket['whopartnercreated'] != null) {
-            var whoPartnerCreated = Map<String, dynamic>.from(jsonDecode(ticket['whopartnercreated']));
+            var whoPartnerCreated = Map<String, dynamic>.from(
+                jsonDecode(ticket['whopartnercreated']));
 
             whoPartnerCreatedModel = WhoPartnerCreatedModel(
                 idProfile: int.parse(whoPartnerCreated['idProfile'].toString()),
@@ -77,10 +81,12 @@ class HomeRepositoryImpl implements HomeRepository {
           //! whocustomercreated ...
           WhoCustomerCreatedModel? whoCustomerCreatedModel;
           if (ticket['whocustomercreated'] != null) {
-            var whoCustomerCreated = Map<String, dynamic>.from(jsonDecode(ticket['whocustomercreated']));
+            var whoCustomerCreated = Map<String, dynamic>.from(
+                jsonDecode(ticket['whocustomercreated']));
 
             whoCustomerCreatedModel = WhoCustomerCreatedModel(
-                idProfile: int.parse(whoCustomerCreated['idProfile'].toString()),
+                idProfile:
+                    int.parse(whoCustomerCreated['idProfile'].toString()),
                 fullname: whoCustomerCreated['fullname'],
                 email: whoCustomerCreated['email'],
                 phone: whoCustomerCreated['phone'],
@@ -92,7 +98,8 @@ class HomeRepositoryImpl implements HomeRepository {
           //! whopartnerupdated ...
           WhoPartnerUpdatedModel? whoPartnerUpdatedModel;
           if (ticket['whopartnerupdated'] != null) {
-            var whoPartnerUpdated = Map<String, dynamic>.from(jsonDecode(ticket['whopartnerupdated']));
+            var whoPartnerUpdated = Map<String, dynamic>.from(
+                jsonDecode(ticket['whopartnerupdated']));
 
             whoPartnerUpdatedModel = WhoPartnerUpdatedModel(
                 idProfile: int.parse(whoPartnerUpdated['idProfile'].toString()),
@@ -107,10 +114,12 @@ class HomeRepositoryImpl implements HomeRepository {
           //! whocustomerupdated ...
           WhoCustomerUpdatedModel? whoCustomerUpdatedModel;
           if (ticket['whocustomerupdated'] != null) {
-            var whoCustomerUpdated = Map<String, dynamic>.from(jsonDecode(ticket['whocustomerupdated']));
+            var whoCustomerUpdated = Map<String, dynamic>.from(
+                jsonDecode(ticket['whocustomerupdated']));
 
             whoCustomerUpdatedModel = WhoCustomerUpdatedModel(
-                idProfile: int.parse(whoCustomerUpdated['idProfile'].toString()),
+                idProfile:
+                    int.parse(whoCustomerUpdated['idProfile'].toString()),
                 fullname: whoCustomerUpdated['fullname'],
                 email: whoCustomerUpdated['email'],
                 phone: whoCustomerUpdated['phone'],
@@ -121,11 +130,18 @@ class HomeRepositoryImpl implements HomeRepository {
 
           MaintenancesModel maintenancesModel = MaintenancesModel(
               id: int.parse(ticket['id'].toString()),
-              fkTypeMaintenance: int.parse(ticket['fkTypeMaintenance'].toString()),
-              fkPLC: (ticket['fkPLC'] != null) ? int.parse(ticket['fkPLC'].toString()) : null,
+              fkTypeMaintenance:
+                  int.parse(ticket['fkTypeMaintenance'].toString()),
+              fkPLC: (ticket['fkPLC'] != null)
+                  ? int.parse(ticket['fkPLC'].toString())
+                  : null,
               fkCBO: int.parse(ticket['fkCBO'].toString()),
-              fkStatusMaintenance: int.parse(ticket['fkStatusMaintenance'].toString()),
-              fkCustomerProfileUpdated: (ticket['fkCustomerProfileUpdated'] != null) ? int.parse(ticket['fkCustomerProfileUpdated']) : null,
+              fkStatusMaintenance:
+                  int.parse(ticket['fkStatusMaintenance'].toString()),
+              fkCustomerProfileUpdated:
+                  (ticket['fkCustomerProfileUpdated'] != null)
+                      ? int.parse(ticket['fkCustomerProfileUpdated'].toString())
+                      : null,
               customer: ticket['customer'],
               folio: int.parse(ticket['folio'].toString()),
               viewFolio: ticket['viewFolio'],
@@ -135,7 +151,9 @@ class HomeRepositoryImpl implements HomeRepository {
               status: ticket['status'],
               type: ticket['type'],
               createdAt: DateTime.parse(ticket['createdAt'].toString()),
-              statusUpdateAt: (ticket['statusUpdateAt'] != null) ? DateTime.parse(ticket['statusUpdateAt'].toString()) : null,
+              statusUpdateAt: (ticket['statusUpdateAt'] != null)
+                  ? DateTime.parse(ticket['statusUpdateAt'].toString())
+                  : null,
               branchOfficeModel: branchOfficeModel,
               photoevidence: photoEvidenceModel,
               whoPartnerCreatedModel: whoPartnerCreatedModel,

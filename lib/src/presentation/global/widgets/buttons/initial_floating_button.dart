@@ -21,7 +21,7 @@ class InitialFloatingButton extends StatelessWidget {
       closeManually: false,
       children: [
         SpeedDialChild(
-            backgroundColor: blueNeutralGlobalColor,
+            backgroundColor: mediumGray,
             child: const Icon(
               Icons.account_circle,
               color: blackPanter,
@@ -29,7 +29,7 @@ class InitialFloatingButton extends StatelessWidget {
             label: 'Perfil de Usuario',
             onTap: () async {}),
         SpeedDialChild(
-            backgroundColor: blueNeutralGlobalColor,
+            backgroundColor: mediumGray,
             child: const Icon(
               Icons.add,
               color: blackPanter,
@@ -39,7 +39,7 @@ class InitialFloatingButton extends StatelessWidget {
               Navigator.of(context).pushNamed(Routes.newTicket);
             }),
         SpeedDialChild(
-            backgroundColor: blueNeutralGlobalColor,
+            backgroundColor: mediumGray,
             child: const Icon(
               Icons.power_settings_new_rounded,
               color: blackPanter,

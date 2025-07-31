@@ -11,7 +11,7 @@ Widget cardTicket(MaintenancesModel maintenance) {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          color: blueExtraLightGlobalColor,
+          color: veryLightGray,
           child: Column(children: <Widget>[
             //! Folio ...
             Container(

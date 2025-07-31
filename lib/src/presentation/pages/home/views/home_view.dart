@@ -43,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       backgroundColor: whiteGlobalColor,
       appBar: AppBar(
+          backgroundColor: whiteGlobalColor,
           title: const GeneralText(
               mensaje: 'Servicios',
               maxLines: 1,
@@ -62,7 +63,7 @@ class _HomeViewState extends State<HomeView> {
                 properties: GeneralTextPropertiesModel(
                     label: 'Palabra clave ...',
                     enable: true,
-                    objectsColor: blueNeutralGlobalColor,
+                    objectsColor: mediumGray,
                     textColor: blackPanter,
                     obscureText: false,
                     validator: null,
@@ -98,7 +99,7 @@ class _HomeViewState extends State<HomeView> {
                     height: 35,
                     child: CircularProgressIndicator(
                         backgroundColor: whiteGlobalColor,
-                        color: blueNeutralGlobalColor,
+                        color: mediumDarkGray,
                         strokeWidth: 4))
                 : Container(),
           ]),
