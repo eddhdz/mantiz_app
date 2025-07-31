@@ -23,3 +23,9 @@ const Color orangePrincipal = Color(0XFFFF5F18);
 
 //! greens ...
 const Color greenPrincipal = Color(0XFF2A8453);
+// Gray scale
+const Color darkGray = Color(0xFF212121);
+const Color mediumDarkGray = Color(0xFF424242);
+const Color mediumGray = Color(0xFF757575);
+const Color lightGray = Color(0xFFBDBDBD);
+const Color veryLightGray = Color(0xFFEEEEEE);

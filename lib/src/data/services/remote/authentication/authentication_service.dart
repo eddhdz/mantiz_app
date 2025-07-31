@@ -8,10 +8,10 @@ import '../../../http/http.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
-class AuthenticationApi {
+class AuthenticationService {
   final Http _http;
 
-  AuthenticationApi(this._http);
+  AuthenticationService(this._http);
 
   Future<Either<SignInFailure, String>> createSessionWithLogIn({
     required String username,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/presentation/global/widgets/buttons/submit_button.dart';
 
 import '../../../global/colors.dart';
+import '../../../global/widgets/buttons/general_button.dart';
+import '../../../global/widgets/textFormField/helper_text_form_field.dart';
 import '../controller/log_in_controller.dart';
 
 import 'package:provider/provider.dart';
@@ -12,110 +13,106 @@ class LogInView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final controller = Provider.of<LogInController>(context);
 
-    return ChangeNotifierProvider<LogInController>(
-      create: (_) => LogInController(),
-      child: Scaffold(
-        body: Stack(
+    return Scaffold(
+      backgroundColor: mediumDarkGray,
+      body: SingleChildScrollView(
+        child: Column(
           children: [
             Container(
               width: double.infinity,
-              height: double.infinity,
+              height: size.height * 0.5,
               decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [blueLightGlobalColor, blueStrongGlobalColor],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                color: mediumDarkGray,
+              ),
+              child: const Center(
+                  child: Text(
+                'MANTIZ',
+                style: TextStyle(
+                  color: veryLightGray,
+                  fontSize: 50,
+                  fontWeight: FontWeight.w500,
+                ),
               )),
             ),
-            SafeArea(
-              child: Center(
-                child: Container(
-                  width: size.width * 0.9,
-                  height: size.height * 0.6,
-                  decoration: BoxDecoration(
-                      color: whiteGlobalColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Form(
-                      child: Builder(builder: (context) {
-                        final controller =
-                            Provider.of<LogInController>(context);
-                        return AbsorbPointer(
-                          absorbing: controller.fetching,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Text(
-                                'Login',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              TextFormField(
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                decoration: const InputDecoration(
-                                    label: Text(
-                                      'Nombre de usuario',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.always,
-                                    filled: true,
-                                    fillColor: blueExtraLightGlobalColor,
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)))),
-                                onChanged: (text) {
-                                  controller.onUserNameChanged(text);
-                                },
-                                validator: (value) {
-                                  value = value?.trim().toLowerCase() ?? '';
-                                  if (value.isEmpty) {
-                                    return 'Invalid Username';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              TextFormField(
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  obscureText: true,
-                                  decoration: const InputDecoration(
-                                      label: Text('Contraseña',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600)),
-                                      floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
-                                      filled: true,
-                                      fillColor: blueExtraLightGlobalColor,
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)))),
-                                  onChanged: (text) {
-                                    controller.onPasswordChanged(text);
-                                  },
-                                  validator: (value) {
-                                    value = value?.replaceAll(' ', '') ?? '';
-                                    if (value.length < 3) {
-                                      return 'Invalid Password';
-                                    }
-                                    return null;
-                                  }),
-                              const SubmitButton()
-                            ],
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
+            Container(
+              width: double.infinity,
+              height: size.height * 0.5,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: const BoxDecoration(
+                color: lightGray,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
-            )
+              child: Form(
+                child: Builder(builder: (formcontext) {
+                  return AbsorbPointer(
+                    absorbing: controller.fetching,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text(
+                          'Iniciar sesión',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                        buildTextFormField(
+                          hintText: 'Usuario',
+                          icon: Icons.person,
+                          keyboardType: TextInputType.emailAddress,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          onChanged: (user) =>
+                              controller.onUserNameChanged(user),
+                          validator: (user) {
+                            user = user?.trim().toLowerCase() ?? '';
+                            if (user.isEmpty) {
+                              return 'Este campo no puede estar vacío';
+                            }
+                            return null;
+                          },
+                        ),
+                        buildTextFormField(
+                            hintText: 'Contraseña',
+                            icon: Icons.lock_open_rounded,
+                            obscureText: !controller.isVisible,
+                            suffixIcon: IconButton(
+                              onPressed: () => controller.onVisibleChanged(),
+                              icon: Icon(controller.isVisible
+                                  ? Icons.visibility_rounded
+                                  : Icons.visibility_off_rounded),
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            onChanged: (password) =>
+                                controller.onPasswordChanged(password),
+                            validator: (password) {
+                              password = password?.replaceAll(' ', '') ?? '';
+                              if (password.length < 3) {
+                                // Minimum 6 characters is standard
+                                return 'La contraseña debe tener al menos 6 caracteres';
+                              }
+                              return null;
+                            }),
+                        GeneralButton(
+                          text: 'Iniciar sesión',
+                          color: darkGray,
+                          textColor: veryLightGray,
+                          onPressed: () {
+                            final isValid = Form.of(formcontext).validate();
+                            if (isValid) {
+                              controller.submitLogin(context);
+                            }
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ),
           ],
         ),
       ),

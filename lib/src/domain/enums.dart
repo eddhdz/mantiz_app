@@ -18,3 +18,10 @@ enum GeneralFailure {
   clientError,
   serverError,
 }
+
+enum LicenceStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+}

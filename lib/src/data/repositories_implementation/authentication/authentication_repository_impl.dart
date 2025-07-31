@@ -4,7 +4,7 @@ import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../models/user_model.dart';
 import '../../../domain/repositories/authentication/authentication_repository.dart';
-import '../../services/remote/authentication/authentication_api.dart';
+import '../../services/remote/authentication/authentication_service.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -12,7 +12,7 @@ const _key = 'sessionId';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final FlutterSecureStorage _secureStorage;
-  final AuthenticationApi _authenticationApi;
+  final AuthenticationService _authenticationApi;
 
   AuthenticationRepositoryImpl(
     this._secureStorage,
