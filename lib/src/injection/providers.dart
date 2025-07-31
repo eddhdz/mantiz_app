@@ -2,16 +2,21 @@ import '../data/http/http.dart';
 import '../data/repositories_implementation/authentication/authentication_repository_impl.dart';
 import '../data/repositories_implementation/connectivity/connectivity_repository_impl.dart';
 import '../data/repositories_implementation/home/home_repository_impl.dart';
+import '../data/repositories_implementation/licence/licence_repository_impl.dart';
 import '../data/repositories_implementation/new_ticket/new_ticket_repository_impl.dart';
-import '../data/services/remote/authentication/authentication_api.dart';
+import '../data/services/remote/authentication/authentication_service.dart';
 import '../data/services/remote/home/home_api.dart';
+import '../data/services/remote/licence/licence_service.dart';
 import '../data/services/remote/new_ticket/new_ticket_api.dart';
+import '../domain/providers/licence_provider.dart';
 import '../domain/repositories/authentication/authentication_repository.dart';
 import '../domain/repositories/connectivity/connectivity_repository.dart';
 import '../domain/repositories/home/home_repository.dart';
+import '../domain/repositories/licence/licence_repository.dart';
 import '../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../presentation/constants/app_constants.dart';
 import '../presentation/pages/home/views/home_view_vm.dart';
+import '../presentation/pages/log_in/controller/log_in_controller.dart';
 import '../presentation/pages/new_ticket/views/new_ticket_view_vm.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -37,10 +42,28 @@ List<SingleChildWidget> appProviders = [
   Provider<AuthenticationRepository>(
     create: (_) => AuthenticationRepositoryImpl(
       const FlutterSecureStorage(),
-      AuthenticationApi(Http(
+      AuthenticationService(Http(
         http.Client(),
         AppConstants.baseUrl,
       )),
+    ),
+  ),
+
+  Provider<LicenceRepository>(
+    create: (_) => LicenceRepositoryImpl(
+      LicenceService(
+        Http(http.Client(), AppConstants.baseUrl),
+      ),
+    ),
+  ),
+
+  ChangeNotifierProvider<LicenceProvider>(
+    create: (context) => LicenceProvider(context.read<LicenceRepository>()),
+  ),
+
+  ChangeNotifierProvider<LogInController>(
+    create: (context) => LogInController(
+      context.read<AuthenticationRepository>(),
     ),
   ),
 
