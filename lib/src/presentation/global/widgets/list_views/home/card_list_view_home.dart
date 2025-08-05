@@ -1,10 +1,16 @@
 part of 'list_view_home.dart';
 
-Widget cardTicket(MaintenancesModel maintenance) {
+Widget cardTicket(MaintenancesModel maintenance, BuildContext context) {
   return Wrap(children: <Widget>[
     Column(children: <Widget>[
       GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            Routes.detailTicket,
+            arguments: maintenance,
+          );
+        },
         child: SizedBox(
             child: Card(
           elevation: 7,

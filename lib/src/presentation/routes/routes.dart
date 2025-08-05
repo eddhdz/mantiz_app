@@ -5,4 +5,5 @@ class Routes {
   static const home = '/home';
   static const offline = '/offline';
   static const newTicket = '/new_ticket';
+  static const detailTicket = '/detail_ticket';
 }

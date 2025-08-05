@@ -1,5 +1,3 @@
-import 'package:mantiz/src/data/models/photo_evidence_model.dart';
-
 class SaveTicketModel {
   final int id;
   final int fkTypeMaintenance;
@@ -56,10 +54,15 @@ class SaveTicketModel {
         description: json['description'],
         area: json['area'],
         reason: json['reason'],
-        photoevidence: (json['photoevidence'] != null) ? json['photoevidence'] : null,
+        photoevidence:
+            (json['photoevidence'] != null) ? json['photoevidence'] : null,
         createdAt: DateTime.parse(json['createdAt'].toString()),
-        createdByPartner: (json['createdByPartner'] != null) ? int.parse(json['createdByPartner'].toString()) : null,
-        createdByCustomer: (json['createdByCustomer'] != null) ? int.parse(json['createdByCustomer'].toString()) : null);
+        createdByPartner: (json['createdByPartner'] != null)
+            ? int.parse(json['createdByPartner'].toString())
+            : null,
+        createdByCustomer: (json['createdByCustomer'] != null)
+            ? int.parse(json['createdByCustomer'].toString())
+            : null);
   }
 
   Map<String, dynamic> toJson() => {
