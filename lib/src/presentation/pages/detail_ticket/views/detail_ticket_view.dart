@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mantiz/src/data/models/maintenances_model.dart';
 import 'package:intl/intl.dart';
+
+import '../../../global/widgets/maps/ticket_map.dart';
 
 class DetailTicketView extends StatelessWidget {
   final MaintenancesModel maintenance;
@@ -133,6 +136,39 @@ class DetailTicketView extends StatelessWidget {
                     buildDetailRow('Tiempo estimado', 'Sin registro'),
                     buildDetailRow('Cotización', '0.00 MXN'),
                     buildDetailRow('Asignado a', 'Sin asignar'),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusGeometry.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ubicación del servicio',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const Divider(),
+                    SizedBox(
+                      height: 250,
+                      child: TicketMapWidget(
+                        location: LatLng(
+                            double.parse(maintenance.branchOfficeModel.latitud),
+                            double.parse(
+                              maintenance.branchOfficeModel.longitud,
+                            )),
+                        address: maintenance.branchOfficeModel.location,
+                      ),
+                    )
                   ],
                 ),
               ),
