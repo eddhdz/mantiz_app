@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:mantiz/src/data/models/maintenances_model.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../data/models/models.dart';
 import '../../../global/widgets/maps/ticket_map.dart';
+import '../../../global/widgets/speed_dials/speed_dial_detail_ticket.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DetailTicketView extends StatelessWidget {
   final MaintenancesModel maintenance;
@@ -173,9 +175,11 @@ class DetailTicketView extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 50),
           ],
         ),
       ),
+      floatingActionButton: const SpeedDialDetailTicket(),
     );
   }
 
