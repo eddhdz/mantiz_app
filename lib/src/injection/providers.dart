@@ -1,6 +1,10 @@
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/branchoffice_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supplier_repository_impl.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/branch_office_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/branchoffice_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository.dart';
 
 import '../data/http/http.dart';
@@ -92,5 +96,16 @@ List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<SupplierProvider>(
     create: (context) => SupplierProvider(
         supplierRepository: context.read<SupplierRepository>()),
-  )
+  ),
+
+  Provider<BranchofficeRepository>(
+    create: (context) => BranchofficeRepositoryImpl(
+        branchofficeService: BranchofficeService(
+            http: Http(http.Client(), AppConstants.baseUrl))),
+  ),
+
+  ChangeNotifierProvider<BranchofficeProvider>(
+    create: (context) => BranchofficeProvider(
+        branchofficeRepository: context.read<BranchofficeRepository>()),
+  ),
 ];
