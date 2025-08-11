@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/enums.dart';
-import '../../../../domain/providers/licence_provider.dart';
+import '../../../../domain/providers/licence/licence_provider.dart';
 import '../../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../../routes/routes.dart';
 

@@ -25,3 +25,10 @@ enum LicenceStatus {
   loaded,
   error,
 }
+
+enum DataStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+}

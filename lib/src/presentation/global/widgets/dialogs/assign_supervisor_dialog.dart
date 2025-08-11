@@ -1,147 +1,143 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/data/models/supplier_response_model.dart';
+import 'package:mantiz/src/domain/enums.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
+import 'package:provider/provider.dart';
 
 class AssignSupervisorDialog extends StatefulWidget {
-  const AssignSupervisorDialog({super.key});
+  final String fkPartnerLicence;
+  const AssignSupervisorDialog({
+    super.key,
+    required this.fkPartnerLicence,
+  });
 
   @override
   State<AssignSupervisorDialog> createState() => _AssignSupervisorDialogState();
 }
 
 class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
-  // Datos de ejemplo para los dropdowns
-  final List<String> _options1 = [
-    'Opcion1',
-    'Opcion2',
-    'Opcion3',
-  ];
-
-  final List<String> _options2 = [
-    'Opcion1',
-    'Opcion2',
-    'Opcion3',
-  ];
-
-  final List<String> _options3 = [
-    'Opcion1',
-    'Opcion2',
-    'Opcion3',
-  ];
-
   // Variables para guardar el valor seleccionado
   String? _selectedOption1;
-
   String? _selectedOption2;
-
   String? _selectedOption3;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<SupplierProvider>(context, listen: false)
+          .fetchSuppliers(widget.fkPartnerLicence);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Asignar Supervisor'),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //Dropdown 1
-            const Text(
-              'Proveedor:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            _buildDropdown(
-              _options1,
-              _selectedOption1,
-              (newValue) {
-                setState(() {
-                  _selectedOption1 = newValue;
-                  _selectedOption2 = null;
-                  _selectedOption3 = null;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
+    return Consumer<SupplierProvider>(
+      builder: (context, provider, child) {
+        Widget dropdownContent;
+        switch (provider.status) {
+          case DataStatus.loading:
+            dropdownContent = const Center(
+              child: CircularProgressIndicator(),
+            );
+            break;
+          case DataStatus.error:
+            dropdownContent = const Center(
+              child: Text('Error'),
+            );
+            break;
+          case DataStatus.loaded:
+            dropdownContent = _buildDropdown(
+                provider.suppliers!, _selectedOption1, (newValue) {
+              setState(() {
+                _selectedOption1 = newValue;
+                _selectedOption2 = null;
+                _selectedOption3 = null;
+              });
+            });
+            break;
+          default:
+            dropdownContent = const SizedBox.shrink();
+            break;
+        }
 
-            //Dropdown 2
-            const Text(
-              'Sucursal:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            _buildDropdown(
-              _options2,
-              _selectedOption2,
-              _selectedOption1 != null
-                  ? (newValue) {
-                      setState(() {
-                        _selectedOption2 = newValue;
-                        _selectedOption3 = null;
-                      });
-                    }
-                  : null,
-            ),
-            const SizedBox(height: 16),
+        return AlertDialog(
+          title: const Text('Asignar Supervisor'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Dropdown 1
+                const Text(
+                  'Proveedor:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                dropdownContent,
+                const SizedBox(height: 16),
 
-            //Dropdown3
-            const Text(
-              'Supervisor:',
-              style: TextStyle(fontWeight: FontWeight.bold),
+                //Dropdown 2
+                const Text(
+                  'Sucursal:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                dropdownContent,
+                const SizedBox(height: 16),
+
+                //Dropdown3
+                const Text(
+                  'Supervisor:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                dropdownContent,
+                const SizedBox(
+                  height: 16,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 8,
-            ),
-            _buildDropdown(
-              _options3,
-              _selectedOption3,
-              (_selectedOption1 != null && _selectedOption2 != null)
-                  ? (newValue) {
-                      setState(() {
-                        _selectedOption3 = newValue;
-                      });
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancelar')),
+            TextButton(
+              onPressed: (_selectedOption1 != null &&
+                      _selectedOption2 != null &&
+                      _selectedOption3 != null)
+                  ? () {
+                      // Lógica para guardar
+                      Navigator.of(context).pop();
                     }
-                  : null,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
+                  : null, // El botón estará deshabilitado si faltan selecciones
+              child: const Text('Asignar'),
+            )
           ],
-        ),
-      ),
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar')),
-        TextButton(
-          onPressed: (_selectedOption1 != null &&
-                  _selectedOption2 != null &&
-                  _selectedOption3 != null)
-              ? () {
-                  // Lógica para guardar
-                  Navigator.of(context).pop();
-                }
-              : null, // El botón estará deshabilitado si faltan selecciones
-          child: const Text('Asignar'),
-        )
-      ],
+        );
+      },
     );
   }
 
   _buildDropdown(
-    List<String> options,
+    List<Supplier> options,
     String? selectedValue,
     Function(String?)? onChanged,
   ) {
     return DropdownButtonFormField<String>(
       isExpanded: true,
       value: selectedValue,
-      items: options.map<DropdownMenuItem<String>>((String value) {
+      items: options.map<DropdownMenuItem<String>>((Supplier supplier) {
         return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
+          value: supplier.id.toString(),
+          child: Text(supplier.supplier),
         );
       }).toList(),
       onChanged: onChanged, // Se le pasa el callback o null

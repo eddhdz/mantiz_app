@@ -1,3 +1,8 @@
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supplier_repository_impl.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository.dart';
+
 import '../data/http/http.dart';
 import '../data/repositories_implementation/authentication/authentication_repository_impl.dart';
 import '../data/repositories_implementation/connectivity/connectivity_repository_impl.dart';
@@ -8,7 +13,7 @@ import '../data/services/remote/authentication/authentication_service.dart';
 import '../data/services/remote/home/home_api.dart';
 import '../data/services/remote/licence/licence_service.dart';
 import '../data/services/remote/new_ticket/new_ticket_api.dart';
-import '../domain/providers/licence_provider.dart';
+import '../domain/providers/licence/licence_provider.dart';
 import '../domain/repositories/authentication/authentication_repository.dart';
 import '../domain/repositories/connectivity/connectivity_repository.dart';
 import '../domain/repositories/home/home_repository.dart';
@@ -75,4 +80,17 @@ List<SingleChildWidget> appProviders = [
         )),
         const FlutterSecureStorage()),
   ),
+
+  Provider<SupplierRepository>(
+    create: (context) => SupplierRepositoryImpl(
+      suppliersService: SuppliersService(
+        http: Http(http.Client(), AppConstants.baseUrl),
+      ),
+    ),
+  ),
+
+  ChangeNotifierProvider<SupplierProvider>(
+    create: (context) => SupplierProvider(
+        supplierRepository: context.read<SupplierRepository>()),
+  )
 ];

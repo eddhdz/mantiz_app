@@ -28,7 +28,9 @@ class SpeedDialDetailTicket extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) {
-                return const AssignSupervisorDialog();
+                return const AssignSupervisorDialog(
+                  fkPartnerLicence: '3',
+                );
               },
             );
           },

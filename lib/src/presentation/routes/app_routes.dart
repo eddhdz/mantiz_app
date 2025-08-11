@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mantiz/src/data/models/maintenances_model.dart';
-import 'package:mantiz/src/presentation/pages/detail_ticket/views/detail_ticket_view.dart';
+import 'package:mantiz/src/presentation/pages/ticket_detail/views/detail_ticket_view.dart';
 
 import '../pages/views.dart';
 import 'routes.dart';
