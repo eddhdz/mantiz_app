@@ -31,4 +31,5 @@ enum DataStatus {
   loading,
   loaded,
   error,
+  noData,
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/data/models/supplier_response_model.dart';
 import 'package:mantiz/src/domain/enums.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/supervisor_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -34,37 +34,6 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // return
-
-    // Consumer<SupplierProvider>(
-    //   builder: (context, provider, child) {
-    //     Widget dropdownContent;
-    //     switch (provider.status) {
-    //       case DataStatus.loading:
-    //         dropdownContent = const Center(
-    //           child: CircularProgressIndicator(),
-    //         );
-    //         break;
-    //       case DataStatus.error:
-    //         dropdownContent = const Center(
-    //           child: Text('Error'),
-    //         );
-    //         break;
-    //       case DataStatus.loaded:
-    //         dropdownContent = _buildDropdown(
-    //             provider.suppliers!, _selectedSupplierId, (newValue) {
-    //           setState(() {
-    //             _selectedSupplierId = newValue;
-    //             _selectedBranchofficeId = null;
-    //             _selectedSupervisorId = null;
-    //           });
-    //         });
-    //         break;
-    //       default:
-    //         dropdownContent = const SizedBox.shrink();
-    //         break;
-    //     }
-
     return AlertDialog(
       title: const Text('Asignar Supervisor'),
       content: SingleChildScrollView(
@@ -102,12 +71,7 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
             const SizedBox(
               height: 8,
             ),
-            _buildDropdown(
-              [],
-              _selectedSupervisorId,
-              null,
-              enabled: false,
-            ),
+            _buildSupervisorDropdown(),
             const SizedBox(
               height: 16,
             ),
@@ -199,8 +163,43 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
           (newValue) {
             setState(() {
               _selectedBranchofficeId = newValue;
-              // Aquí podrías disparar la llamada para los supervisores
-              // _selectedSupervisorId = null;
+              _selectedSupervisorId = null;
+            });
+            Provider.of<SupervisorProvider>(context, listen: false)
+                .fetchSupervisors(newValue!);
+          },
+          enabled: true,
+        );
+      },
+    );
+  }
+
+  Widget _buildSupervisorDropdown() {
+    return Consumer<SupervisorProvider>(
+      builder: (context, provider, child) {
+        if (_selectedBranchofficeId == null) {
+          return _buildDropdown([], null, null, enabled: false);
+        }
+        if (provider.status == DataStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (provider.status == DataStatus.error) {
+          return const Center(child: Text('Error al cargar supervisores'));
+        }
+        if (provider.supervisors.isEmpty) {
+          return _buildDropdown([], null, null, enabled: false);
+        }
+        return _buildDropdown(
+          provider.supervisors
+              .map((su) => DropdownMenuItem(
+                    value: su.id.toString(),
+                    child: Text(su.profile.fullname),
+                  ))
+              .toList(),
+          _selectedSupervisorId,
+          (newValue) {
+            setState(() {
+              _selectedSupervisorId = newValue;
             });
           },
           enabled: true,

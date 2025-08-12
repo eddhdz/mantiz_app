@@ -1,10 +1,14 @@
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/branchoffice_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supervisor_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supplier_repository_impl.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/branch_office_service.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/supervisor_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/branchoffice_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/supervisor_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/supervisor_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository.dart';
 
 import '../data/http/http.dart';
@@ -47,7 +51,9 @@ List<SingleChildWidget> appProviders = [
   Provider<ConnectivityRepository>(
     create: (_) => ConnectivityRepositoryImpl(Connectivity()),
   ),
+
   // Repositorio LogIn
+
   Provider<AuthenticationRepository>(
     create: (_) => AuthenticationRepositoryImpl(
       const FlutterSecureStorage(),
@@ -57,6 +63,8 @@ List<SingleChildWidget> appProviders = [
       )),
     ),
   ),
+
+  // Repositorio para la licencia
 
   Provider<LicenceRepository>(
     create: (_) => LicenceRepositoryImpl(
@@ -85,6 +93,8 @@ List<SingleChildWidget> appProviders = [
         const FlutterSecureStorage()),
   ),
 
+  // Repositorio para cargar proveedores en el detalle del ticket
+
   Provider<SupplierRepository>(
     create: (context) => SupplierRepositoryImpl(
       suppliersService: SuppliersService(
@@ -98,6 +108,8 @@ List<SingleChildWidget> appProviders = [
         supplierRepository: context.read<SupplierRepository>()),
   ),
 
+  // Repositorio para cargar las sucursales en el detalle del ticket
+
   Provider<BranchofficeRepository>(
     create: (context) => BranchofficeRepositoryImpl(
         branchofficeService: BranchofficeService(
@@ -107,5 +119,18 @@ List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<BranchofficeProvider>(
     create: (context) => BranchofficeProvider(
         branchofficeRepository: context.read<BranchofficeRepository>()),
+  ),
+
+  // Repositorio para cargar los supervisores en el detalle del ticket
+
+  Provider<SupervisorRepository>(
+    create: (context) => SupervisorRepositoryImpl(
+        supervisorService:
+            SupervisorService(http: Http(http.Client(), AppConstants.baseUrl))),
+  ),
+
+  ChangeNotifierProvider<SupervisorProvider>(
+    create: (context) => SupervisorProvider(
+        supervisorRepository: context.read<SupervisorRepository>()),
   ),
 ];
