@@ -1,7 +1,7 @@
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/repositories/ticket_detail/supplier_repository.dart';
-import '../../models/supplier_response_model.dart';
+import '../../models/ticket_detail/supplier_response_model.dart';
 import '../../services/remote/ticket_detail/suppliers_service.dart';
 
 class SupplierRepositoryImpl implements SupplierRepository {

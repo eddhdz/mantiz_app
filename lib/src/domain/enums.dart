@@ -32,4 +32,5 @@ enum DataStatus {
   loaded,
   error,
   noData,
+  success,
 }

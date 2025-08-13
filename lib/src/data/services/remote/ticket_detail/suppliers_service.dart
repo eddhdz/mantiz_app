@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
 import '../../../http/http.dart';
-import '../../../models/supplier_response_model.dart';
+import '../../../models/ticket_detail/supplier_response_model.dart';
 
 class SuppliersService {
   final Http _http;

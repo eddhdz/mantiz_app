@@ -1,7 +1,7 @@
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/repositories/ticket_detail/supervisor_repository.dart';
-import '../../models/profile_response_model.dart';
+import '../../models/ticket_detail/profile_response_model.dart';
 import '../../services/remote/ticket_detail/supervisor_service.dart';
 
 class SupervisorRepositoryImpl implements SupervisorRepository {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/data/models/supplier_response_model.dart';
+import 'package:mantiz/src/data/models/ticket_detail/supplier_response_model.dart';
 import 'package:mantiz/src/domain/enums.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository.dart';
 

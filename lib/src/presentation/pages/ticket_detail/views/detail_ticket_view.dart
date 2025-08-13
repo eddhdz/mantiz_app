@@ -179,7 +179,8 @@ class DetailTicketView extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: const SpeedDialDetailTicket(),
+      floatingActionButton:
+          SpeedDialDetailTicket(fkMaintenance: maintenance.id),
     );
   }
 

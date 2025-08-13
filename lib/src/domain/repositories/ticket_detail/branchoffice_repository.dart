@@ -1,4 +1,4 @@
-import '../../../data/models/branchoffice_response_model.dart';
+import '../../../data/models/ticket_detail/branchoffice_response_model.dart';
 import '../../either.dart';
 import '../../enums.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/branchoffice_response_model.dart';
+import '../../../data/models/ticket_detail/branchoffice_response_model.dart';
 import '../../enums.dart';
 import '../../repositories/ticket_detail/branchoffice_repository.dart';
 

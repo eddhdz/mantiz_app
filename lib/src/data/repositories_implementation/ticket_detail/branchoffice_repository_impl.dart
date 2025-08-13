@@ -1,7 +1,7 @@
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/repositories/ticket_detail/branchoffice_repository.dart';
-import '../../models/branchoffice_response_model.dart';
+import '../../models/ticket_detail/branchoffice_response_model.dart';
 import '../../services/remote/ticket_detail/branch_office_service.dart';
 
 class BranchofficeRepositoryImpl implements BranchofficeRepository {

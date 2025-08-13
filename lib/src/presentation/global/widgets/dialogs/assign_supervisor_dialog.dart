@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:mantiz/src/domain/enums.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supervisor_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../domain/providers/ticket_detail/branchoffice_provider.dart';
+import '../../../routes/routes.dart';
 
 class AssignSupervisorDialog extends StatefulWidget {
   final String fkPartnerLicence;
+  final int fkMaintenance;
   const AssignSupervisorDialog({
     super.key,
     required this.fkPartnerLicence,
+    required this.fkMaintenance,
   });
 
   @override
@@ -82,17 +86,39 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
         TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Cancelar')),
-        TextButton(
-          onPressed: (_selectedSupplierId != null &&
-                  _selectedBranchofficeId != null &&
-                  _selectedSupervisorId != null)
-              ? () {
-                  // Lógica para guardar
-                  Navigator.of(context).pop();
-                }
-              : null, // El botón estará deshabilitado si faltan selecciones
+        Consumer<AssignProvider>(
+          builder: (context, provider, child) {
+            final bool isEnabled = _selectedSupplierId != null &&
+                _selectedBranchofficeId != null &&
+                _selectedSupervisorId != null;
+
+            if (provider.status == DataStatus.loading) {
+              return const CircularProgressIndicator();
+            }
+
+            return TextButton(
+                onPressed: isEnabled
+                    ? () async {
+                        await provider.assignTicket(
+                            widget.fkMaintenance,
+                            int.parse(widget.fkPartnerLicence),
+                            int.parse(_selectedSupervisorId!));
+
+                        if (provider.status == DataStatus.success) {
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushReplacementNamed(context, Routes.home);
+                        } else if (provider.status == DataStatus.error) {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Error desconocido')));
+                        }
+                      }
+                    : null,
+                child: child!);
+          },
           child: const Text('Asignar'),
-        )
+        ),
       ],
     );
     //   },

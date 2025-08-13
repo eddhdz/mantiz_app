@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
 import '../../../http/http.dart';
-import '../../../models/profile_response_model.dart';
+import '../../../models/ticket_detail/profile_response_model.dart';
 
 class SupervisorService {
   final Http _http;

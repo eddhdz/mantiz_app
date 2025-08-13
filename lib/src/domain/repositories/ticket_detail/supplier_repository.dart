@@ -1,4 +1,4 @@
-import '../../../data/models/supplier_response_model.dart';
+import '../../../data/models/ticket_detail/supplier_response_model.dart';
 import '../../either.dart';
 import '../../enums.dart';
 

@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../colors.dart';
+import '../dialogs/assign_supervisor_dialog.dart';
 
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-import '../dialogs/assign_supervisor_dialog.dart';
-
 class SpeedDialDetailTicket extends StatelessWidget {
-  const SpeedDialDetailTicket({super.key});
+  final int fkMaintenance;
+
+  const SpeedDialDetailTicket({
+    super.key,
+    required this.fkMaintenance,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +29,16 @@ class SpeedDialDetailTicket extends StatelessWidget {
           backgroundColor: mediumDarkGray,
           foregroundColor: veryLightGray,
           label: 'Asignar Supervisor',
-          onTap: () {
+          onTap: () async {
+            final storage = FlutterSecureStorage();
+            String? fkPartnerLicence =
+                await storage.read(key: 'fkPartnerLicence');
             showDialog(
               context: context,
               builder: (context) {
-                return const AssignSupervisorDialog(
-                  fkPartnerLicence: '3',
+                return AssignSupervisorDialog(
+                  fkPartnerLicence: fkPartnerLicence ?? '',
+                  fkMaintenance: fkMaintenance,
                 );
               },
             );

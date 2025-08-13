@@ -1,12 +1,16 @@
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/assign_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/branchoffice_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supervisor_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supplier_repository_impl.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/assign_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/branch_office_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/supervisor_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/branchoffice_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supervisor_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/assign_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supervisor_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository.dart';
@@ -132,5 +136,18 @@ List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<SupervisorProvider>(
     create: (context) => SupervisorProvider(
         supervisorRepository: context.read<SupervisorRepository>()),
+  ),
+
+  // Repositorio para asignar el ticket
+
+  Provider<AssignRepository>(
+    create: (context) => AssignRepositoryImpl(
+        assignService:
+            AssignService(http: Http(http.Client(), AppConstants.baseUrl))),
+  ),
+
+  ChangeNotifierProvider<AssignProvider>(
+    create: (context) =>
+        AssignProvider(assignRepository: context.read<AssignRepository>()),
   ),
 ];
