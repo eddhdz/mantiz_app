@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/domain/enums.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/supervisor_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
+
+import '../../../../domain/enums.dart';
+import '../../../../domain/providers/ticket_detail/assign_provider.dart';
+import '../../../../domain/providers/ticket_detail/branchoffice_provider.dart';
+import '../../../../domain/providers/ticket_detail/supervisor_provider.dart';
+import '../../../../domain/providers/ticket_detail/supplier_provider.dart';
+import '../../../routes/routes.dart';
+
 import 'package:provider/provider.dart';
 
-import '../../../../domain/providers/ticket_detail/branchoffice_provider.dart';
-import '../../../routes/routes.dart';
+import '../../colors.dart';
 
 class AssignSupervisorDialog extends StatefulWidget {
   final String fkPartnerLicence;
@@ -105,6 +108,30 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
                             int.parse(_selectedSupervisorId!));
 
                         if (provider.status == DataStatus.success) {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: const Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle_outline,
+                                  color: veryLightGray,
+                                ),
+                                Text(
+                                  'Ticket asignado con éxito',
+                                  style: TextStyle(color: veryLightGray),
+                                )
+                              ],
+                            ),
+                            backgroundColor: mediumGray,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(10),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 15),
+                            padding: const EdgeInsets.all(10),
+                            duration: const Duration(seconds: 3),
+                          ));
                           // ignore: use_build_context_synchronously
                           Navigator.pushReplacementNamed(context, Routes.home);
                         } else if (provider.status == DataStatus.error) {

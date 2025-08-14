@@ -1,28 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mantiz/src/domain/enums.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/assigned_to_provider.dart';
 
 import '../../../../data/models/models.dart';
 import '../../../global/widgets/maps/ticket_map.dart';
 import '../../../global/widgets/speed_dials/speed_dial_detail_ticket.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
-class DetailTicketView extends StatelessWidget {
+class DetailTicketView extends StatefulWidget {
   final MaintenancesModel maintenance;
 
   const DetailTicketView({super.key, required this.maintenance});
+
+  @override
+  State<DetailTicketView> createState() => _DetailTicketViewState();
+}
+
+class _DetailTicketViewState extends State<DetailTicketView> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AssignedToProvider>(context, listen: false)
+          .fetchAssignedTo(widget.maintenance.id.toString());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final DateFormat formatter =
         DateFormat('dd/MM/yyyy \'a las\' HH:mm \'horas\'');
     final String createdAtFormatted =
-        formatter.format(maintenance.createdAt.toLocal());
-    final whoCreated = maintenance.whoPartnerCreatedModel;
+        formatter.format(widget.maintenance.createdAt.toLocal());
+    final whoCreated = widget.maintenance.whoPartnerCreatedModel;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Servicio ${maintenance.folio}"),
+        title: Text("Servicio ${widget.maintenance.folio}"),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -48,10 +66,10 @@ class DetailTicketView extends StatelessWidget {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Divider(),
-                    buildDetailRow('Título', maintenance.description),
-                    buildDetailRow('Estatus', maintenance.status),
-                    buildDetailRow('Área', maintenance.area ?? 'N/A'),
-                    buildDetailRow('Descripción', maintenance.reason),
+                    buildDetailRow('Título', widget.maintenance.description),
+                    buildDetailRow('Estatus', widget.maintenance.status),
+                    buildDetailRow('Área', widget.maintenance.area ?? 'N/A'),
+                    buildDetailRow('Descripción', widget.maintenance.reason),
                     buildDetailRow('Fecha de creación', createdAtFormatted),
                   ],
                 ),
@@ -77,12 +95,12 @@ class DetailTicketView extends StatelessWidget {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Divider(),
-                    buildDetailRow(
-                        'Sucursal', maintenance.branchOfficeModel.description),
+                    buildDetailRow('Sucursal',
+                        widget.maintenance.branchOfficeModel.description),
                     buildDetailRow('Razón social',
-                        maintenance.branchOfficeModel.subcompany),
-                    buildDetailRow(
-                        'Dirección', maintenance.branchOfficeModel.location),
+                        widget.maintenance.branchOfficeModel.subcompany),
+                    buildDetailRow('Dirección',
+                        widget.maintenance.branchOfficeModel.location),
                   ],
                 ),
               ),
@@ -137,7 +155,46 @@ class DetailTicketView extends StatelessWidget {
                     buildDetailRow('Agendado para', 'Sin agendar'),
                     buildDetailRow('Tiempo estimado', 'Sin registro'),
                     buildDetailRow('Cotización', '0.00 MXN'),
-                    buildDetailRow('Asignado a', 'Sin asignar'),
+                    Consumer<AssignedToProvider>(
+                      builder: (context, provider, child) {
+                        String assignedToValue = 'Sin asignar';
+                        Widget assignedToWidget;
+
+                        // Manejar los diferentes estados del provider
+                        switch (provider.status) {
+                          case DataStatus.initial:
+                            assignedToWidget =
+                                buildDetailRow('Asignado a', assignedToValue);
+                            break;
+                          case DataStatus.loading:
+                            assignedToWidget =
+                                const CircularProgressIndicator();
+                            break;
+                          case DataStatus.loaded:
+                            // Si la lista de asignaciones no está vacía, muestra el nombre
+                            if (provider.assigned != null &&
+                                provider.assigned!.isNotEmpty) {
+                              assignedToValue =
+                                  provider.assigned!.first.tosasigned.fullname;
+                              assignedToWidget =
+                                  buildDetailRow('Asignado a', assignedToValue);
+                            } else {
+                              assignedToWidget =
+                                  buildDetailRow('Asignado a', assignedToValue);
+                            }
+                            break;
+                          case DataStatus.error:
+                            assignedToWidget =
+                                buildDetailRow('Asignado a', 'No asignado');
+                            break;
+                          default:
+                            assignedToWidget =
+                                buildDetailRow('Asignado a', assignedToValue);
+                            break;
+                        }
+                        return assignedToWidget;
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -164,11 +221,12 @@ class DetailTicketView extends StatelessWidget {
                       height: 250,
                       child: TicketMapWidget(
                         location: LatLng(
-                            double.parse(maintenance.branchOfficeModel.latitud),
                             double.parse(
-                              maintenance.branchOfficeModel.longitud,
+                                widget.maintenance.branchOfficeModel.latitud),
+                            double.parse(
+                              widget.maintenance.branchOfficeModel.longitud,
                             )),
-                        address: maintenance.branchOfficeModel.location,
+                        address: widget.maintenance.branchOfficeModel.location,
                       ),
                     )
                   ],
@@ -179,8 +237,20 @@ class DetailTicketView extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton:
-          SpeedDialDetailTicket(fkMaintenance: maintenance.id),
+      floatingActionButton: Consumer<AssignedToProvider>(
+        builder: (context, provider, child) {
+          String currentStatus = widget.maintenance.status;
+          if (provider.status == DataStatus.loaded &&
+              provider.assigned != null &&
+              provider.assigned!.isNotEmpty) {
+            currentStatus = 'Asignado';
+          }
+          return SpeedDialDetailTicket(
+            fkMaintenance: widget.maintenance.id,
+            status: currentStatus,
+          );
+        },
+      ),
     );
   }
 

@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../colors.dart';
 import '../dialogs/assign_supervisor_dialog.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class SpeedDialDetailTicket extends StatelessWidget {
   final int fkMaintenance;
+  final String status;
 
   const SpeedDialDetailTicket({
     super.key,
     required this.fkMaintenance,
+    required this.status,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool isDisabledSpeedChild = status == 'Asignado';
     return SpeedDial(
       icon: Icons.add,
       activeIcon: Icons.close,
@@ -26,23 +29,32 @@ class SpeedDialDetailTicket extends StatelessWidget {
       children: [
         SpeedDialChild(
           child: const Icon(Icons.file_copy),
-          backgroundColor: mediumDarkGray,
+          backgroundColor: isDisabledSpeedChild ? lightGray : darkGray,
           foregroundColor: veryLightGray,
           label: 'Asignar Supervisor',
-          onTap: () async {
-            final storage = FlutterSecureStorage();
-            String? fkPartnerLicence =
-                await storage.read(key: 'fkPartnerLicence');
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AssignSupervisorDialog(
-                  fkPartnerLicence: fkPartnerLicence ?? '',
-                  fkMaintenance: fkMaintenance,
-                );
-              },
-            );
-          },
+          onTap: isDisabledSpeedChild
+              ? () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('El ticket ya ha sido asignado.'),
+                    ),
+                  );
+                }
+              : () async {
+                  const storage = FlutterSecureStorage();
+                  String? fkPartnerLicence =
+                      await storage.read(key: 'fkPartnerLicence');
+                  showDialog(
+                    // ignore: use_build_context_synchronously
+                    context: context,
+                    builder: (context) {
+                      return AssignSupervisorDialog(
+                        fkPartnerLicence: fkPartnerLicence ?? '',
+                        fkMaintenance: fkMaintenance,
+                      );
+                    },
+                  );
+                },
         ),
       ],
     );

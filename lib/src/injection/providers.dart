@@ -1,16 +1,20 @@
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/assign_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/assigned_to_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/branchoffice_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supervisor_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supplier_repository_impl.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/assign_service.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/assigned_to_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/branch_office_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/supervisor_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/assigned_to_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/branchoffice_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supervisor_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/assign_repository.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/assigned_to_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supervisor_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository.dart';
@@ -95,6 +99,21 @@ List<SingleChildWidget> appProviders = [
           AppConstants.baseUrl,
         )),
         const FlutterSecureStorage()),
+  ),
+
+  // Repositorio para verificar si el ticket esta asignado
+
+  Provider<AssignedToRepository>(
+    create: (context) => AssignedToRepositoryImpl(
+      assignedToService: AssignedToService(
+        http: Http(http.Client(), AppConstants.baseUrl),
+      ),
+    ),
+  ),
+
+  ChangeNotifierProvider<AssignedToProvider>(
+    create: (context) => AssignedToProvider(
+        assignedToRepository: context.read<AssignedToRepository>()),
   ),
 
   // Repositorio para cargar proveedores en el detalle del ticket
