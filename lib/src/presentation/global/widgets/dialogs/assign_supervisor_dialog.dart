@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/add_message_provider.dart';
 
 import '../../../../domain/enums.dart';
 import '../../../../domain/providers/ticket_detail/assign_provider.dart';
@@ -108,6 +109,18 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
                             int.parse(_selectedSupervisorId!));
 
                         if (provider.status == DataStatus.success) {
+                          final addMessageProvider =
+                              Provider.of<AddMessageProvider>(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            listen: false,
+                          );
+                          const message =
+                              'Ticket asignado desde app movil para su seguimineto';
+                          await addMessageProvider.addMessage(
+                              widget.fkMaintenance,
+                              int.parse(widget.fkPartnerLicence),
+                              message);
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: const Row(
