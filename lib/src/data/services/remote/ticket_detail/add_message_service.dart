@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
-import 'package:mantiz/src/data/models/ticket_detail/add_message_response_model.dart';
-import 'package:mantiz/src/domain/either.dart';
-import 'package:mantiz/src/domain/enums.dart';
 
+import '../../../../domain/either.dart';
+import '../../../../domain/enums.dart';
 import '../../../http/http.dart';
+import '../../../models/ticket_detail/message_response_model.dart';
 
 class AddMessageService {
   final Http _http;
@@ -36,8 +36,8 @@ class AddMessageService {
             ? jsonDecode(responseBody) as Map<String, dynamic>
             : responseBody as Map<String, dynamic>;
 
-        final AddMessageResponseModel addMessageData =
-            AddMessageResponseModel.fromJson(parsedBody);
+        final MessageResponseModel addMessageData =
+            MessageResponseModel.fromJson(parsedBody);
 
         if (addMessageData.response.id == 1) {
           return Either.right(addMessageData.response.id);

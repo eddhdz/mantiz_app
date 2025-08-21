@@ -6,4 +6,5 @@ class Routes {
   static const offline = '/offline';
   static const newTicket = '/new_ticket';
   static const detailTicket = '/detail_ticket';
+  static const trackingTicket = '/tracking_ticket';
 }

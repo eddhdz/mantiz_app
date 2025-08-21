@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/data/models/maintenances_model.dart';
-import 'package:mantiz/src/presentation/pages/ticket_detail/views/detail_ticket_view.dart';
 
+import '../../data/models/models.dart';
 import '../pages/views.dart';
 import 'routes.dart';
 
 Route<dynamic>? generateRoute(RouteSettings settings) {
+  final args = settings.arguments;
   switch (settings.name) {
     case Routes.splash:
       return MaterialPageRoute(
@@ -42,6 +42,17 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
           ),
         ),
       );
+    case Routes.trackingTicket:
+      if (args is List && args.length >= 2) {
+        final int fkMaintenance = args[0] as int;
+        final int currentUserId = args[1] as int;
+        return MaterialPageRoute(
+          builder: (_) => TicketTrackingView(
+            fkMaintenance: fkMaintenance,
+            currentUserId: currentUserId,
+          ),
+        );
+      }
     default:
       return MaterialPageRoute(
         builder: (_) => const Scaffold(

@@ -17,6 +17,7 @@ enum GeneralFailure {
   network,
   clientError,
   serverError,
+  empty,
 }
 
 enum LicenceStatus {

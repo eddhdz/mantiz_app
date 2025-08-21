@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mantiz/src/domain/enums.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/assigned_to_provider.dart';
 
 import '../../../../data/models/models.dart';
+import '../../../../domain/enums.dart';
+import '../../../../domain/providers/ticket_detail/assigned_to_provider.dart';
 import '../../../global/widgets/maps/ticket_map.dart';
 import '../../../global/widgets/speed_dials/speed_dial_detail_ticket.dart';
+import '../../../routes/routes.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -35,13 +37,30 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     final DateFormat formatter =
         DateFormat('dd/MM/yyyy \'a las\' HH:mm \'horas\'');
     final String createdAtFormatted =
-        formatter.format(widget.maintenance.createdAt.toLocal());
+        formatter.format(widget.maintenance.createdAt);
     final whoCreated = widget.maintenance.whoPartnerCreatedModel;
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Servicio ${widget.maintenance.folio}"),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () async {
+                const storage = FlutterSecureStorage();
+                String? fkPartnerLicence =
+                    await storage.read(key: 'fkPartnerLicence');
+                Navigator.pushNamed(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    Routes.trackingTicket,
+                    arguments: [
+                      widget.maintenance.id,
+                      int.parse(fkPartnerLicence!),
+                    ]);
+              },
+              icon: const Icon(Icons.chat_rounded))
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
