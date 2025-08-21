@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/add_message_provider.dart';
 
 import '../../../../data/models/ticket_detail/message_response_model.dart';
 import '../../../../domain/enums.dart';
@@ -44,38 +45,23 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
       final messageText = _messageController.text;
       _messageController.clear(); // Limpia el campo de texto inmediatamente
 
-      final provider = Provider.of<TrackingProvider>(context, listen: false);
+      final addMessageProvider =
+          Provider.of<AddMessageProvider>(context, listen: false);
+      final trackingProvider =
+          Provider.of<TrackingProvider>(context, listen: false);
 
-      // 🎯 Lógica para enviar el mensaje a la API.
-      // Aquí debes crear un método en tu repository y provider para esto.
-      // Por ahora, simularemos la adición del mensaje.
-      // provider.addMessage(widget.fkMaintenance, messageText, currentUserId);
+      await addMessageProvider.addMessage(
+          widget.fkMaintenance, widget.currentUserId, messageText);
 
-      // Simula la adición del mensaje localmente para una respuesta instantánea
-      // provider.messages?.insert(
-      //   0, // Inserta en el inicio para el chat inverso
-      //   Message(
-      //     id: 0, // ID temporal
-      //     fkMaintenance: int.parse(widget.fkMaintenance),
-      //     fkSender: currentUserId,
-      //     body: messageText,
-      //     createdAt: DateTime.now(),
-      //     updatedAt: null,
-      //     removedAt: null,
-      //     ticket: '', // Datos de dummy
-      //     folio: 0, // Datos de dummy
-      //     profile: Profile(
-      //       idProfile: currentUserId,
-      //       fullname: 'Mi Nombre',
-      //       email: '',
-      //       phone: '',
-      //       userToken: '',
-      //       typeUser: 'Partner',
-      //       typeRole: 'Administrator',
-      //     ),
-      //   ),
-      // );
-      provider.notifyListeners();
+      if (addMessageProvider.status == DataStatus.success) {
+        await trackingProvider.fetchMessages(widget.fkMaintenance);
+      } else {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Error al enviar el mensaje, inetantalo de nuevo'),
+          backgroundColor: mediumGray,
+        ));
+      }
     }
   }
 
@@ -231,7 +217,7 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
             ),
             child: IconButton(
               icon: const Icon(Icons.send, color: veryLightGray),
-              onPressed: () {},
+              onPressed: _handleSendMessage,
             ),
           ),
         ],
