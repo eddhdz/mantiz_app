@@ -2,6 +2,7 @@ import 'package:mantiz/src/data/repositories_implementation/ticket_detail/add_me
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/assign_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/assigned_to_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/branchoffice_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/schedule_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supervisor_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supplier_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/tracking_repository_impl.dart';
@@ -9,6 +10,7 @@ import 'package:mantiz/src/data/services/remote/ticket_detail/add_message_servic
 import 'package:mantiz/src/data/services/remote/ticket_detail/assign_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/assigned_to_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/branch_office_service.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/schedule_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/supervisor_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/tracking_service.dart';
@@ -16,6 +18,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/add_message_provider.d
 import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/assigned_to_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/branchoffice_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/schedule_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supervisor_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/tracking_provider.dart';
@@ -23,6 +26,7 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/add_message_reposit
 import 'package:mantiz/src/domain/repositories/ticket_detail/assign_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/assigned_to_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/schedule_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supervisor_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/tracking_repository.dart';
@@ -202,5 +206,18 @@ List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<TrackingProvider>(
     create: (context) => TrackingProvider(
         trackingRepository: context.read<TrackingRepository>()),
+  ),
+
+  // Repositorio para agendar un ticket
+
+  Provider<ScheduleRepository>(
+    create: (context) => ScheduleRepositoryImpl(
+        scheduleService:
+            ScheduleService(http: Http(http.Client(), AppConstants.baseUrl))),
+  ),
+
+  ChangeNotifierProvider<ScheduleProvider>(
+    create: (context) => ScheduleProvider(
+        scheduleRepository: context.read<ScheduleRepository>()),
   ),
 ];

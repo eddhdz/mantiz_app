@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/presentation/global/widgets/dialogs/schedule_ticket_dialog.dart';
 
 import '../../colors.dart';
 import '../dialogs/assign_supervisor_dialog.dart';
@@ -56,6 +57,35 @@ class SpeedDialDetailTicket extends StatelessWidget {
                   );
                 },
         ),
+        SpeedDialChild(
+          child: const Icon(Icons.calendar_month),
+          backgroundColor: isDisabledSpeedChild ? lightGray : darkGray,
+          foregroundColor: veryLightGray,
+          label: 'Agendar',
+          onTap: isDisabledSpeedChild
+              ? () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('El ticket ya ha sido agendado.'),
+                    ),
+                  );
+                }
+              : () async {
+                  const storage = FlutterSecureStorage();
+                  String? fkPartnerLicence =
+                      await storage.read(key: 'fkPartnerLicence');
+                  showDialog(
+                    // ignore: use_build_context_synchronously
+                    context: context,
+                    builder: (context) {
+                      return ScheduleTicketDialog(
+                        fkMaintenance: fkMaintenance,
+                        scheduleByPartner: int.parse(fkPartnerLicence!),
+                      );
+                    },
+                  );
+                },
+        )
       ],
     );
   }
