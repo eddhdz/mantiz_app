@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
 
 import '../../../../data/models/models.dart';
 import '../../../../domain/enums.dart';
@@ -29,6 +30,11 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AssignedToProvider>(context, listen: false)
           .fetchAssignedTo(widget.maintenance.id.toString());
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ScheduleForProvider>(context, listen: false)
+          .fetchScheduleFor(widget.maintenance.id);
     });
   }
 
@@ -171,8 +177,82 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Divider(),
-                    buildDetailRow('Agendado para', 'Sin agendar'),
-                    buildDetailRow('Tiempo estimado', 'Sin registro'),
+                    Consumer<ScheduleForProvider>(
+                      builder: (context, provider, child) {
+                        String scheduledForValue = 'Sin agendar';
+                        Widget scheduledForWidget;
+
+                        switch (provider.status) {
+                          case DataStatus.initial:
+                            scheduledForWidget = buildDetailRow(
+                                'Agendado para', scheduledForValue);
+                            break;
+                          case DataStatus.loading:
+                            scheduledForWidget =
+                                const CircularProgressIndicator();
+                            break;
+                          case DataStatus.loaded:
+                            if (provider.scheduled != null &&
+                                provider.scheduled!.isNotEmpty) {
+                              scheduledForValue = formatter
+                                  .format(provider.scheduled!.first.atentionAt);
+                              scheduledForWidget = buildDetailRow(
+                                  'Agendado para', scheduledForValue);
+                            } else {
+                              scheduledForWidget = buildDetailRow(
+                                  'Agendado para', scheduledForValue);
+                            }
+                            break;
+                          case DataStatus.error:
+                            scheduledForWidget =
+                                buildDetailRow('Agendado para', 'Sin agendar');
+                            break;
+                          default:
+                            scheduledForWidget = buildDetailRow(
+                                'Agendado para', scheduledForValue);
+                            break;
+                        }
+                        return scheduledForWidget;
+                      },
+                    ),
+                    Consumer<ScheduleForProvider>(
+                      builder: (context, provider, child) {
+                        String scheduledForValue = 'Sin registro';
+                        Widget scheduledForWidget;
+
+                        switch (provider.status) {
+                          case DataStatus.initial:
+                            scheduledForWidget = buildDetailRow(
+                                'Tiempo estimado', scheduledForValue);
+                            break;
+                          case DataStatus.loading:
+                            scheduledForWidget =
+                                const CircularProgressIndicator();
+                            break;
+                          case DataStatus.loaded:
+                            if (provider.scheduled != null &&
+                                provider.scheduled!.isNotEmpty) {
+                              scheduledForValue = _formatTime(
+                                  provider.scheduled!.first.atentionTime);
+                              scheduledForWidget = buildDetailRow(
+                                  'Tiempo estimado', scheduledForValue);
+                            } else {
+                              scheduledForWidget = buildDetailRow(
+                                  'Tiempo estimado', scheduledForValue);
+                            }
+                            break;
+                          case DataStatus.error:
+                            scheduledForWidget = buildDetailRow(
+                                'Tiempo estimado', 'Sin registro');
+                            break;
+                          default:
+                            scheduledForWidget = buildDetailRow(
+                                'Tiempo estimado', scheduledForValue);
+                            break;
+                        }
+                        return scheduledForWidget;
+                      },
+                    ),
                     buildDetailRow('Cotización', '0.00 MXN'),
                     Consumer<AssignedToProvider>(
                       builder: (context, provider, child) {
@@ -258,15 +338,27 @@ class _DetailTicketViewState extends State<DetailTicketView> {
       ),
       floatingActionButton: Consumer<AssignedToProvider>(
         builder: (context, provider, child) {
-          String currentStatus = widget.maintenance.status;
+          final scheduleProvider =
+              Provider.of<ScheduleForProvider>(context, listen: false);
+
+          String assignCurrentStatus = widget.maintenance.status;
+          String scheduleCurrentStatus = widget.maintenance.status;
+
           if (provider.status == DataStatus.loaded &&
               provider.assigned != null &&
               provider.assigned!.isNotEmpty) {
-            currentStatus = 'Asignado';
+            assignCurrentStatus = 'Asignado';
+          }
+
+          if (scheduleProvider.status == DataStatus.loaded &&
+              scheduleProvider.scheduled != null &&
+              scheduleProvider.scheduled!.isNotEmpty) {
+            scheduleCurrentStatus = 'Agendado';
           }
           return SpeedDialDetailTicket(
             fkMaintenance: widget.maintenance.id,
-            status: currentStatus,
+            assignStatus: assignCurrentStatus,
+            scheduleStatus: scheduleCurrentStatus,
           );
         },
       ),
@@ -290,5 +382,17 @@ class _DetailTicketViewState extends State<DetailTicketView> {
         ],
       ),
     );
+  }
+
+  String _formatTime(int minutes) {
+    if (minutes == 30) {
+      return '30 minutos';
+    }
+    if (minutes % 60 == 0) {
+      int hours = minutes ~/ 60;
+      return '$hours hora${hours > 1 ? 's' : ''}';
+    }
+    double hours = minutes / 60;
+    return '${hours.toStringAsFixed(1)} horas';
   }
 }

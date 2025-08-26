@@ -9,17 +9,21 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class SpeedDialDetailTicket extends StatelessWidget {
   final int fkMaintenance;
-  final String status;
+  final String assignStatus;
+  final String scheduleStatus;
 
   const SpeedDialDetailTicket({
     super.key,
     required this.fkMaintenance,
-    required this.status,
+    required this.assignStatus,
+    required this.scheduleStatus,
   });
 
   @override
   Widget build(BuildContext context) {
-    bool isDisabledSpeedChild = status == 'Asignado';
+    bool isDisabledAssignSpeedChild = assignStatus == 'Asignado';
+    bool isDisabledScheduleSpeedChild = scheduleStatus == 'Agendado';
+
     return SpeedDial(
       icon: Icons.add,
       activeIcon: Icons.close,
@@ -30,10 +34,10 @@ class SpeedDialDetailTicket extends StatelessWidget {
       children: [
         SpeedDialChild(
           child: const Icon(Icons.file_copy),
-          backgroundColor: isDisabledSpeedChild ? lightGray : darkGray,
+          backgroundColor: isDisabledAssignSpeedChild ? lightGray : darkGray,
           foregroundColor: veryLightGray,
           label: 'Asignar Supervisor',
-          onTap: isDisabledSpeedChild
+          onTap: isDisabledAssignSpeedChild
               ? () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -59,10 +63,10 @@ class SpeedDialDetailTicket extends StatelessWidget {
         ),
         SpeedDialChild(
           child: const Icon(Icons.calendar_month),
-          backgroundColor: isDisabledSpeedChild ? lightGray : darkGray,
+          backgroundColor: isDisabledScheduleSpeedChild ? lightGray : darkGray,
           foregroundColor: veryLightGray,
           label: 'Agendar',
-          onTap: isDisabledSpeedChild
+          onTap: isDisabledScheduleSpeedChild
               ? () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
