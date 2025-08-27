@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/presentation/global/widgets/dialogs/schedule_ticket_dialog.dart';
 
 import '../../colors.dart';
 import '../dialogs/assign_supervisor_dialog.dart';
+import '../dialogs/price_ticket_dialog.dart';
+import '../dialogs/schedule_ticket_dialog.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SpeedDialDetailTicket extends StatelessWidget {
   final int fkMaintenance;
@@ -85,6 +86,35 @@ class SpeedDialDetailTicket extends StatelessWidget {
                       return ScheduleTicketDialog(
                         fkMaintenance: fkMaintenance,
                         scheduleByPartner: int.parse(fkPartnerLicence!),
+                      );
+                    },
+                  );
+                },
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.attach_money_rounded),
+          backgroundColor: false ? lightGray : darkGray,
+          foregroundColor: veryLightGray,
+          label: 'Cotización',
+          onTap: false
+              ? () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('El ticket ya ha sido agendado.'),
+                    ),
+                  );
+                }
+              : () async {
+                  const storage = FlutterSecureStorage();
+                  String? fkPartnerLicence =
+                      await storage.read(key: 'fkPartnerLicence');
+                  showDialog(
+                    // ignore: use_build_context_synchronously
+                    context: context,
+                    builder: (context) {
+                      return PriceTicketDialog(
+                        fkMaintenance: fkMaintenance,
+                        createdByPartner: int.parse(fkPartnerLicence!),
                       );
                     },
                   );
