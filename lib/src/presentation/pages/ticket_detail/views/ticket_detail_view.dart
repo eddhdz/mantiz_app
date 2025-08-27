@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
 
 import '../../../../data/models/models.dart';
@@ -35,6 +36,11 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ScheduleForProvider>(context, listen: false)
           .fetchScheduleFor(widget.maintenance.id);
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<PrizedByProvider>(context, listen: false)
+          .fetchPrizedBy(widget.maintenance.id);
     });
   }
 
@@ -253,7 +259,45 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                         return scheduledForWidget;
                       },
                     ),
-                    buildDetailRow('Cotización', '0.00 MXN'),
+                    Consumer<PrizedByProvider>(
+                      builder: (context, provider, child) {
+                        String prizedByValue = '\$0.00 MXN';
+                        Widget prizedByWidget;
+
+                        // Manejar los diferentes estados del provider
+                        switch (provider.status) {
+                          case DataStatus.initial:
+                            prizedByWidget =
+                                buildDetailRow('Cotización', prizedByValue);
+                            break;
+                          case DataStatus.loading:
+                            prizedByWidget = const CircularProgressIndicator();
+                            break;
+                          case DataStatus.loaded:
+                            // Si la lista de asignaciones no está vacía, muestra el nombre
+                            if (provider.costs != null &&
+                                provider.costs!.isNotEmpty) {
+                              prizedByValue =
+                                  '\$${provider.costs!.last.price.toString()} MXN MAS IVA';
+                              prizedByWidget =
+                                  buildDetailRow('Cotización', prizedByValue);
+                            } else {
+                              prizedByWidget =
+                                  buildDetailRow('Cotización', prizedByValue);
+                            }
+                            break;
+                          case DataStatus.error:
+                            prizedByWidget =
+                                buildDetailRow('Cotización', '\$0.00 MXN');
+                            break;
+                          default:
+                            prizedByWidget =
+                                buildDetailRow('Cotización', prizedByValue);
+                            break;
+                        }
+                        return prizedByWidget;
+                      },
+                    ),
                     Consumer<AssignedToProvider>(
                       builder: (context, provider, child) {
                         String assignedToValue = 'Sin asignar';
