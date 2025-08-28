@@ -8,6 +8,8 @@ import '../dialogs/schedule_ticket_dialog.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../dialogs/suspend_ticket_dialog.dart';
+
 class SpeedDialDetailTicket extends StatelessWidget {
   final int fkMaintenance;
   final String assignStatus;
@@ -115,6 +117,37 @@ class SpeedDialDetailTicket extends StatelessWidget {
                       return PriceTicketDialog(
                         fkMaintenance: fkMaintenance,
                         createdByPartner: int.parse(fkPartnerLicence!),
+                      );
+                    },
+                  );
+                },
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.pause_rounded),
+          backgroundColor: isDisabledScheduleSpeedChild ? lightGray : darkGray,
+          foregroundColor: veryLightGray,
+          label: 'Suspender',
+          onTap: isDisabledScheduleSpeedChild
+              ? () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('El ticket ya ha sido agendado.'),
+                    ),
+                  );
+                }
+              : () async {
+                  const storage = FlutterSecureStorage();
+                  String? fkPartnerLicence =
+                      await storage.read(key: 'fkPartnerLicence');
+                  showDialog(
+                    // ignore: use_build_context_synchronously
+                    context: context,
+                    builder: (context) {
+                      return SuspendTicketDialog(
+                        fkMaintenance: fkMaintenance,
+                        suspenderByPartner: int.parse(
+                          fkPartnerLicence!,
+                        ),
                       );
                     },
                   );

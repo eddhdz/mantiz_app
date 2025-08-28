@@ -8,6 +8,7 @@ import 'package:mantiz/src/data/repositories_implementation/ticket_detail/schedu
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/schedule_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supervisor_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/supplier_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspend_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/tracking_repository_impl.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/add_message_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/assign_service.dart';
@@ -19,6 +20,7 @@ import 'package:mantiz/src/data/services/remote/ticket_detail/schedule_for_servi
 import 'package:mantiz/src/data/services/remote/ticket_detail/schedule_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/supervisor_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/suspend_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/tracking_service.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/add_message_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
@@ -30,6 +32,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.
 import 'package:mantiz/src/domain/providers/ticket_detail/schedule_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supervisor_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/suspend_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/tracking_provider.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/add_message_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/assign_repository.dart';
@@ -41,6 +44,7 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/schedule_for_reposi
 import 'package:mantiz/src/domain/repositories/ticket_detail/schedule_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supervisor_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/suspend_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/tracking_repository.dart';
 
 import '../data/http/http.dart';
@@ -270,4 +274,17 @@ List<SingleChildWidget> appProviders = [
     create: (context) =>
         PriceProvider(priceRepository: context.read<PriceRepository>()),
   ),
+
+  // Repositorio para suspender un ticket
+
+  Provider<SuspendRepository>(
+    create: (context) => SuspendRepositoryImpl(
+        suspendService:
+            SuspendService(http: Http(http.Client(), AppConstants.baseUrl))),
+  ),
+
+  ChangeNotifierProvider<SuspendProvider>(
+    create: (context) =>
+        SuspendProvider(suspendRepository: context.read<SuspendRepository>()),
+  )
 ];
