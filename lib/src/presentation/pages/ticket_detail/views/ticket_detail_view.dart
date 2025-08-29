@@ -261,6 +261,11 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                     ),
                     Consumer<PrizedByProvider>(
                       builder: (context, provider, child) {
+                        final NumberFormat formatter = NumberFormat.currency(
+                          locale: 'es_MX',
+                          symbol: '\$',
+                          decimalDigits: 2,
+                        );
                         String prizedByValue = '\$0.00 MXN';
                         Widget prizedByWidget;
 
@@ -277,8 +282,10 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                             // Si la lista de asignaciones no está vacía, muestra el nombre
                             if (provider.costs != null &&
                                 provider.costs!.isNotEmpty) {
-                              prizedByValue =
-                                  '\$${provider.costs!.last.price.toString()} MXN MAS IVA';
+                              final double price = provider.costs!.last.price;
+                              final String formattedPrice =
+                                  formatter.format(price);
+                              prizedByValue = '$formattedPrice MXN MAS IVA';
                               prizedByWidget =
                                   buildDetailRow('Cotización', prizedByValue);
                             } else {
