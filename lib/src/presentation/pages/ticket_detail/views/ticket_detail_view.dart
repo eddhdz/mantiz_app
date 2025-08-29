@@ -395,21 +395,28 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           String assignCurrentStatus = widget.maintenance.status;
           String scheduleCurrentStatus = widget.maintenance.status;
 
-          if (provider.status == DataStatus.loaded &&
-              provider.assigned != null &&
-              provider.assigned!.isNotEmpty) {
-            assignCurrentStatus = 'Asignado';
+          if (widget.maintenance.status == 'Suspendido') {
+            assignCurrentStatus = 'Suspendido';
+            scheduleCurrentStatus = 'Suspendido';
+          } else {
+            if (provider.status == DataStatus.loaded &&
+                provider.assigned != null &&
+                provider.assigned!.isNotEmpty) {
+              assignCurrentStatus = 'Asignado';
+            }
+
+            if (scheduleProvider.status == DataStatus.loaded &&
+                scheduleProvider.scheduled != null &&
+                scheduleProvider.scheduled!.isNotEmpty) {
+              scheduleCurrentStatus = 'Agendado';
+            }
           }
 
-          if (scheduleProvider.status == DataStatus.loaded &&
-              scheduleProvider.scheduled != null &&
-              scheduleProvider.scheduled!.isNotEmpty) {
-            scheduleCurrentStatus = 'Agendado';
-          }
           return SpeedDialDetailTicket(
             fkMaintenance: widget.maintenance.id,
             assignStatus: assignCurrentStatus,
             scheduleStatus: scheduleCurrentStatus,
+            generalStatus: widget.maintenance.status,
           );
         },
       ),

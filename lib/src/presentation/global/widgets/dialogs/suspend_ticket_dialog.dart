@@ -76,7 +76,7 @@ class SuspendTicketDialog extends StatelessWidget {
                           ),
                           Text(
                             'Ticket suspendido con exito',
-                            style: const TextStyle(color: veryLightGray),
+                            style: TextStyle(color: veryLightGray),
                           )
                         ],
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/presentation/global/widgets/dialogs/activate_ticket_dialog.dart';
 
 import '../../colors.dart';
 import '../dialogs/assign_supervisor_dialog.dart';
@@ -14,18 +15,156 @@ class SpeedDialDetailTicket extends StatelessWidget {
   final int fkMaintenance;
   final String assignStatus;
   final String scheduleStatus;
+  final String generalStatus;
 
   const SpeedDialDetailTicket({
     super.key,
     required this.fkMaintenance,
     required this.assignStatus,
     required this.scheduleStatus,
+    required this.generalStatus,
   });
 
   @override
   Widget build(BuildContext context) {
     bool isDisabledAssignSpeedChild = assignStatus == 'Asignado';
     bool isDisabledScheduleSpeedChild = scheduleStatus == 'Agendado';
+
+    final suspendedSpeedDialChildren = <SpeedDialChild>[
+      SpeedDialChild(
+        child: const Icon(Icons.check_rounded),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Activar',
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return ActivateTicketDialog(
+                fkMaintenance: fkMaintenance,
+                openByPartner: int.parse(fkPartnerLicence!),
+              );
+            },
+          );
+        },
+      ),
+      SpeedDialChild(
+        child: const Icon(Icons.cancel_outlined),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Cancelar',
+        onTap: () {},
+      )
+    ];
+
+    final allSpeedDialChildren = <SpeedDialChild>[
+      SpeedDialChild(
+        child: const Icon(Icons.file_copy),
+        backgroundColor: isDisabledAssignSpeedChild ? lightGray : darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Asignar Supervisor',
+        onTap: isDisabledAssignSpeedChild
+            ? () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('El ticket ya ha sido asignado.'),
+                  ),
+                );
+              }
+            : () async {
+                const storage = FlutterSecureStorage();
+                String? fkPartnerLicence =
+                    await storage.read(key: 'fkPartnerLicence');
+                showDialog(
+                  // ignore: use_build_context_synchronously
+                  context: context,
+                  builder: (context) {
+                    return AssignSupervisorDialog(
+                      fkPartnerLicence: fkPartnerLicence ?? '',
+                      fkMaintenance: fkMaintenance,
+                    );
+                  },
+                );
+              },
+      ),
+      SpeedDialChild(
+        child: const Icon(Icons.calendar_month),
+        backgroundColor: isDisabledScheduleSpeedChild ? lightGray : darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Agendar',
+        onTap: isDisabledScheduleSpeedChild
+            ? () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('El ticket ya ha sido agendado.'),
+                  ),
+                );
+              }
+            : () async {
+                const storage = FlutterSecureStorage();
+                String? fkPartnerLicence =
+                    await storage.read(key: 'fkPartnerLicence');
+                showDialog(
+                  // ignore: use_build_context_synchronously
+                  context: context,
+                  builder: (context) {
+                    return ScheduleTicketDialog(
+                      fkMaintenance: fkMaintenance,
+                      scheduleByPartner: int.parse(fkPartnerLicence!),
+                    );
+                  },
+                );
+              },
+      ),
+      SpeedDialChild(
+        child: const Icon(Icons.attach_money_rounded),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Cotización',
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return PriceTicketDialog(
+                fkMaintenance: fkMaintenance,
+                createdByPartner: int.parse(fkPartnerLicence!),
+              );
+            },
+          );
+        },
+      ),
+      SpeedDialChild(
+        child: const Icon(Icons.pause_rounded),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Suspender',
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return SuspendTicketDialog(
+                fkMaintenance: fkMaintenance,
+                suspenderByPartner: int.parse(
+                  fkPartnerLicence!,
+                ),
+              );
+            },
+          );
+        },
+      ),
+    ];
 
     return SpeedDial(
       icon: Icons.add,
@@ -34,126 +173,9 @@ class SpeedDialDetailTicket extends StatelessWidget {
       foregroundColor: lightGray,
       spacing: 10,
       childMargin: const EdgeInsets.symmetric(horizontal: 10),
-      children: [
-        SpeedDialChild(
-          child: const Icon(Icons.file_copy),
-          backgroundColor: isDisabledAssignSpeedChild ? lightGray : darkGray,
-          foregroundColor: veryLightGray,
-          label: 'Asignar Supervisor',
-          onTap: isDisabledAssignSpeedChild
-              ? () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('El ticket ya ha sido asignado.'),
-                    ),
-                  );
-                }
-              : () async {
-                  const storage = FlutterSecureStorage();
-                  String? fkPartnerLicence =
-                      await storage.read(key: 'fkPartnerLicence');
-                  showDialog(
-                    // ignore: use_build_context_synchronously
-                    context: context,
-                    builder: (context) {
-                      return AssignSupervisorDialog(
-                        fkPartnerLicence: fkPartnerLicence ?? '',
-                        fkMaintenance: fkMaintenance,
-                      );
-                    },
-                  );
-                },
-        ),
-        SpeedDialChild(
-          child: const Icon(Icons.calendar_month),
-          backgroundColor: isDisabledScheduleSpeedChild ? lightGray : darkGray,
-          foregroundColor: veryLightGray,
-          label: 'Agendar',
-          onTap: isDisabledScheduleSpeedChild
-              ? () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('El ticket ya ha sido agendado.'),
-                    ),
-                  );
-                }
-              : () async {
-                  const storage = FlutterSecureStorage();
-                  String? fkPartnerLicence =
-                      await storage.read(key: 'fkPartnerLicence');
-                  showDialog(
-                    // ignore: use_build_context_synchronously
-                    context: context,
-                    builder: (context) {
-                      return ScheduleTicketDialog(
-                        fkMaintenance: fkMaintenance,
-                        scheduleByPartner: int.parse(fkPartnerLicence!),
-                      );
-                    },
-                  );
-                },
-        ),
-        SpeedDialChild(
-          child: const Icon(Icons.attach_money_rounded),
-          backgroundColor: false ? lightGray : darkGray,
-          foregroundColor: veryLightGray,
-          label: 'Cotización',
-          onTap: false
-              ? () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('El ticket ya ha sido agendado.'),
-                    ),
-                  );
-                }
-              : () async {
-                  const storage = FlutterSecureStorage();
-                  String? fkPartnerLicence =
-                      await storage.read(key: 'fkPartnerLicence');
-                  showDialog(
-                    // ignore: use_build_context_synchronously
-                    context: context,
-                    builder: (context) {
-                      return PriceTicketDialog(
-                        fkMaintenance: fkMaintenance,
-                        createdByPartner: int.parse(fkPartnerLicence!),
-                      );
-                    },
-                  );
-                },
-        ),
-        SpeedDialChild(
-          child: const Icon(Icons.pause_rounded),
-          backgroundColor: isDisabledScheduleSpeedChild ? lightGray : darkGray,
-          foregroundColor: veryLightGray,
-          label: 'Suspender',
-          onTap: isDisabledScheduleSpeedChild
-              ? () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('El ticket ya ha sido agendado.'),
-                    ),
-                  );
-                }
-              : () async {
-                  const storage = FlutterSecureStorage();
-                  String? fkPartnerLicence =
-                      await storage.read(key: 'fkPartnerLicence');
-                  showDialog(
-                    // ignore: use_build_context_synchronously
-                    context: context,
-                    builder: (context) {
-                      return SuspendTicketDialog(
-                        fkMaintenance: fkMaintenance,
-                        suspenderByPartner: int.parse(
-                          fkPartnerLicence!,
-                        ),
-                      );
-                    },
-                  );
-                },
-        )
-      ],
+      children: generalStatus == 'Suspendido'
+          ? suspendedSpeedDialChildren
+          : allSpeedDialChildren,
     );
   }
 }
