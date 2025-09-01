@@ -16,6 +16,7 @@ class SpeedDialDetailTicket extends StatelessWidget {
   final String assignStatus;
   final String scheduleStatus;
   final String generalStatus;
+  final String suspendStatus;
 
   const SpeedDialDetailTicket({
     super.key,
@@ -23,12 +24,14 @@ class SpeedDialDetailTicket extends StatelessWidget {
     required this.assignStatus,
     required this.scheduleStatus,
     required this.generalStatus,
+    required this.suspendStatus,
   });
 
   @override
   Widget build(BuildContext context) {
     bool isDisabledAssignSpeedChild = assignStatus == 'Asignado';
     bool isDisabledScheduleSpeedChild = scheduleStatus == 'Agendado';
+    bool isDisabledSuspendSpeedChild = suspendStatus == 'Suspendido';
 
     final suspendedSpeedDialChildren = <SpeedDialChild>[
       SpeedDialChild(
@@ -143,26 +146,34 @@ class SpeedDialDetailTicket extends StatelessWidget {
       ),
       SpeedDialChild(
         child: const Icon(Icons.pause_rounded),
-        backgroundColor: darkGray,
+        backgroundColor: isDisabledSuspendSpeedChild ? lightGray : darkGray,
         foregroundColor: veryLightGray,
         label: 'Suspender',
-        onTap: () async {
-          const storage = FlutterSecureStorage();
-          String? fkPartnerLicence =
-              await storage.read(key: 'fkPartnerLicence');
-          showDialog(
-            // ignore: use_build_context_synchronously
-            context: context,
-            builder: (context) {
-              return SuspendTicketDialog(
-                fkMaintenance: fkMaintenance,
-                suspenderByPartner: int.parse(
-                  fkPartnerLicence!,
-                ),
-              );
-            },
-          );
-        },
+        onTap: isDisabledSuspendSpeedChild
+            ? () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('El ticket ya ha sido suspendido una vez.'),
+                  ),
+                );
+              }
+            : () async {
+                const storage = FlutterSecureStorage();
+                String? fkPartnerLicence =
+                    await storage.read(key: 'fkPartnerLicence');
+                showDialog(
+                  // ignore: use_build_context_synchronously
+                  context: context,
+                  builder: (context) {
+                    return SuspendTicketDialog(
+                      fkMaintenance: fkMaintenance,
+                      suspenderByPartner: int.parse(
+                        fkPartnerLicence!,
+                      ),
+                    );
+                  },
+                );
+              },
       ),
     ];
 
