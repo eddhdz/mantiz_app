@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mantiz/src/presentation/global/widgets/dialogs/activate_ticket_dialog.dart';
+import 'package:mantiz/src/presentation/global/widgets/dialogs/cancel_ticket_dialog.dart';
 
 import '../../colors.dart';
 import '../dialogs/assign_supervisor_dialog.dart';
@@ -60,7 +61,20 @@ class SpeedDialDetailTicket extends StatelessWidget {
         backgroundColor: darkGray,
         foregroundColor: veryLightGray,
         label: 'Cancelar',
-        onTap: () {},
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return CancelTicketDialog(
+                  fkMaintenance: fkMaintenance,
+                  cancelByPartner: int.parse(fkPartnerLicence!));
+            },
+          );
+        },
       )
     ];
 
@@ -174,6 +188,26 @@ class SpeedDialDetailTicket extends StatelessWidget {
                   },
                 );
               },
+      ),
+      SpeedDialChild(
+        child: const Icon(Icons.cancel_outlined),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Cancelar',
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return CancelTicketDialog(
+                  fkMaintenance: fkMaintenance,
+                  cancelByPartner: int.parse(fkPartnerLicence!));
+            },
+          );
+        },
       ),
     ];
 
