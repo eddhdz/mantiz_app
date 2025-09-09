@@ -1,5 +1,3 @@
-
-
 import '../../either.dart';
 import '../../enums.dart';
 

@@ -4,6 +4,7 @@ import 'package:mantiz/src/data/repositories_implementation/ticket_detail/assign
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/assigned_to_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/branchoffice_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/cancel_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/done_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/price_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/prized_by_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/schedule_for_repository_impl.dart';
@@ -19,6 +20,7 @@ import 'package:mantiz/src/data/services/remote/ticket_detail/assign_service.dar
 import 'package:mantiz/src/data/services/remote/ticket_detail/assigned_to_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/branch_office_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/cancel_service.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/done_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/price_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/prized_by_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/schedule_for_service.dart';
@@ -34,6 +36,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/assigned_to_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/branchoffice_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/cancel_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/done_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/price_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
@@ -49,6 +52,7 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/assign_repository.d
 import 'package:mantiz/src/domain/repositories/ticket_detail/assigned_to_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/cancel_repository.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/done_repositroy.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/price_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/prized_by_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/schedule_for_repository.dart';
@@ -337,5 +341,18 @@ List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<CancelProvider>(
     create: (context) =>
         CancelProvider(cancelRepository: context.read<CancelRepository>()),
+  ),
+
+  // Repositorio para realizar un ticket
+
+  Provider<DoneRepositroy>(
+    create: (context) => DoneRepositoryImpl(
+        doneService:
+            DoneService(http: Http(http.Client(), AppConstants.baseUrl))),
+  ),
+
+  ChangeNotifierProvider<DoneProvider>(
+    create: (context) =>
+        DoneProvider(doneRepositroy: context.read<DoneRepositroy>()),
   ),
 ];

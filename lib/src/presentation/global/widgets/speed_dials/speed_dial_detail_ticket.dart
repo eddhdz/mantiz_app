@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/presentation/global/widgets/dialogs/activate_ticket_dialog.dart';
-import 'package:mantiz/src/presentation/global/widgets/dialogs/cancel_ticket_dialog.dart';
 
 import '../../colors.dart';
+import '../dialogs/activate_ticket_dialog.dart';
 import '../dialogs/assign_supervisor_dialog.dart';
+import '../dialogs/cancel_ticket_dialog.dart';
+import '../dialogs/done_ticket_dialog.dart';
 import '../dialogs/price_ticket_dialog.dart';
 import '../dialogs/schedule_ticket_dialog.dart';
 
@@ -33,6 +34,37 @@ class SpeedDialDetailTicket extends StatelessWidget {
     bool isDisabledAssignSpeedChild = assignStatus == 'Asignado';
     bool isDisabledScheduleSpeedChild = scheduleStatus == 'Agendado';
     bool isDisabledSuspendSpeedChild = suspendStatus == 'Suspendido';
+
+    final doneSpeedDialChildren = <SpeedDialChild>[
+      SpeedDialChild(
+        child: const Icon(Icons.check),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Aprobar',
+        onTap: () {},
+      ),
+      SpeedDialChild(
+        child: const Icon(Icons.attach_money_rounded),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Cotización',
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return PriceTicketDialog(
+                fkMaintenance: fkMaintenance,
+                createdByPartner: int.parse(fkPartnerLicence!),
+              );
+            },
+          );
+        },
+      ),
+    ];
 
     final suspendedSpeedDialChildren = <SpeedDialChild>[
       SpeedDialChild(
@@ -209,18 +241,45 @@ class SpeedDialDetailTicket extends StatelessWidget {
           );
         },
       ),
+      SpeedDialChild(
+        child: const Icon(Icons.done_rounded),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Realizado',
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return DoneTicketDialog(
+                fkMaintenance: fkMaintenance,
+                doneByPartner: int.parse(fkPartnerLicence!),
+              );
+            },
+          );
+        },
+      ),
     ];
 
+    List<SpeedDialChild> childrenToShow;
+    if (generalStatus == 'Suspendido') {
+      childrenToShow = suspendedSpeedDialChildren;
+    } else if (generalStatus == 'Finalizado') {
+      childrenToShow = doneSpeedDialChildren;
+    } else {
+      childrenToShow = allSpeedDialChildren;
+    }
+
     return SpeedDial(
-      icon: Icons.add,
-      activeIcon: Icons.close,
-      backgroundColor: mediumGray,
-      foregroundColor: lightGray,
-      spacing: 10,
-      childMargin: const EdgeInsets.symmetric(horizontal: 10),
-      children: generalStatus == 'Suspendido'
-          ? suspendedSpeedDialChildren
-          : allSpeedDialChildren,
-    );
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        backgroundColor: mediumGray,
+        foregroundColor: lightGray,
+        spacing: 10,
+        childMargin: const EdgeInsets.symmetric(horizontal: 10),
+        children: childrenToShow);
   }
 }
