@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/suspend_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
 
 import '../../../../data/models/models.dart';
@@ -396,39 +395,30 @@ class _DetailTicketViewState extends State<DetailTicketView> {
       ),
       floatingActionButton: widget.maintenance.status == 'Cancelado'
           ? null
-          : Consumer<AssignedToProvider>(
-              builder: (context, provider, child) {
-                final scheduleProvider =
-                    Provider.of<ScheduleForProvider>(context, listen: false);
-                final suspendProvider =
-                    Provider.of<SuspendedByProvider>(context, listen: false);
-
+          : Consumer3<AssignedToProvider, ScheduleForProvider,
+              SuspendedByProvider>(
+              builder: (context, assignedProvider, scheduleProvider,
+                  suspendProvider, child) {
                 String assignCurrentStatus = widget.maintenance.status;
                 String scheduleCurrentStatus = widget.maintenance.status;
                 String suspendCurrentStatus = widget.maintenance.status;
 
-                if (widget.maintenance.status == 'Suspendido') {
-                  assignCurrentStatus = 'Suspendido';
-                  scheduleCurrentStatus = 'Suspendido';
+                if (assignedProvider.status == DataStatus.loaded &&
+                    assignedProvider.assigned != null &&
+                    assignedProvider.assigned!.isNotEmpty) {
+                  assignCurrentStatus = 'Asignado';
+                }
+
+                if (scheduleProvider.status == DataStatus.loaded &&
+                    scheduleProvider.scheduled != null &&
+                    scheduleProvider.scheduled!.isNotEmpty) {
+                  scheduleCurrentStatus = 'Agendado';
+                }
+
+                if (suspendProvider.status == DataStatus.loaded &&
+                    suspendProvider.suspensions != null &&
+                    suspendProvider.suspensions!.isNotEmpty) {
                   suspendCurrentStatus = 'Suspendido';
-                } else {
-                  if (provider.status == DataStatus.loaded &&
-                      provider.assigned != null &&
-                      provider.assigned!.isNotEmpty) {
-                    assignCurrentStatus = 'Asignado';
-                  }
-
-                  if (scheduleProvider.status == DataStatus.loaded &&
-                      scheduleProvider.scheduled != null &&
-                      scheduleProvider.scheduled!.isNotEmpty) {
-                    scheduleCurrentStatus = 'Agendado';
-                  }
-
-                  if (suspendProvider.status == DataStatus.loaded &&
-                      suspendProvider.suspensions != null &&
-                      suspendProvider.suspensions!.isNotEmpty) {
-                    suspendCurrentStatus = 'Suspendido';
-                  }
                 }
 
                 return SpeedDialDetailTicket(

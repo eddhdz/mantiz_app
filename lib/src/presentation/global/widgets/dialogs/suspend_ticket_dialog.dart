@@ -90,6 +90,7 @@ class SuspendTicketDialog extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       duration: const Duration(seconds: 3),
                     ));
+                    // ignore: use_build_context_synchronously
                     Navigator.pushNamedAndRemoveUntil(
                         // ignore: use_build_context_synchronously
                         context,

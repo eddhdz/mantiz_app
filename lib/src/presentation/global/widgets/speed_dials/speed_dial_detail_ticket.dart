@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../domain/providers/ticket_detail/assigned_to_provider.dart';
 import '../../colors.dart';
 import '../dialogs/activate_ticket_dialog.dart';
 import '../dialogs/assign_supervisor_dialog.dart';
@@ -128,7 +133,7 @@ class SpeedDialDetailTicket extends StatelessWidget {
                 const storage = FlutterSecureStorage();
                 String? fkPartnerLicence =
                     await storage.read(key: 'fkPartnerLicence');
-                showDialog(
+                final result = await showDialog(
                   // ignore: use_build_context_synchronously
                   context: context,
                   builder: (context) {
@@ -138,6 +143,13 @@ class SpeedDialDetailTicket extends StatelessWidget {
                     );
                   },
                 );
+                if (result == true) {
+                  final assignedProvider =
+                      // ignore: use_build_context_synchronously
+                      Provider.of<AssignedToProvider>(context, listen: false);
+                  await assignedProvider
+                      .fetchAssignedTo(fkMaintenance.toString());
+                }
               },
       ),
       SpeedDialChild(
@@ -157,7 +169,7 @@ class SpeedDialDetailTicket extends StatelessWidget {
                 const storage = FlutterSecureStorage();
                 String? fkPartnerLicence =
                     await storage.read(key: 'fkPartnerLicence');
-                showDialog(
+                final result = await showDialog(
                   // ignore: use_build_context_synchronously
                   context: context,
                   builder: (context) {
@@ -167,6 +179,12 @@ class SpeedDialDetailTicket extends StatelessWidget {
                     );
                   },
                 );
+                if (result == true) {
+                  final scheduledProvider =
+                      // ignore: use_build_context_synchronously
+                      Provider.of<ScheduleForProvider>(context, listen: false);
+                  await scheduledProvider.fetchScheduleFor(fkMaintenance);
+                }
               },
       ),
       SpeedDialChild(
@@ -178,7 +196,7 @@ class SpeedDialDetailTicket extends StatelessWidget {
           const storage = FlutterSecureStorage();
           String? fkPartnerLicence =
               await storage.read(key: 'fkPartnerLicence');
-          showDialog(
+          final result = await showDialog(
             // ignore: use_build_context_synchronously
             context: context,
             builder: (context) {
@@ -188,6 +206,13 @@ class SpeedDialDetailTicket extends StatelessWidget {
               );
             },
           );
+
+          if (result == true) {
+            final prizedProvider =
+                // ignore: use_build_context_synchronously
+                Provider.of<PrizedByProvider>(context, listen: false);
+            await prizedProvider.fetchPrizedBy(fkMaintenance);
+          }
         },
       ),
       SpeedDialChild(
@@ -219,6 +244,12 @@ class SpeedDialDetailTicket extends StatelessWidget {
                     );
                   },
                 );
+                // if (result == true) {
+                //   final suspendedProvider =
+                //       // ignore: use_build_context_synchronously
+                //       Provider.of<SuspendedByProvider>(context, listen: false);
+                //   await suspendedProvider.fetchSuspendedBy(fkMaintenance);
+                // }
               },
       ),
       SpeedDialChild(
@@ -265,10 +296,10 @@ class SpeedDialDetailTicket extends StatelessWidget {
     ];
 
     List<SpeedDialChild> childrenToShow;
-    if (generalStatus == 'Suspendido') {
-      childrenToShow = suspendedSpeedDialChildren;
-    } else if (generalStatus == 'Finalizado') {
+    if (generalStatus == 'Finalizado') {
       childrenToShow = doneSpeedDialChildren;
+    } else if (generalStatus == 'Suspendido') {
+      childrenToShow = suspendedSpeedDialChildren;
     } else {
       childrenToShow = allSpeedDialChildren;
     }

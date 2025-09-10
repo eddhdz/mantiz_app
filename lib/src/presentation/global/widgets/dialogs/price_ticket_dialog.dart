@@ -95,11 +95,8 @@ class PriceTicketDialog extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       duration: const Duration(seconds: 3),
                     ));
-                    Navigator.pushNamedAndRemoveUntil(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        Routes.home,
-                        (route) => false);
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context, true);
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(

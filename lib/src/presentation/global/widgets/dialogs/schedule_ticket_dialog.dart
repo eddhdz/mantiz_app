@@ -210,7 +210,7 @@ class _ScheduleTicketDialogState extends State<ScheduleTicketDialog> {
                     duration: const Duration(seconds: 3),
                   ));
                   // ignore: use_build_context_synchronously
-                  Navigator.pushReplacementNamed(context, Routes.home);
+                  Navigator.pop(context, true);
                 } else if (provider.status == DataStatus.error) {
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
