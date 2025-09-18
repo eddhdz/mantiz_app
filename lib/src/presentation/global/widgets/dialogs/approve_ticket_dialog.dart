@@ -1,23 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/approve_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../domain/enums.dart';
 import '../../../../domain/providers/ticket_detail/add_message_provider.dart';
-import '../../../../domain/providers/ticket_detail/done_provider.dart';
 import '../../../routes/routes.dart';
 import '../../colors.dart';
 
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-
-class DoneTicketDialog extends StatelessWidget {
+class ApproveTicketDialog extends StatelessWidget {
   final int fkMaintenance;
-  final int doneByPartner;
-  const DoneTicketDialog({
+  final int approveByPartner;
+  const ApproveTicketDialog({
     super.key,
     required this.fkMaintenance,
-    required this.doneByPartner,
+    required this.approveByPartner,
   });
 
   @override
@@ -79,7 +79,7 @@ class DoneTicketDialog extends StatelessWidget {
         }
 
         return AlertDialog(
-          title: const Text('Terminar servicio'),
+          title: const Text('Aprobar servicio'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -94,7 +94,7 @@ class DoneTicketDialog extends StatelessWidget {
                   controller: notesController,
                   maxLines: 4,
                   decoration: const InputDecoration(
-                    hintText: 'Escribe el motivo de finalización...',
+                    hintText: 'Escribe el motivo de aprovación...',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -166,7 +166,7 @@ class DoneTicketDialog extends StatelessWidget {
               },
               child: const Text('Cancelar'),
             ),
-            Consumer<DoneProvider>(
+            Consumer<ApproveProvider>(
               builder: (context, provider, child) {
                 if (provider.status == DataStatus.loading) {
                   return const CircularProgressIndicator();
@@ -181,9 +181,9 @@ class DoneTicketDialog extends StatelessWidget {
                       final String? base64Photo360 = evidencePhoto360 != null
                           ? base64Encode(evidencePhoto360!.readAsBytesSync())
                           : null;
-                      await provider.fetchDoneTicket(
+                      await provider.fetchApproveTicket(
                         fkMaintenance,
-                        doneByPartner,
+                        approveByPartner,
                         finishReason,
                         base64Photo ?? '',
                         base64Photo360 ?? '',
@@ -197,10 +197,10 @@ class DoneTicketDialog extends StatelessWidget {
                           listen: false,
                         );
                         String message =
-                            'Ticket finalizado desde app movil: $finishReason';
+                            'Ticket aprovado desde app movil: $finishReason';
 
                         await addMessageProvider.addMessage(
-                            fkMaintenance, doneByPartner, message);
+                            fkMaintenance, approveByPartner, message);
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Row(
@@ -210,7 +210,7 @@ class DoneTicketDialog extends StatelessWidget {
                                 color: veryLightGray,
                               ),
                               Text(
-                                'Ticket finalizado con exito',
+                                'Ticket aprovado con exito',
                                 style: TextStyle(color: veryLightGray),
                               )
                             ],
@@ -240,7 +240,7 @@ class DoneTicketDialog extends StatelessWidget {
                               color: veryLightGray,
                             ),
                             Text(
-                              'Por favor, escribe el motivo de la finalización',
+                              'Por favor, escribe el motivo de la aprovación',
                               style: TextStyle(color: veryLightGray),
                             )
                           ],

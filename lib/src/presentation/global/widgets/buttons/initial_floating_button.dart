@@ -20,14 +20,14 @@ class InitialFloatingButton extends StatelessWidget {
       spaceBetweenChildren: 5,
       closeManually: false,
       children: [
-        SpeedDialChild(
-            backgroundColor: mediumGray,
-            child: const Icon(
-              Icons.account_circle,
-              color: blackPanter,
-            ),
-            label: 'Perfil de Usuario',
-            onTap: () async {}),
+        // SpeedDialChild(
+        //     backgroundColor: mediumGray,
+        //     child: const Icon(
+        //       Icons.account_circle,
+        //       color: blackPanter,
+        //     ),
+        //     label: 'Perfil de Usuario',
+        //     onTap: () async {}),
         SpeedDialChild(
             backgroundColor: mediumGray,
             child: const Icon(
@@ -45,7 +45,13 @@ class InitialFloatingButton extends StatelessWidget {
               color: blackPanter,
             ),
             label: 'Salir',
-            onTap: () async {}),
+            onTap: () async {
+              Navigator.pushNamedAndRemoveUntil(
+                  // ignore: use_build_context_synchronously
+                  context,
+                  Routes.logIn,
+                  (route) => false);
+            }),
       ],
     );
   }

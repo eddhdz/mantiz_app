@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
+import 'package:mantiz/src/presentation/global/widgets/dialogs/approve_ticket_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../domain/providers/ticket_detail/assigned_to_provider.dart';
@@ -40,13 +41,51 @@ class SpeedDialDetailTicket extends StatelessWidget {
     bool isDisabledScheduleSpeedChild = scheduleStatus == 'Agendado';
     bool isDisabledSuspendSpeedChild = suspendStatus == 'Suspendido';
 
+    final approveSpeedDialChildren = <SpeedDialChild>[
+      SpeedDialChild(
+        child: const Icon(Icons.attach_money_rounded),
+        backgroundColor: darkGray,
+        foregroundColor: veryLightGray,
+        label: 'Cotización',
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return PriceTicketDialog(
+                fkMaintenance: fkMaintenance,
+                createdByPartner: int.parse(fkPartnerLicence!),
+              );
+            },
+          );
+        },
+      ),
+    ];
+
     final doneSpeedDialChildren = <SpeedDialChild>[
       SpeedDialChild(
         child: const Icon(Icons.check),
         backgroundColor: darkGray,
         foregroundColor: veryLightGray,
         label: 'Aprobar',
-        onTap: () {},
+        onTap: () async {
+          const storage = FlutterSecureStorage();
+          String? fkPartnerLicence =
+              await storage.read(key: 'fkPartnerLicence');
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) {
+              return ApproveTicketDialog(
+                fkMaintenance: fkMaintenance,
+                approveByPartner: int.parse(fkPartnerLicence!),
+              );
+            },
+          );
+        },
       ),
       SpeedDialChild(
         child: const Icon(Icons.attach_money_rounded),
@@ -300,6 +339,8 @@ class SpeedDialDetailTicket extends StatelessWidget {
       childrenToShow = doneSpeedDialChildren;
     } else if (generalStatus == 'Suspendido') {
       childrenToShow = suspendedSpeedDialChildren;
+    } else if (generalStatus == 'Aprobado') {
+      childrenToShow = approveSpeedDialChildren;
     } else {
       childrenToShow = allSpeedDialChildren;
     }

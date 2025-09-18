@@ -50,7 +50,7 @@ class LogInController extends ChangeNotifier {
       onFetchingChanged(false);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error inesperado'),
+          content: Text('Usuario o contraseña incorrectos'),
         ),
       );
     }, (userEntity) async {
