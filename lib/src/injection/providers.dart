@@ -115,7 +115,7 @@ List<SingleChildWidget> appProviders = [
       const FlutterSecureStorage(),
       AuthenticationService(Http(
         http.Client(),
-        AppConstants.baseUrl,
+        AppConstants.testUrl,
       )),
     ),
   ),
