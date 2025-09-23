@@ -3,7 +3,10 @@ import 'dart:io';
 
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
+import '../../../../presentation/constants/app_constants.dart';
 import '../../../http/http.dart';
+import '../../../models/authentication/login_response_model.dart';
+import '../../../models/authentication/uuid_session_response_model.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -13,7 +16,7 @@ class AuthenticationService {
 
   AuthenticationService(this._http);
 
-  Future<Either<SignInFailure, String>> createSessionWithLogIn({
+  Future<Either<SignInFailure, List<SessionModel>>> createSessionWithLogIn({
     required String username,
     required String password,
   }) async {
@@ -23,7 +26,7 @@ class AuthenticationService {
     final platform = Platform.isIOS ? 'iOS' : 'Android';
 
     final result = await _http.request(
-      '/Users/api/users/v1/mysql/profiles/signin',
+      ':${AppConstants.usersPort}/api/users/v1/mysql/profiles/signin',
       method: HttpMethod.post,
       body: {
         "id": 1,
@@ -50,8 +53,14 @@ class AuthenticationService {
         return Either.left(SignInFailure.unknown);
       },
       (responseBody) async {
-        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-        final newUserToken = json['profiles'][0]['userToken'] as String;
+        final Map<String, dynamic> parsedBody = (responseBody is String)
+            ? jsonDecode(responseBody) as Map<String, dynamic>
+            : responseBody as Map<String, dynamic>;
+
+        final LoginResponseModel loginData =
+            LoginResponseModel.fromJson(parsedBody);
+
+        final newUserToken = loginData.profiles[0].userToken;
         final sessionResult = await validateSession(token: newUserToken);
         return sessionResult.when(
           (failure) => Either.left(failure),
@@ -63,10 +72,10 @@ class AuthenticationService {
     );
   }
 
-  Future<Either<SignInFailure, String>> validateSession(
+  Future<Either<SignInFailure, List<SessionModel>>> validateSession(
       {required String token}) async {
     final result = await _http.request(
-      '/Api_Mantiz/api/mantiz/v1/mysql/login',
+      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/login',
       method: HttpMethod.post,
       body: {"uuid": token},
     );
@@ -82,8 +91,12 @@ class AuthenticationService {
         return Either.left(SignInFailure.unknown);
       },
       (responseBody) {
-        final json = Map<String, dynamic>.from(jsonDecode(responseBody));
-        return Either.right(jsonEncode(json['sessions'][0]));
+        final Map<String, dynamic> parsedBody = (responseBody is String)
+            ? jsonDecode(responseBody) as Map<String, dynamic>
+            : responseBody as Map<String, dynamic>;
+        UuidSessionResponseModel sessionData =
+            UuidSessionResponseModel.fromJson(parsedBody);
+        return Either.right(sessionData.sessions);
       },
     );
   }

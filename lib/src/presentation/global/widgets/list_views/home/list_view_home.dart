@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../data/models/models.dart';
+import '../../../../routes/routes.dart';
 import '../../../colors.dart';
 import '../../texts/general_text.dart';
 
@@ -19,7 +20,7 @@ class ListViewHome extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return Wrap(children: <Widget>[
             Column(children: <Widget>[
-              SizedBox(child: cardTicket(showTickets[index]))
+              SizedBox(child: cardTicket(showTickets[index], context))
             ])
           ]);
         });

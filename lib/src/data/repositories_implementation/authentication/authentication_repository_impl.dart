@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
+import '../../models/authentication/uuid_session_response_model.dart';
 import '../../models/user_model.dart';
 import '../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../services/remote/authentication/authentication_service.dart';
@@ -31,7 +30,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<SignInFailure, String>> signIn(
+  Future<Either<SignInFailure, List<SessionModel>>> signIn(
     String userName,
     String password,
   ) async {
@@ -44,34 +43,34 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         return Either.left(failure);
       },
       (profileUser) {
-        if (jsonDecode(profileUser)['fkCustomerProfile'] != null) {
+        if (profileUser[0].customer != null) {
           _secureStorage.write(
             key: 'Customer',
-            value: jsonDecode(profileUser)['fkCustomerProfile'].toString(),
+            value: profileUser[0].customer!.fkCustomerProfile.toString(),
           );
         }
 
-        if (jsonDecode(profileUser)['fkSupplierProfile'] != null) {
+        if (profileUser[0].supplier != null) {
           _secureStorage.write(
             key: 'Supplier',
-            value: jsonDecode(profileUser)['fkSupplierProfile'].toString(),
+            value: profileUser[0].supplier!.fkSupplierProfile.toString(),
           );
         }
 
-        if (jsonDecode(profileUser)['fkPartnerProfile'] != null) {
+        if (profileUser[0].partner.fkPartnerProfile != null) {
           _secureStorage.write(
             key: 'Partner',
-            value: jsonDecode(profileUser)['fkPartnerProfile'].toString(),
+            value: profileUser[0].partner.fkPartnerProfile.toString(),
           );
         }
 
         _secureStorage.write(
           key: 'fkPartner',
-          value: jsonDecode(profileUser)['fkPartner'].toString(),
+          value: profileUser[0].partner.fkPartner.toString(),
         );
         _secureStorage.write(
           key: 'fkPartnerLicence',
-          value: jsonDecode(profileUser)['fkPartnerLicence'].toString(),
+          value: profileUser[0].partner.fkPartnerLicence.toString(),
         );
         return Either.right(profileUser);
       },

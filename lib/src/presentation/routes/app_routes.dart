@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../data/models/models.dart';
 import '../pages/views.dart';
 import 'routes.dart';
 
-// Map<String, Widget Function(BuildContext)> get appRoutes {
-//   return {
-//     Routes.splash: (context) => const SplashView(),
-//     Routes.logIn: (context) => const LogInView(),
-//     Routes.home: (context) => const HomeView(),
-//     Routes.offline: (context) => const OfflineView(),
-//     Routes.newTicket: (context) => const NewTicketView(),
-//   };
-// }
-
 Route<dynamic>? generateRoute(RouteSettings settings) {
+  final args = settings.arguments;
   switch (settings.name) {
     case Routes.splash:
       return MaterialPageRoute(
@@ -35,6 +27,32 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (_) => const NewTicketView(),
       );
+    case Routes.detailTicket:
+      if (settings.arguments is MaintenancesModel) {
+        final MaintenancesModel maintenance =
+            settings.arguments as MaintenancesModel;
+        return MaterialPageRoute(
+          builder: (_) => DetailTicketView(maintenance: maintenance),
+        );
+      }
+      return MaterialPageRoute(
+        builder: (_) => const Scaffold(
+          body: Center(
+            child: Text('Error: parametro de ticket no encontrado'),
+          ),
+        ),
+      );
+    case Routes.trackingTicket:
+      if (args is List && args.length >= 2) {
+        final int fkMaintenance = args[0] as int;
+        final int currentUserId = args[1] as int;
+        return MaterialPageRoute(
+          builder: (_) => TicketTrackingView(
+            fkMaintenance: fkMaintenance,
+            currentUserId: currentUserId,
+          ),
+        );
+      }
     default:
       return MaterialPageRoute(
         builder: (_) => const Scaffold(

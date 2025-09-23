@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/enums.dart';
-import '../../../../domain/providers/licence_provider.dart';
+import '../../../../domain/providers/licence/licence_provider.dart';
 import '../../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../../routes/routes.dart';
 
@@ -50,14 +50,14 @@ class LogInController extends ChangeNotifier {
       onFetchingChanged(false);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error inesperado'),
+          content: Text('Usuario o contraseña incorrectos'),
         ),
       );
     }, (userEntity) async {
       // final licenceProvider = context.read<LicenceProvider>();
       final licenceProvider =
           Provider.of<LicenceProvider>(context, listen: false);
-      final String fkPartner = jsonDecode(userEntity)['fkPartner'].toString();
+      final String fkPartner = userEntity[0].partner.fkPartner.toString();
 
       await licenceProvider.fetchUserLicences(fkPartner);
       onFetchingChanged(false);

@@ -8,6 +8,7 @@ class HomeApi {
   HomeApi(this._http);
 
   Future<Either<GeneralFailure, dynamic>> loadMaintenances(int fkPartnerProfile) async {
+    // ignore: unused_local_variable
     var a = 1000;
 
     final result = await _http.request(

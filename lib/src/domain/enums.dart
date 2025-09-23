@@ -17,6 +17,7 @@ enum GeneralFailure {
   network,
   clientError,
   serverError,
+  empty,
 }
 
 enum LicenceStatus {
@@ -24,4 +25,13 @@ enum LicenceStatus {
   loading,
   loaded,
   error,
+}
+
+enum DataStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+  noData,
+  success,
 }

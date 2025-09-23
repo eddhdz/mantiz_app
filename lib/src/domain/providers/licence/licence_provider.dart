@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../data/models/user_licence_response_model.dart';
-import '../enums.dart';
-import '../repositories/licence/licence_repository.dart';
+import '../../../data/models/user_licence_response_model.dart';
+import '../../enums.dart';
+import '../../repositories/licence/licence_repository.dart';
 
 class LicenceProvider extends ChangeNotifier {
   final LicenceRepository _licenceRepository;

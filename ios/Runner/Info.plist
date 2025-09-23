@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Para ofrecerte una mejor experiencia, necesitamos acceder a los servicios de ubicación</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Permitir acceso a la galeria del dispositivo.</string>
 	<key>NSCameraUsageDescription</key>
