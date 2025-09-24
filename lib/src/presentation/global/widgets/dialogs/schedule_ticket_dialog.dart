@@ -153,8 +153,7 @@ class _ScheduleTicketDialogState extends State<ScheduleTicketDialog> {
 
             return ElevatedButton(
               onPressed: () async {
-                final int estimatedMinutes =
-                    _durationMap[_selectedDuration] ?? 0;
+                final int estimatedMinutes = _durationMap[_selectedDuration] ?? 0;
 
                 final DateTime combinedDateTime = DateTime(
                   _selectedDate.year,
@@ -165,8 +164,7 @@ class _ScheduleTicketDialogState extends State<ScheduleTicketDialog> {
                 );
 
                 // Formato de fecha para el API: "YYYY-MM-DD HH:MM:SS"
-                final String formattedDateTime =
-                    DateFormat('yyyy-MM-dd HH:mm:ss').format(combinedDateTime);
+                final String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(combinedDateTime);
 
                 await provider.scheduleTicket(
                   widget.fkMaintenance,
@@ -181,10 +179,8 @@ class _ScheduleTicketDialogState extends State<ScheduleTicketDialog> {
                     context,
                     listen: false,
                   );
-                  const message =
-                      'Ticket agendado desde app movil para su seguimineto';
-                  await addMessageProvider.addMessage(
-                      widget.fkMaintenance, widget.scheduleByPartner, message);
+                  const message = 'Ticket agendado desde app movil para su seguimineto';
+                  await addMessageProvider.addMessage(widget.fkMaintenance, widget.scheduleByPartner, message);
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: const Row(
@@ -201,11 +197,10 @@ class _ScheduleTicketDialogState extends State<ScheduleTicketDialog> {
                     ),
                     backgroundColor: mediumGray,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(10),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                     padding: const EdgeInsets.all(10),
                     duration: const Duration(seconds: 3),
                   ));
@@ -213,8 +208,7 @@ class _ScheduleTicketDialogState extends State<ScheduleTicketDialog> {
                   Navigator.pop(context, true);
                 } else if (provider.status == DataStatus.error) {
                   // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Error desconocido')));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error desconocido')));
                 }
               },
               child: const Text('Agendar'),
