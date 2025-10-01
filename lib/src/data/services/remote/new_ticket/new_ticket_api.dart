@@ -1,5 +1,6 @@
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
+import '../../../../presentation/constants/app_constants.dart';
 import '../../../models/models.dart';
 import '../../../http/http.dart';
 import '../../../models/save_photo_model.dart';
@@ -11,7 +12,7 @@ class NewTicketApi {
 
   Future<Either<GeneralFailure, dynamic>> savePhoto(SavePhotoModel photo) async {
     final result = await _http.request(
-      '/Api_Images/images/add',
+      ':${AppConstants.apiImagesPort}/V1/images/add',
       method: HttpMethod.post,
       body: {
         'uuidapp': photo.uuidapp,
@@ -20,7 +21,7 @@ class NewTicketApi {
         'type': photo.type,
         'url': photo.url,
         'im64': photo.im64,
-        'createdAt': photo.createdAt.toIso8601String(),
+        'createdAt': photo.createdAt.toIso8601String()
       },
     );
 
@@ -43,7 +44,7 @@ class NewTicketApi {
 
   Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel ticket) async {
     final result = await _http.request(
-      '/Api_Mantiz/api/mantiz/v1/mysql/tickets/add',
+      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/tickets/add',
       method: HttpMethod.post,
       body: {
         'id': ticket.id,
@@ -79,9 +80,33 @@ class NewTicketApi {
     });
   }
 
+  Future<Either<GeneralFailure, dynamic>> loadDevices(int fkCBO) async {
+    final result = await _http.request(
+      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/customers/branchoffices/devices',
+      method: HttpMethod.post,
+      body: {'fkCBO': fkCBO},
+    );
+
+    return result.when((failure) {
+      if (failure.statusCode == null) {
+        return Either.left(GeneralFailure.noData);
+      } else if (failure.exception is NetworkException) {
+        return Either.left(GeneralFailure.network);
+      } else if (failure.statusCode! >= 400 && failure.statusCode! <= 499) {
+        return Either.left(GeneralFailure.clientError);
+      } else if (failure.statusCode! >= 500 && failure.statusCode! <= 599) {
+        return Either.left(GeneralFailure.serverError);
+      } else {
+        return Either.left(GeneralFailure.unknown);
+      }
+    }, (responseBody) {
+      return Either.right(responseBody);
+    });
+  }
+
   Future<Either<GeneralFailure, dynamic>> loadBranchs(int fkCustomer) async {
     final result = await _http.request(
-      '/Api_Mantiz/api/mantiz/v1/mysql/customers/branchoffices',
+      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/customers/branchoffices',
       method: HttpMethod.post,
       body: {'fkCustomer': fkCustomer},
     );
@@ -105,7 +130,7 @@ class NewTicketApi {
 
   Future<Either<GeneralFailure, dynamic>> loadCustomers(int fkPartnerLicence) async {
     final result = await _http.request(
-      '/Api_Mantiz/api/mantiz/v1/mysql/partners/licences/customers',
+      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/partners/licences/customers',
       method: HttpMethod.post,
       body: {'fkPartnerLicence': fkPartnerLicence},
     );

@@ -57,11 +57,9 @@ class CancelTicketDialog extends StatelessWidget {
                       context,
                       listen: false,
                     );
-                    String message =
-                        'Ticket cancelado desde app movil: $cancelReason';
+                    String message = 'Ticket cancelado desde app movil: $cancelReason';
 
-                    await addMessageProvider.addMessage(
-                        fkMaintenance, cancelByPartner, message);
+                    await addMessageProvider.addMessage(fkMaintenance, cancelByPartner, message);
                     // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: const Row(
@@ -78,11 +76,10 @@ class CancelTicketDialog extends StatelessWidget {
                       ),
                       backgroundColor: mediumGray,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       behavior: SnackBarBehavior.floating,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                       padding: const EdgeInsets.all(10),
                       duration: const Duration(seconds: 3),
                     ));
@@ -108,11 +105,10 @@ class CancelTicketDialog extends StatelessWidget {
                     ),
                     backgroundColor: mediumGray,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(10),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                     padding: const EdgeInsets.all(10),
                     duration: const Duration(seconds: 3),
                   ));

@@ -20,8 +20,7 @@ class ActivateTicketDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Reactivar servicio'),
-      content:
-          const Text('¿Estás seguro de que deseas reactivar este servicio?'),
+      content: const Text('¿Estás seguro de que deseas reactivar este servicio?'),
       actions: [
         TextButton(
           onPressed: () {
@@ -44,11 +43,9 @@ class ActivateTicketDialog extends StatelessWidget {
                     context,
                     listen: false,
                   );
-                  const message =
-                      'Servicio reactivado. El ticket ha sido activado nuevamente para su seguimiento.';
+                  const message = 'Servicio reactivado. El ticket ha sido activado nuevamente para su seguimiento.';
 
-                  await addMessageProvider.addMessage(
-                      fkMaintenance, openByPartner, message);
+                  await addMessageProvider.addMessage(fkMaintenance, openByPartner, message);
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: const Row(
@@ -65,11 +62,10 @@ class ActivateTicketDialog extends StatelessWidget {
                     ),
                     backgroundColor: mediumGray,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(10),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                     padding: const EdgeInsets.all(10),
                     duration: const Duration(seconds: 3),
                   ));

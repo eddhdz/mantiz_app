@@ -33,6 +33,7 @@ class Http {
       };
       late final Response response;
       final bodyString = jsonEncode(body);
+
       logs = {
         'url': url.toString(),
         'method': method.name,

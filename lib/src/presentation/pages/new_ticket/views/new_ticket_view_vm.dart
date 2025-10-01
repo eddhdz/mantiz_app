@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:mantiz/src/data/models/device_model.dart';
+
 import '../../../../data/models/photo_evidence_model.dart';
 import '../../../../data/models/save_photo_model.dart';
 import '../../../../domain/enums.dart';
@@ -29,6 +31,12 @@ class NewTicketViewVM with ChangeNotifier {
 
   String? _rutaImage;
   String? get rutaImage => _rutaImage;
+
+  List<DeviceModel> _devices = [];
+  List<DeviceModel> get devices => _devices;
+
+  DeviceModel? _selectedDevice;
+  DeviceModel? get selectedDevice => _selectedDevice;
 
   List<CustomerModel> _customers = [];
   List<CustomerModel> get customers => _customers;
@@ -141,6 +149,7 @@ class NewTicketViewVM with ChangeNotifier {
         fkPCL: _selectedCustomer!.id,
         fkCBO: _selectedBranch!.id,
         fkStatusMaintenance: 1,
+        fkCustomerBranchofficeDevice: _selectedDevice!.id,
         folio: 0,
         description: _title,
         area: _area,
@@ -241,9 +250,52 @@ class NewTicketViewVM with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> branchSelectedAction(BranchOfficeModel branch) async {
+  Future<void> branchSelectedAction(BuildContext context, BranchOfficeModel branch) async {
     _selectedBranch = branch;
+
+    //! Cargamos dispositivos correspondientes a la sucursal seleccionada ...
+    if (_selectedBranch != null) {
+      await loadDevices(context, _selectedBranch!);
+    }
+  }
+
+  Future<void> loadDevices(BuildContext context, BranchOfficeModel branch) async {
+    _isLoading = true;
     notifyListeners();
+
+    _devices = [];
+    final result = await Provider.of<NewTicketRepository>(context, listen: false).loadDevices(branch.id);
+
+    result.when((failure) {
+      final message = {
+        GeneralFailure.noData: 'No information',
+        GeneralFailure.unknown: 'Error',
+        GeneralFailure.network: 'No Internet',
+        GeneralFailure.clientError: 'Client side connection failure',
+        GeneralFailure.serverError: 'Server side connection failure',
+      }[failure];
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
+    }, (devices) {
+      _devices = devices;
+    });
+
+    _selectedDevice = _devices.isNotEmpty ? _devices[0] : null;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> deviceSelectedAction(DeviceModel device) async {
+    _selectedDevice = device;
+    notifyListeners();
+  }
+
+  String? validatorDevice(DeviceModel? device) {
+    if (device == null) {
+      return 'Debe seleccionar al menos un equipo en pantalla';
+    }
+
+    return null;
   }
 
   String? validatorBranch(BranchOfficeModel? branch) {

@@ -7,4 +7,5 @@ class AppConstants {
 
   static const String usersPort = '17504';
   static const String apiMantizPort = '18001';
+  static const String apiImagesPort = '17508';
 }
