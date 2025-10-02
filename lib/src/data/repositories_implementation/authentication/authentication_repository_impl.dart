@@ -46,21 +46,25 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         if (profileUser[0].customer != null) {
           _secureStorage.write(
             key: 'Customer',
-            value: profileUser[0].customer!.fkCustomerProfile.toString(),
+            value: profileUser[0].customer!.fkProfile.toString(),
           );
+        } else {
+          _secureStorage.delete(key: 'Customer');
         }
 
         if (profileUser[0].supplier != null) {
           _secureStorage.write(
             key: 'Supplier',
-            value: profileUser[0].supplier!.fkSupplierProfile.toString(),
+            value: profileUser[0].supplier!.fkProfile.toString(),
           );
+        } else {
+          _secureStorage.delete(key: 'Supplier');
         }
 
         if (profileUser[0].partner.fkPartnerProfile != null) {
           _secureStorage.write(
             key: 'Partner',
-            value: profileUser[0].partner.fkPartnerProfile.toString(),
+            value: profileUser[0].partner.fkProfile.toString(),
           );
         }
 

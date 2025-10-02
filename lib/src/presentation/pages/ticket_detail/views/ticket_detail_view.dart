@@ -30,26 +30,32 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AssignedToProvider>(context, listen: false).fetchAssignedTo(widget.maintenance.id.toString());
+      Provider.of<AssignedToProvider>(context, listen: false)
+          .fetchAssignedTo(widget.maintenance.id.toString());
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ScheduleForProvider>(context, listen: false).fetchScheduleFor(widget.maintenance.id);
+      Provider.of<ScheduleForProvider>(context, listen: false)
+          .fetchScheduleFor(widget.maintenance.id);
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<PrizedByProvider>(context, listen: false).fetchPrizedBy(widget.maintenance.id);
+      Provider.of<PrizedByProvider>(context, listen: false)
+          .fetchPrizedBy(widget.maintenance.id);
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<SuspendedByProvider>(context, listen: false).fetchSuspendedBy(widget.maintenance.id);
+      Provider.of<SuspendedByProvider>(context, listen: false)
+          .fetchSuspendedBy(widget.maintenance.id);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat('dd/MM/yyyy \'a las\' HH:mm \'horas\'');
-    final String createdAtFormatted = formatter.format(widget.maintenance.createdAt);
+    final DateFormat formatter =
+        DateFormat('dd/MM/yyyy \'a las\' HH:mm \'horas\'');
+    final String createdAtFormatted =
+        formatter.format(widget.maintenance.createdAt);
     final whoCreated = widget.maintenance.whoPartnerCreatedModel;
 
     return Scaffold(
@@ -60,14 +66,30 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           IconButton(
               onPressed: () async {
                 const storage = FlutterSecureStorage();
-                String? fkPartnerLicence = await storage.read(key: 'fkPartnerLicence');
+                String? fkPartnerLicence =
+                    await storage.read(key: 'fkPartnerLicence');
+                String? fkProfileCustomer = await storage.read(key: 'Customer');
+                String? fkProfileSupplier = await storage.read(key: 'Supplier');
+                String? fkProfilePartner = await storage.read(key: 'Partner');
+                String? currentFkProfile =
+                    fkProfileCustomer ?? fkProfileSupplier ?? fkProfilePartner;
+
+                if (currentFkProfile == null || fkPartnerLicence == null) {
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Error: Información de usuario o licencia incompleta.')),
+                  );
+                  return; // Detiene la ejecución
+                }
                 Navigator.pushNamed(
                     // ignore: use_build_context_synchronously
                     context,
                     Routes.trackingTicket,
                     arguments: [
                       widget.maintenance.id,
-                      int.parse(fkPartnerLicence!),
+                      int.parse(currentFkProfile),
                     ]);
               },
               icon: const Icon(Icons.chat_rounded))
@@ -81,7 +103,8 @@ class _DetailTicketViewState extends State<DetailTicketView> {
             // Sección de detalles del ticket
             Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -89,7 +112,10 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                   children: [
                     Text(
                       'Detalles del Ticket',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Divider(),
                     buildDetailRow('Título', widget.maintenance.description),
@@ -106,7 +132,8 @@ class _DetailTicketViewState extends State<DetailTicketView> {
             // Sección de detalles de la sucursal
             Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -114,12 +141,18 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                   children: [
                     Text(
                       'Información de la Sucursal',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Divider(),
-                    buildDetailRow('Sucursal', widget.maintenance.branchOfficeModel.description),
-                    buildDetailRow('Razón social', widget.maintenance.branchOfficeModel.subcompany),
-                    buildDetailRow('Dirección', widget.maintenance.branchOfficeModel.location),
+                    buildDetailRow('Sucursal',
+                        widget.maintenance.branchOfficeModel.description),
+                    buildDetailRow('Razón social',
+                        widget.maintenance.branchOfficeModel.subcompany),
+                    buildDetailRow('Dirección',
+                        widget.maintenance.branchOfficeModel.location),
                   ],
                 ),
               ),
@@ -129,7 +162,8 @@ class _DetailTicketViewState extends State<DetailTicketView> {
             // Sección de contacto
             Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -137,7 +171,10 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                   children: [
                     Text(
                       'Contacto',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Divider(),
                     buildDetailRow('Creado por', whoCreated?.fullname ?? 'N/A'),
@@ -152,7 +189,8 @@ class _DetailTicketViewState extends State<DetailTicketView> {
             // Otros detalles
             Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -160,7 +198,10 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                   children: [
                     Text(
                       'Otros Detalles',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Divider(),
                     Consumer<ScheduleForProvider>(
@@ -170,24 +211,32 @@ class _DetailTicketViewState extends State<DetailTicketView> {
 
                         switch (provider.status) {
                           case DataStatus.initial:
-                            scheduledForWidget = buildDetailRow('Agendado para', scheduledForValue);
+                            scheduledForWidget = buildDetailRow(
+                                'Agendado para', scheduledForValue);
                             break;
                           case DataStatus.loading:
-                            scheduledForWidget = const CircularProgressIndicator();
+                            scheduledForWidget =
+                                const CircularProgressIndicator();
                             break;
                           case DataStatus.loaded:
-                            if (provider.scheduled != null && provider.scheduled!.isNotEmpty) {
-                              scheduledForValue = formatter.format(provider.scheduled!.first.atentionAt);
-                              scheduledForWidget = buildDetailRow('Agendado para', scheduledForValue);
+                            if (provider.scheduled != null &&
+                                provider.scheduled!.isNotEmpty) {
+                              scheduledForValue = formatter
+                                  .format(provider.scheduled!.first.atentionAt);
+                              scheduledForWidget = buildDetailRow(
+                                  'Agendado para', scheduledForValue);
                             } else {
-                              scheduledForWidget = buildDetailRow('Agendado para', scheduledForValue);
+                              scheduledForWidget = buildDetailRow(
+                                  'Agendado para', scheduledForValue);
                             }
                             break;
                           case DataStatus.error:
-                            scheduledForWidget = buildDetailRow('Agendado para', 'Sin agendar');
+                            scheduledForWidget =
+                                buildDetailRow('Agendado para', 'Sin agendar');
                             break;
                           default:
-                            scheduledForWidget = buildDetailRow('Agendado para', scheduledForValue);
+                            scheduledForWidget = buildDetailRow(
+                                'Agendado para', scheduledForValue);
                             break;
                         }
                         return scheduledForWidget;
@@ -200,24 +249,32 @@ class _DetailTicketViewState extends State<DetailTicketView> {
 
                         switch (provider.status) {
                           case DataStatus.initial:
-                            scheduledForWidget = buildDetailRow('Tiempo estimado', scheduledForValue);
+                            scheduledForWidget = buildDetailRow(
+                                'Tiempo estimado', scheduledForValue);
                             break;
                           case DataStatus.loading:
-                            scheduledForWidget = const CircularProgressIndicator();
+                            scheduledForWidget =
+                                const CircularProgressIndicator();
                             break;
                           case DataStatus.loaded:
-                            if (provider.scheduled != null && provider.scheduled!.isNotEmpty) {
-                              scheduledForValue = _formatTime(provider.scheduled!.first.atentionTime);
-                              scheduledForWidget = buildDetailRow('Tiempo estimado', scheduledForValue);
+                            if (provider.scheduled != null &&
+                                provider.scheduled!.isNotEmpty) {
+                              scheduledForValue = _formatTime(
+                                  provider.scheduled!.first.atentionTime);
+                              scheduledForWidget = buildDetailRow(
+                                  'Tiempo estimado', scheduledForValue);
                             } else {
-                              scheduledForWidget = buildDetailRow('Tiempo estimado', scheduledForValue);
+                              scheduledForWidget = buildDetailRow(
+                                  'Tiempo estimado', scheduledForValue);
                             }
                             break;
                           case DataStatus.error:
-                            scheduledForWidget = buildDetailRow('Tiempo estimado', 'Sin registro');
+                            scheduledForWidget = buildDetailRow(
+                                'Tiempo estimado', 'Sin registro');
                             break;
                           default:
-                            scheduledForWidget = buildDetailRow('Tiempo estimado', scheduledForValue);
+                            scheduledForWidget = buildDetailRow(
+                                'Tiempo estimado', scheduledForValue);
                             break;
                         }
                         return scheduledForWidget;
@@ -236,27 +293,34 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                         // Manejar los diferentes estados del provider
                         switch (provider.status) {
                           case DataStatus.initial:
-                            prizedByWidget = buildDetailRow('Cotización', prizedByValue);
+                            prizedByWidget =
+                                buildDetailRow('Cotización', prizedByValue);
                             break;
                           case DataStatus.loading:
                             prizedByWidget = const CircularProgressIndicator();
                             break;
                           case DataStatus.loaded:
                             // Si la lista de asignaciones no está vacía, muestra el nombre
-                            if (provider.costs != null && provider.costs!.isNotEmpty) {
+                            if (provider.costs != null &&
+                                provider.costs!.isNotEmpty) {
                               final double price = provider.costs!.last.price;
-                              final String formattedPrice = formatter.format(price);
+                              final String formattedPrice =
+                                  formatter.format(price);
                               prizedByValue = '$formattedPrice MXN MAS IVA';
-                              prizedByWidget = buildDetailRow('Cotización', prizedByValue);
+                              prizedByWidget =
+                                  buildDetailRow('Cotización', prizedByValue);
                             } else {
-                              prizedByWidget = buildDetailRow('Cotización', prizedByValue);
+                              prizedByWidget =
+                                  buildDetailRow('Cotización', prizedByValue);
                             }
                             break;
                           case DataStatus.error:
-                            prizedByWidget = buildDetailRow('Cotización', '\$0.00 MXN');
+                            prizedByWidget =
+                                buildDetailRow('Cotización', '\$0.00 MXN');
                             break;
                           default:
-                            prizedByWidget = buildDetailRow('Cotización', prizedByValue);
+                            prizedByWidget =
+                                buildDetailRow('Cotización', prizedByValue);
                             break;
                         }
                         return prizedByWidget;
@@ -270,25 +334,33 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                         // Manejar los diferentes estados del provider
                         switch (provider.status) {
                           case DataStatus.initial:
-                            assignedToWidget = buildDetailRow('Asignado a', assignedToValue);
+                            assignedToWidget =
+                                buildDetailRow('Asignado a', assignedToValue);
                             break;
                           case DataStatus.loading:
-                            assignedToWidget = const CircularProgressIndicator();
+                            assignedToWidget =
+                                const CircularProgressIndicator();
                             break;
                           case DataStatus.loaded:
                             // Si la lista de asignaciones no está vacía, muestra el nombre
-                            if (provider.assigned != null && provider.assigned!.isNotEmpty) {
-                              assignedToValue = provider.assigned!.first.tosasigned.fullname;
-                              assignedToWidget = buildDetailRow('Asignado a', assignedToValue);
+                            if (provider.assigned != null &&
+                                provider.assigned!.isNotEmpty) {
+                              assignedToValue =
+                                  provider.assigned!.first.tosasigned.fullname;
+                              assignedToWidget =
+                                  buildDetailRow('Asignado a', assignedToValue);
                             } else {
-                              assignedToWidget = buildDetailRow('Asignado a', assignedToValue);
+                              assignedToWidget =
+                                  buildDetailRow('Asignado a', assignedToValue);
                             }
                             break;
                           case DataStatus.error:
-                            assignedToWidget = buildDetailRow('Asignado a', 'No asignado');
+                            assignedToWidget =
+                                buildDetailRow('Asignado a', 'No asignado');
                             break;
                           default:
-                            assignedToWidget = buildDetailRow('Asignado a', assignedToValue);
+                            assignedToWidget =
+                                buildDetailRow('Asignado a', assignedToValue);
                             break;
                         }
                         return assignedToWidget;
@@ -301,7 +373,8 @@ class _DetailTicketViewState extends State<DetailTicketView> {
             const SizedBox(height: 16),
             Card(
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -309,14 +382,18 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                   children: [
                     Text(
                       'Ubicación del servicio',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Divider(),
                     SizedBox(
                       height: 250,
                       child: TicketMapWidget(
                         location: LatLng(
-                            double.parse(widget.maintenance.branchOfficeModel.latitud),
+                            double.parse(
+                                widget.maintenance.branchOfficeModel.latitud),
                             double.parse(
                               widget.maintenance.branchOfficeModel.longitud,
                             )),
@@ -333,21 +410,29 @@ class _DetailTicketViewState extends State<DetailTicketView> {
       ),
       floatingActionButton: widget.maintenance.status == 'Cancelado'
           ? null
-          : Consumer3<AssignedToProvider, ScheduleForProvider, SuspendedByProvider>(
-              builder: (context, assignedProvider, scheduleProvider, suspendProvider, child) {
+          : Consumer3<AssignedToProvider, ScheduleForProvider,
+              SuspendedByProvider>(
+              builder: (context, assignedProvider, scheduleProvider,
+                  suspendProvider, child) {
                 String assignCurrentStatus = widget.maintenance.status;
                 String scheduleCurrentStatus = widget.maintenance.status;
                 String suspendCurrentStatus = widget.maintenance.status;
 
-                if (assignedProvider.status == DataStatus.loaded && assignedProvider.assigned != null && assignedProvider.assigned!.isNotEmpty) {
+                if (assignedProvider.status == DataStatus.loaded &&
+                    assignedProvider.assigned != null &&
+                    assignedProvider.assigned!.isNotEmpty) {
                   assignCurrentStatus = 'Asignado';
                 }
 
-                if (scheduleProvider.status == DataStatus.loaded && scheduleProvider.scheduled != null && scheduleProvider.scheduled!.isNotEmpty) {
+                if (scheduleProvider.status == DataStatus.loaded &&
+                    scheduleProvider.scheduled != null &&
+                    scheduleProvider.scheduled!.isNotEmpty) {
                   scheduleCurrentStatus = 'Agendado';
                 }
 
-                if (suspendProvider.status == DataStatus.loaded && suspendProvider.suspensions != null && suspendProvider.suspensions!.isNotEmpty) {
+                if (suspendProvider.status == DataStatus.loaded &&
+                    suspendProvider.suspensions != null &&
+                    suspendProvider.suspensions!.isNotEmpty) {
                   suspendCurrentStatus = 'Suspendido';
                 }
 
