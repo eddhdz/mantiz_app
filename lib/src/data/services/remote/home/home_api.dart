@@ -7,14 +7,37 @@ class HomeApi {
 
   HomeApi(this._http);
 
-  Future<Either<GeneralFailure, dynamic>> loadMaintenances(int fkPartnerProfile) async {
+  Future<Either<GeneralFailure, dynamic>> loadMaintenances(
+      int fkPartnerProfile, String role) async {
     // ignore: unused_local_variable
     var a = 1000;
+    String path;
+    Map<String, dynamic> body;
 
-    final result = await _http.request(
-      '/Api_Mantiz/api/mantiz/v1/mysql/tickets',
+    switch (role) {
+      case 'partner':
+        path = '/Api_Mantiz/api/mantiz/v1/mysql/tickets';
+        body = {'id': fkPartnerProfile};
+        break;
+      case 'customer':
+        path = '/Api_Mantiz/api/mantiz/v1/mysql/tickets/customers';
+        body = {'id': fkPartnerProfile};
+        break;
+      case 'supplier':
+        path = '/Api_Mantiz/api/mantiz/v1/mysql/tickets/suppliers';
+        body = {
+          'id': 0,
+          'fkProfile': fkPartnerProfile,
+        };
+        break;
+      default:
+        return Either.left(GeneralFailure.noData);
+    }
+
+    var result = await _http.request(
+      path,
       method: HttpMethod.post,
-      body: {'id': fkPartnerProfile},
+      body: body,
     );
 
     return result.when((failure) {

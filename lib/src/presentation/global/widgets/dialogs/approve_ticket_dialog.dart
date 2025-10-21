@@ -175,12 +175,8 @@ class ApproveTicketDialog extends StatelessWidget {
                   onPressed: () async {
                     final String finishReason = notesController.text.trim();
                     if (finishReason.isNotEmpty) {
-                      final String? base64Photo = evidencePhoto != null
-                          ? base64Encode(evidencePhoto!.readAsBytesSync())
-                          : null;
-                      final String? base64Photo360 = evidencePhoto360 != null
-                          ? base64Encode(evidencePhoto360!.readAsBytesSync())
-                          : null;
+                      final String? base64Photo = evidencePhoto != null ? base64Encode(evidencePhoto!.readAsBytesSync()) : null;
+                      final String? base64Photo360 = evidencePhoto360 != null ? base64Encode(evidencePhoto360!.readAsBytesSync()) : null;
                       await provider.fetchApproveTicket(
                         fkMaintenance,
                         approveByPartner,
@@ -190,17 +186,14 @@ class ApproveTicketDialog extends StatelessWidget {
                       );
 
                       if (provider.status == DataStatus.success) {
-                        final addMessageProvider =
-                            Provider.of<AddMessageProvider>(
+                        final addMessageProvider = Provider.of<AddMessageProvider>(
                           // ignore: use_build_context_synchronously
                           context,
                           listen: false,
                         );
-                        String message =
-                            'Ticket aprovado desde app movil: $finishReason';
+                        String message = 'Ticket aprovado desde app movil: $finishReason';
 
-                        await addMessageProvider.addMessage(
-                            fkMaintenance, approveByPartner, message);
+                        await addMessageProvider.addMessage(fkMaintenance, approveByPartner, message);
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Row(
@@ -217,11 +210,10 @@ class ApproveTicketDialog extends StatelessWidget {
                           ),
                           backgroundColor: mediumGray,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadiusGeometry.circular(10),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           behavior: SnackBarBehavior.floating,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
+                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                           padding: const EdgeInsets.all(10),
                           duration: const Duration(seconds: 3),
                         ));
@@ -247,11 +239,10 @@ class ApproveTicketDialog extends StatelessWidget {
                         ),
                         backgroundColor: mediumGray,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(10),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         behavior: SnackBarBehavior.floating,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 15),
+                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                         padding: const EdgeInsets.all(10),
                         duration: const Duration(seconds: 3),
                       ));

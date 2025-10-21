@@ -35,8 +35,7 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<SupplierProvider>(context, listen: false)
-          .fetchSuppliers(widget.fkPartnerLicence);
+      Provider.of<SupplierProvider>(context, listen: false).fetchSuppliers(widget.fkPartnerLicence);
     });
   }
 
@@ -87,14 +86,10 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
         ),
       ),
       actions: [
-        TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancelar')),
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancelar')),
         Consumer<AssignProvider>(
           builder: (context, provider, child) {
-            final bool isEnabled = _selectedSupplierId != null &&
-                _selectedBranchofficeId != null &&
-                _selectedSupervisorId != null;
+            final bool isEnabled = _selectedSupplierId != null && _selectedBranchofficeId != null && _selectedSupervisorId != null;
 
             if (provider.status == DataStatus.loading) {
               return const CircularProgressIndicator();
@@ -103,24 +98,16 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
             return TextButton(
                 onPressed: isEnabled
                     ? () async {
-                        await provider.assignTicket(
-                            widget.fkMaintenance,
-                            int.parse(widget.fkPartnerLicence),
-                            int.parse(_selectedSupervisorId!));
+                        await provider.assignTicket(widget.fkMaintenance, int.parse(widget.fkPartnerLicence), int.parse(_selectedSupervisorId!));
 
                         if (provider.status == DataStatus.success) {
-                          final addMessageProvider =
-                              Provider.of<AddMessageProvider>(
+                          final addMessageProvider = Provider.of<AddMessageProvider>(
                             // ignore: use_build_context_synchronously
                             context,
                             listen: false,
                           );
-                          const message =
-                              'Ticket asignado desde app movil para su seguimineto';
-                          await addMessageProvider.addMessage(
-                              widget.fkMaintenance,
-                              int.parse(widget.fkPartnerLicence),
-                              message);
+                          const message = 'Ticket asignado desde app movil para su seguimineto';
+                          await addMessageProvider.addMessage(widget.fkMaintenance, int.parse(widget.fkPartnerLicence), message);
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: const Row(
@@ -137,11 +124,10 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
                             ),
                             backgroundColor: mediumGray,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusGeometry.circular(10),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             behavior: SnackBarBehavior.floating,
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 15),
+                            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                             padding: const EdgeInsets.all(10),
                             duration: const Duration(seconds: 3),
                           ));
@@ -150,9 +136,7 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
                           // Navigator.pushReplacementNamed(context, Routes.home);
                         } else if (provider.status == DataStatus.error) {
                           // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Error desconocido')));
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error desconocido')));
                         }
                       }
                     : null,
@@ -195,8 +179,7 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
             _selectedBranchofficeId = null;
             _selectedSupervisorId = null;
           });
-          Provider.of<BranchofficeProvider>(context, listen: false)
-              .fetchBranchoffices(newValue!);
+          Provider.of<BranchofficeProvider>(context, listen: false).fetchBranchoffices(newValue!);
         }, enabled: true);
       },
     );
@@ -232,8 +215,7 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
               _selectedBranchofficeId = newValue;
               _selectedSupervisorId = null;
             });
-            Provider.of<SupervisorProvider>(context, listen: false)
-                .fetchSupervisors(newValue!);
+            Provider.of<SupervisorProvider>(context, listen: false).fetchSupervisors(newValue!);
           },
           enabled: true,
         );
@@ -275,9 +257,7 @@ class _AssignSupervisorDialogState extends State<AssignSupervisorDialog> {
     );
   }
 
-  _buildDropdown(List<DropdownMenuItem<String>> items, String? selectedValue,
-      Function(String?)? onChanged,
-      {required bool enabled}) {
+  _buildDropdown(List<DropdownMenuItem<String>> items, String? selectedValue, Function(String?)? onChanged, {required bool enabled}) {
     return DropdownButtonFormField<String>(
       isExpanded: true,
       value: selectedValue,

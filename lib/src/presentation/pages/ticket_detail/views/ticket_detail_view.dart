@@ -68,13 +68,28 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 const storage = FlutterSecureStorage();
                 String? fkPartnerLicence =
                     await storage.read(key: 'fkPartnerLicence');
+                String? fkProfileCustomer = await storage.read(key: 'Customer');
+                String? fkProfileSupplier = await storage.read(key: 'Supplier');
+                String? fkProfilePartner = await storage.read(key: 'Partner');
+                String? currentFkProfile =
+                    fkProfileCustomer ?? fkProfileSupplier ?? fkProfilePartner;
+
+                if (currentFkProfile == null || fkPartnerLicence == null) {
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Error: Información de usuario o licencia incompleta.')),
+                  );
+                  return; // Detiene la ejecución
+                }
                 Navigator.pushNamed(
                     // ignore: use_build_context_synchronously
                     context,
                     Routes.trackingTicket,
                     arguments: [
                       widget.maintenance.id,
-                      int.parse(fkPartnerLicence!),
+                      int.parse(currentFkProfile),
                     ]);
               },
               icon: const Icon(Icons.chat_rounded))
@@ -359,7 +374,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
             Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusGeometry.circular(10)),
+                  borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(

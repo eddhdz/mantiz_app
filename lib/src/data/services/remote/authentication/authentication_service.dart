@@ -26,7 +26,7 @@ class AuthenticationService {
     final platform = Platform.isIOS ? 'iOS' : 'Android';
 
     final result = await _http.request(
-      ':${AppConstants.usersPort}/api/users/v1/mysql/profiles/signin',
+      '/${AppConstants.usersPort}/api/users/v1/mysql/profiles/signin',
       method: HttpMethod.post,
       body: {
         "id": 1,
@@ -75,7 +75,7 @@ class AuthenticationService {
   Future<Either<SignInFailure, List<SessionModel>>> validateSession(
       {required String token}) async {
     final result = await _http.request(
-      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/login',
+      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/login',
       method: HttpMethod.post,
       body: {"uuid": token},
     );

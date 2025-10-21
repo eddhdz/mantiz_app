@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/repositories/home/home_repository.dart';
@@ -19,9 +21,20 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<Either<GeneralFailure, List<MaintenancesModel>>>
       loadMaintenances() async {
-    final partner = await _storage.read(key: 'Partner');
+    String? fkPartnerLicence = await _storage.read(key: 'fkPartnerLicence');
+    String? fkProfileCustomer = await _storage.read(key: 'FkCustomer');
+    String? fkProfileSupplier = await _storage.read(key: 'FkSupplierProfile');
+    String? currentFkProfile =
+        fkProfileCustomer ?? fkProfileSupplier ?? fkPartnerLicence;
+    String role = 'partner';
 
-    final homeResult = await _homeApi.loadMaintenances(int.parse(partner!));
+    if (fkProfileCustomer != null && fkProfileSupplier == null) {
+      role = 'customer';
+    } else if (fkProfileCustomer == null && fkProfileSupplier != null) {
+      role = 'supplier';
+    }
+    final homeResult =
+        await _homeApi.loadMaintenances(int.parse(currentFkProfile!), role);
 
     return homeResult.when(
       (failure) {

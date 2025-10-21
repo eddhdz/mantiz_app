@@ -57,8 +57,7 @@ class PriceTicketDialog extends StatelessWidget {
                 final double? cost = double.tryParse(costText);
 
                 if (cost != null) {
-                  await provider.fetchPriceTicket(
-                      fkMaintenance, createdByPartner, cost);
+                  await provider.fetchPriceTicket(fkMaintenance, createdByPartner, cost);
 
                   if (provider.status == DataStatus.success) {
                     final addMessageProvider = Provider.of<AddMessageProvider>(
@@ -66,11 +65,9 @@ class PriceTicketDialog extends StatelessWidget {
                       context,
                       listen: false,
                     );
-                    String message =
-                        'Se agrega cotización desde app movil por la cantidad de $cost MXN MAS IVA';
+                    String message = 'Se agrega cotización desde app movil por la cantidad de $cost MXN MAS IVA';
 
-                    await addMessageProvider.addMessage(
-                        fkMaintenance, createdByPartner, message);
+                    await addMessageProvider.addMessage(fkMaintenance, createdByPartner, message);
                     // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Row(
@@ -87,11 +84,10 @@ class PriceTicketDialog extends StatelessWidget {
                       ),
                       backgroundColor: mediumGray,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       behavior: SnackBarBehavior.floating,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                       padding: const EdgeInsets.all(10),
                       duration: const Duration(seconds: 3),
                     ));
@@ -114,11 +110,10 @@ class PriceTicketDialog extends StatelessWidget {
                     ),
                     backgroundColor: mediumGray,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusGeometry.circular(10),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                     padding: const EdgeInsets.all(10),
                     duration: const Duration(seconds: 3),
                   ));

@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
-import '../../models/models.dart';
+import '../../models/branch_office_model.dart';
+import '../../models/customer_model.dart';
+import '../../models/device_model.dart';
 import '../../../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../../models/photo_evidence_model.dart';
 import '../../models/save_photo_model.dart';
+import '../../models/save_ticket_model.dart';
 import '../../services/remote/new_ticket/new_ticket_api.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -26,14 +29,20 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
       PhotoEvidenceModel photo = PhotoEvidenceModel.onInit();
 
       final json = Map<String, dynamic>.from(jsonDecode(save));
-      if (json['images'] != null || json['images'] != '') {
-        photo = PhotoEvidenceModel(
-          uuid: json['images'][0]['uuid'],
-          uuidapp: json['images'][0]['uuidapp'],
-          name: json['images'][0]['name'],
-          type: json['images'][0]['type'],
-          url: json['images'][0]['url'],
-        );
+      if (json['response']['id'] > 0) {
+        if ((json['list'] as List).isNotEmpty) {
+          photo = PhotoEvidenceModel(
+            uuid: json['list'][0]['uuid'],
+            uuidapp: json['list'][0]['uuidapp'],
+            name: json['list'][0]['name'],
+            type: json['list'][0]['type'],
+            url: json['list'][0]['url'],
+          );
+        } else {
+          return Either.left(GeneralFailure.clientError);
+        }
+      } else {
+        return Either.left(GeneralFailure.clientError);
       }
 
       return Either.right(photo);
@@ -73,6 +82,43 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
     }, (save) {
       return Either.right(save);
     });
+  }
+
+  @override
+  Future<Either<GeneralFailure, List<DeviceModel>>> loadDevices(int fkCBO) async {
+    final deviceResult = await _newTicketApi.loadDevices(fkCBO);
+
+    return deviceResult.when(
+      (failure) {
+        return Either.left(failure);
+      },
+      (responseDevices) {
+        List<DeviceModel> devices = [];
+
+        final json = Map<String, dynamic>.from(jsonDecode(responseDevices));
+
+        for (var item in json['devices'] as List) {
+          Map<String, dynamic> device = Map<String, dynamic>.from(jsonDecode(item['device']));
+
+          DeviceModel deviceModel = DeviceModel(
+              id: int.parse(item['id'].toString()),
+              code: item['code'],
+              uuidDevice: device['uuidDevice'],
+              description: device['description'],
+              barCode: device['barcode'],
+              specs: device['specs'],
+              subCategory: device['subcategory'],
+              category: device['category'],
+              product: device['product'],
+              typeService: device['typeservice'],
+              brand: device['brand']);
+
+          devices.add(deviceModel);
+        }
+
+        return Either.right(devices);
+      },
+    );
   }
 
   @override
