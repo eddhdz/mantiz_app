@@ -48,8 +48,12 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
             key: 'Customer',
             value: profileUser[0].customer!.fkProfile.toString(),
           );
+          _secureStorage.write(
+              key: 'FkCustomer',
+              value: profileUser[0].customer!.fkCustomer.toString());
         } else {
           _secureStorage.delete(key: 'Customer');
+          _secureStorage.delete(key: 'FkCustomer');
         }
 
         if (profileUser[0].supplier != null) {
@@ -57,8 +61,13 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
             key: 'Supplier',
             value: profileUser[0].supplier!.fkProfile.toString(),
           );
+          _secureStorage.write(
+            key: 'FkSupplierProfile',
+            value: profileUser[0].supplier!.fkSupplierProfile.toString(),
+          );
         } else {
           _secureStorage.delete(key: 'Supplier');
+          _secureStorage.delete(key: 'FkSupplierProfile');
         }
 
         if (profileUser[0].partner.fkPartnerProfile != null) {

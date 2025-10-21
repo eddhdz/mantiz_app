@@ -47,7 +47,14 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4  
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "lib/src/assets/logos/mantiz_icono.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "lib/src/assets/logos/mantiz_icono.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.

@@ -10,9 +10,10 @@ class NewTicketApi {
 
   NewTicketApi(this._http);
 
-  Future<Either<GeneralFailure, dynamic>> savePhoto(SavePhotoModel photo) async {
+  Future<Either<GeneralFailure, dynamic>> savePhoto(
+      SavePhotoModel photo) async {
     final result = await _http.request(
-      ':${AppConstants.apiImagesPort}/V1/images/add',
+      '/${AppConstants.apiImagePort}/V1/images/add',
       method: HttpMethod.post,
       body: {
         'uuidapp': photo.uuidapp,
@@ -42,9 +43,10 @@ class NewTicketApi {
     });
   }
 
-  Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel ticket) async {
+  Future<Either<GeneralFailure, bool>> saveTicket(
+      SaveTicketModel ticket) async {
     final result = await _http.request(
-      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/tickets/add',
+      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/tickets/add',
       method: HttpMethod.post,
       body: {
         'id': ticket.id,
@@ -82,7 +84,7 @@ class NewTicketApi {
 
   Future<Either<GeneralFailure, dynamic>> loadDevices(int fkCBO) async {
     final result = await _http.request(
-      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/customers/branchoffices/devices',
+      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/customers/branchoffices/devices',
       method: HttpMethod.post,
       body: {'fkCBO': fkCBO},
     );
@@ -106,7 +108,7 @@ class NewTicketApi {
 
   Future<Either<GeneralFailure, dynamic>> loadBranchs(int fkCustomer) async {
     final result = await _http.request(
-      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/customers/branchoffices',
+      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/customers/branchoffices',
       method: HttpMethod.post,
       body: {'fkCustomer': fkCustomer},
     );
@@ -128,9 +130,10 @@ class NewTicketApi {
     });
   }
 
-  Future<Either<GeneralFailure, dynamic>> loadCustomers(int fkPartnerLicence) async {
+  Future<Either<GeneralFailure, dynamic>> loadCustomers(
+      int fkPartnerLicence) async {
     final result = await _http.request(
-      ':${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/partners/licences/customers',
+      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/partners/licences/customers',
       method: HttpMethod.post,
       body: {'fkPartnerLicence': fkPartnerLicence},
     );

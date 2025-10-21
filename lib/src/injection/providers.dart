@@ -101,7 +101,7 @@ List<SingleChildWidget> appProviders = [
 
   Provider<NewTicketRepository>(
       create: (_) => NewTicketRepositoryImpl(
-          NewTicketApi(Http(http.Client(), AppConstants.testUrl)),
+          NewTicketApi(Http(http.Client(), AppConstants.baseUrl)),
           const FlutterSecureStorage())),
   // Repositorio para conexion
   Provider<ConnectivityRepository>(
