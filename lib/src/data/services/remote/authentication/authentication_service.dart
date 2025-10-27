@@ -26,17 +26,18 @@ class AuthenticationService {
     final platform = Platform.isIOS ? 'iOS' : 'Android';
 
     final result = await _http.request(
-      '/${AppConstants.usersPort}/api/users/v1/mysql/profiles/signin',
+      '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/signin',
       method: HttpMethod.post,
       body: {
-        "id": 1,
         "username": username,
         "password": password,
-        "encryptcode": "dc4514e898db7048305716fa928d61dc",
-        "platform": platform,
-        "versionplatform": versionPlatform,
+        "useruuid": null,
+        "mobileuuid": "e46f5c3f94b5aaf053da7190d6aa2434",
+        "firebasetoken": "ABCKSADASDJASDJSAOJDASOJD",
         "versionapp": packageInfo.version,
-        "token": "",
+        "versionplatform": versionPlatform,
+        "platform": platform,
+        "visitfrom": "MobileApp",
         "createdat": DateTime.now().toString()
       },
     );
