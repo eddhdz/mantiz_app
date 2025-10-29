@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1084248724336",
+    "firebase_url": "https://mantis-bca8d.firebaseio.com",
+    "project_id": "mantis-bca8d",
+    "storage_bucket": "mantis-bca8d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084248724336:android:c0f325c9f7fb2e4216f5b5",
+        "android_client_info": {
+          "package_name": "com.ecosat.mantiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDm9uGtNEvTDyhZ5HqSMnP9Fx0w7a_54hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

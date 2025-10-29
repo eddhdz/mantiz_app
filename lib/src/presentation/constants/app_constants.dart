@@ -1,10 +1,10 @@
 class AppConstants {
   AppConstants._();
   static const String baseUrl = 'https://servicios.sidon.mx';
-  static const String testUrl = 'http://172.168.10.20';
+  static const String testUrl = 'http://192.168.200.200';
 
   //slash o dots
-  static const String slashDots = '/';
+  static const String symbol = ':';
 
   // Puertos de produccion
 
@@ -14,7 +14,7 @@ class AppConstants {
 
   //Puertos de prueba
 
-  static const String usersPortTest = '17504';
+  static const String usersPortTest = '18002';
   static const String apiMantizPortTest = '18001';
   static const String apiImagesPortTest = '17508';
 }

@@ -1,6 +1,7 @@
+import 'package:mantiz/src/data/models/authentication/login_response_model.dart';
+
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
-import '../../models/authentication/uuid_session_response_model.dart';
 import '../../models/user_model.dart';
 import '../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../services/remote/authentication/authentication_service.dart';
@@ -30,60 +31,32 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<SignInFailure, List<SessionModel>>> signIn(
+  Future<Either<SignInFailure, LoginResponseModel>> signIn(
     String userName,
     String password,
+    String mobileUuid,
+    String? firebasetoken,
+    
   ) async {
     final loginResult = await _authenticationApi.createSessionWithLogIn(
       username: userName,
       password: password,
+      mobileUuid: mobileUuid,
+      firebasetoken: firebasetoken,
+      
     );
     return loginResult.when(
       (failure) {
         return Either.left(failure);
       },
       (profileUser) {
-        if (profileUser[0].customer != null) {
-          _secureStorage.write(
-            key: 'Customer',
-            value: profileUser[0].customer!.fkProfile.toString(),
-          );
-          _secureStorage.write(
-              key: 'FkCustomer',
-              value: profileUser[0].customer!.fkCustomer.toString());
-        } else {
-          _secureStorage.delete(key: 'Customer');
-          _secureStorage.delete(key: 'FkCustomer');
-        }
-
-        if (profileUser[0].supplier != null) {
-          _secureStorage.write(
-            key: 'Supplier',
-            value: profileUser[0].supplier!.fkProfile.toString(),
-          );
-          _secureStorage.write(
-            key: 'FkSupplierProfile',
-            value: profileUser[0].supplier!.fkSupplierProfile.toString(),
-          );
-        } else {
-          _secureStorage.delete(key: 'Supplier');
-          _secureStorage.delete(key: 'FkSupplierProfile');
-        }
-
-        if (profileUser[0].partner.fkPartnerProfile != null) {
-          _secureStorage.write(
-            key: 'Partner',
-            value: profileUser[0].partner.fkProfile.toString(),
-          );
-        }
-
         _secureStorage.write(
-          key: 'fkPartner',
-          value: profileUser[0].partner.fkPartner.toString(),
+          key: 'uuid',
+          value: profileUser.list[0].profile.mobile.uuid,
         );
         _secureStorage.write(
-          key: 'fkPartnerLicence',
-          value: profileUser[0].partner.fkPartnerLicence.toString(),
+          key: 'useruuid',
+          value: profileUser.list[0].profile.user.useruuid,
         );
         return Either.right(profileUser);
       },

@@ -6,7 +6,6 @@ import '../../../../domain/enums.dart';
 import '../../../../presentation/constants/app_constants.dart';
 import '../../../http/http.dart';
 import '../../../models/authentication/login_response_model.dart';
-import '../../../models/authentication/uuid_session_response_model.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -16,9 +15,11 @@ class AuthenticationService {
 
   AuthenticationService(this._http);
 
-  Future<Either<SignInFailure, List<SessionModel>>> createSessionWithLogIn({
+  Future<Either<SignInFailure, LoginResponseModel>> createSessionWithLogIn({
     required String username,
     required String password,
+    required String mobileUuid,
+    required String? firebasetoken,
   }) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
@@ -26,17 +27,18 @@ class AuthenticationService {
     final platform = Platform.isIOS ? 'iOS' : 'Android';
 
     final result = await _http.request(
-      '/${AppConstants.usersPort}/api/users/v1/mysql/profiles/signin',
+      '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/signin',
       method: HttpMethod.post,
       body: {
-        "id": 1,
         "username": username,
         "password": password,
-        "encryptcode": "dc4514e898db7048305716fa928d61dc",
-        "platform": platform,
-        "versionplatform": versionPlatform,
+        "useruuid": null,
+        "mobileuuid": mobileUuid,
+        "firebasetoken": firebasetoken,
         "versionapp": packageInfo.version,
-        "token": "",
+        "versionplatform": versionPlatform,
+        "platform": platform,
+        "visitfrom": "MobileApp",
         "createdat": DateTime.now().toString()
       },
     );
@@ -59,44 +61,11 @@ class AuthenticationService {
 
         final LoginResponseModel loginData =
             LoginResponseModel.fromJson(parsedBody);
-
-        final newUserToken = loginData.profiles[0].userToken;
-        final sessionResult = await validateSession(token: newUserToken);
-        return sessionResult.when(
-          (failure) => Either.left(failure),
-          (profile) {
-            return Either.right(profile);
-          },
-        );
-      },
-    );
-  }
-
-  Future<Either<SignInFailure, List<SessionModel>>> validateSession(
-      {required String token}) async {
-    final result = await _http.request(
-      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/login',
-      method: HttpMethod.post,
-      body: {"uuid": token},
-    );
-
-    return result.when(
-      (failure) {
-        if (failure.statusCode != null) {
+        if (loginData.response.id > 0) {
+          return Either.right(loginData);
+        } else {
           return Either.left(SignInFailure.unknown);
         }
-        if (failure.exception is NetworkException) {
-          return Either.left(SignInFailure.network);
-        }
-        return Either.left(SignInFailure.unknown);
-      },
-      (responseBody) {
-        final Map<String, dynamic> parsedBody = (responseBody is String)
-            ? jsonDecode(responseBody) as Map<String, dynamic>
-            : responseBody as Map<String, dynamic>;
-        UuidSessionResponseModel sessionData =
-            UuidSessionResponseModel.fromJson(parsedBody);
-        return Either.right(sessionData.sessions);
       },
     );
   }
