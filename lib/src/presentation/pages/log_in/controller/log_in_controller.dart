@@ -1,26 +1,30 @@
 import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../domain/enums.dart';
-import '../../../../domain/providers/licence/licence_provider.dart';
 import '../../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../../routes/routes.dart';
 
-import 'package:provider/provider.dart';
-
 class LogInController extends ChangeNotifier {
   final AuthenticationRepository _authenticationRepository;
+  final FirebaseMessaging _fbm;
 
   String _userName = '', _password = '';
   bool _fetching = false, _mounted = true, _isVisible = false;
+
+  LogInController(
+      {required AuthenticationRepository authenticationRepository,
+      required FirebaseMessaging fbm})
+      : _authenticationRepository = authenticationRepository,
+        _fbm = fbm;
 
   String get username => _userName;
   String get password => _password;
   bool get fetching => _fetching;
   bool get mounted => _mounted;
   bool get isVisible => _isVisible;
-
-  LogInController(this._authenticationRepository);
 
   void onUserNameChanged(String text) {
     _userName = text.trim().toLowerCase();
@@ -40,12 +44,38 @@ class LogInController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String?> getFBMToken() async {
+    try {
+      NotificationSettings settings =
+          await _fbm.requestPermission(alert: true, badge: true, sound: true);
+      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
+          settings.authorizationStatus == AuthorizationStatus.provisional) {
+        String? token = await _fbm.getToken();
+        if (token != null) {
+          return token;
+        }
+        token = await _fbm.onTokenRefresh.first;
+        return token;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<void> submitLogin(BuildContext context) async {
     if (fetching) return;
 
     onFetchingChanged(true);
+    String? firebasetoken = await getFBMToken();
+    String timestamp = DateTime.now().toUtc().toIso8601String();
+    String combinedData = '$firebasetoken$timestamp';
+    List<int> bytes = utf8.encode(combinedData);
+    Digest mobileUuid = md5.convert(bytes);
 
-    final result = await _authenticationRepository.signIn(_userName, _password);
+    final result = await _authenticationRepository.signIn(
+        _userName, _password, mobileUuid.toString(), firebasetoken);
     result.when((failure) {
       onFetchingChanged(false);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -54,25 +84,7 @@ class LogInController extends ChangeNotifier {
         ),
       );
     }, (userEntity) async {
-      // final licenceProvider = context.read<LicenceProvider>();
-      final licenceProvider =
-          Provider.of<LicenceProvider>(context, listen: false);
-      final String fkPartner = userEntity[0].partner.fkPartner.toString();
-
-      await licenceProvider.fetchUserLicences(fkPartner);
-      onFetchingChanged(false);
-
-      if (licenceProvider.status == LicenceStatus.loaded &&
-          licenceProvider.isLicenceActive) {
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, Routes.home);
-      } else {
-        String licenceErrorMessage = "Licencia inválida o no activa.";
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(licenceErrorMessage)),
-        );
-      }
+      Navigator.pushReplacementNamed(context, Routes.home);
     });
   }
 

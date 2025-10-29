@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mantiz/src/data/repositories_implementation/session/session_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/activate_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/add_message_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/approve_repository_impl.dart';
@@ -49,6 +51,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart
 import 'package:mantiz/src/domain/providers/ticket_detail/suspend_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/tracking_provider.dart';
+import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/activate_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/add_message_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/approve_repository.dart';
@@ -108,6 +111,14 @@ List<SingleChildWidget> appProviders = [
     create: (_) => ConnectivityRepositoryImpl(Connectivity()),
   ),
 
+  //Repositorio para revisar la sesion
+  Provider<SessionRepository>(
+    create: (context) => SessionRepositoryImpl(
+      secureStorage: const FlutterSecureStorage(),
+      fbm: FirebaseMessaging.instance,
+    ),
+  ),
+
   // Repositorio LogIn
 
   Provider<AuthenticationRepository>(
@@ -136,7 +147,8 @@ List<SingleChildWidget> appProviders = [
 
   ChangeNotifierProvider<LogInController>(
     create: (context) => LogInController(
-      context.read<AuthenticationRepository>(),
+      authenticationRepository: context.read<AuthenticationRepository>(),
+      fbm: FirebaseMessaging.instance,
     ),
   ),
 

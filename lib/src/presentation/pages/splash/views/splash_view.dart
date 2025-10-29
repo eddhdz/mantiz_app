@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
 
 import '../../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../../routes/routes.dart';
@@ -34,12 +35,14 @@ class _SplashViewState extends State<SplashView> {
       context,
       listen: false,
     );
+    final sessionRepository =
+        Provider.of<SessionRepository>(context, listen: false);
     final hasInternet = await connectivityRepository.hasInternet;
+    final sessionActive = await sessionRepository.isSessionActive;
     await Future.delayed(const Duration(seconds: 2));
 
     if (hasInternet) {
-      final isSignedIn = await authenticationRepository.isSignedIn;
-      if (isSignedIn) {
+      if (sessionActive) {
         final user = await authenticationRepository.getUserData();
         if (mounted) {
           if (user != null) {
