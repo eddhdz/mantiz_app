@@ -35,8 +35,7 @@ class _SplashViewState extends State<SplashView> {
       context,
       listen: false,
     );
-    final sessionRepository =
-        Provider.of<SessionRepository>(context, listen: false);
+    final sessionRepository = Provider.of<SessionRepository>(context, listen: false);
     final hasInternet = await connectivityRepository.hasInternet;
     final sessionActive = await sessionRepository.isSessionActive;
     await Future.delayed(const Duration(seconds: 2));
@@ -46,7 +45,8 @@ class _SplashViewState extends State<SplashView> {
         final user = await authenticationRepository.getUserData();
         if (mounted) {
           if (user != null) {
-            _goTo(Routes.home);
+            // _goTo(Routes.home);
+            _goTo(Routes.startingPoint);
           } else {
             _goTo(Routes.logIn);
           }

@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:mantiz/src/data/repositories_implementation/session/session_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/starting_point/starting_point_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/activate_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/add_message_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/approve_repository_impl.dart';
@@ -17,6 +18,7 @@ import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suppli
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspend_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspended_by_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/tracking_repository_impl.dart';
+import 'package:mantiz/src/data/services/remote/starting_point/starting_point_api.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/activate_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/add_message_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/approve_service.dart';
@@ -52,6 +54,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/suspend_provider.dart'
 import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/tracking_provider.dart';
 import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
+import 'package:mantiz/src/domain/repositories/starting_point/starting_point_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/activate_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/add_message_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/approve_repository.dart';
@@ -69,6 +72,8 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository
 import 'package:mantiz/src/domain/repositories/ticket_detail/suspend_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/suspended_by_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/tracking_repository.dart';
+import 'package:mantiz/src/presentation/pages/first_page/controller/first_page_controller.dart';
+import 'package:mantiz/src/presentation/pages/starting_point.dart/controller/starting_point_controller.dart';
 
 import '../data/http/http.dart';
 import '../data/repositories_implementation/authentication/authentication_repository_impl.dart';
@@ -99,13 +104,10 @@ import 'package:provider/single_child_widget.dart';
 
 List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider.value(value: HomeViewVm()),
-
   ChangeNotifierProvider.value(value: NewTicketViewVM()),
+  ChangeNotifierProvider.value(value: FirstPageController()),
 
-  Provider<NewTicketRepository>(
-      create: (_) => NewTicketRepositoryImpl(
-          NewTicketApi(Http(http.Client(), AppConstants.baseUrl)),
-          const FlutterSecureStorage())),
+  Provider<NewTicketRepository>(create: (_) => NewTicketRepositoryImpl(NewTicketApi(Http(http.Client(), AppConstants.baseUrl)), const FlutterSecureStorage())),
   // Repositorio para conexion
   Provider<ConnectivityRepository>(
     create: (_) => ConnectivityRepositoryImpl(Connectivity()),
@@ -156,7 +158,17 @@ List<SingleChildWidget> appProviders = [
     create: (_) => HomeRepositoryImpl(
         HomeApi(Http(
           http.Client(),
-          AppConstants.baseUrl,
+          AppConstants.testUrl,
+        )),
+        const FlutterSecureStorage()),
+  ),
+
+  ChangeNotifierProvider.value(value: StartingPointController()),
+  Provider<StartingPointRepository>(
+    create: (_) => StartingPointImpl(
+        StartingPointApi(Http(
+          http.Client(),
+          AppConstants.testUrl,
         )),
         const FlutterSecureStorage()),
   ),
@@ -172,47 +184,37 @@ List<SingleChildWidget> appProviders = [
   ),
 
   ChangeNotifierProvider<AssignedToProvider>(
-    create: (context) => AssignedToProvider(
-        assignedToRepository: context.read<AssignedToRepository>()),
+    create: (context) => AssignedToProvider(assignedToRepository: context.read<AssignedToRepository>()),
   ),
 
   //  Repositorio para verificar si el ticket esta agendado
 
   Provider<ScheduleForRepository>(
-    create: (context) => ScheduleForRepositoryImpl(
-        scheduleForService: ScheduleForService(
-            http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => ScheduleForRepositoryImpl(scheduleForService: ScheduleForService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<ScheduleForProvider>(
-    create: (context) => ScheduleForProvider(
-        scheduleForRepository: context.read<ScheduleForRepository>()),
+    create: (context) => ScheduleForProvider(scheduleForRepository: context.read<ScheduleForRepository>()),
   ),
 
   // Repositorio para verificar si el ticket tiene un costo asignado
 
   Provider<PrizedByRepository>(
-    create: (context) => PrizedByRepositoryImpl(
-        prizedByService:
-            PrizedByService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => PrizedByRepositoryImpl(prizedByService: PrizedByService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<PrizedByProvider>(
-    create: (context) => PrizedByProvider(
-        prizedByRepository: context.read<PrizedByRepository>()),
+    create: (context) => PrizedByProvider(prizedByRepository: context.read<PrizedByRepository>()),
   ),
 
   // Repositorio para verificar si el ticket ya fue suspendido minimo una vez
 
   Provider<SuspendedByRepository>(
-    create: (context) => SuspendedByRepositoryImpl(
-        suspendedByService: SuspendedByService(
-            http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => SuspendedByRepositoryImpl(suspendedByService: SuspendedByService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<SuspendedByProvider>(
-    create: (context) => SuspendedByProvider(
-        suspendedByRepository: context.read<SuspendedByRepository>()),
+    create: (context) => SuspendedByProvider(suspendedByRepository: context.read<SuspendedByRepository>()),
   ),
 
   // Repositorio para cargar proveedores en el detalle del ticket
@@ -226,162 +228,125 @@ List<SingleChildWidget> appProviders = [
   ),
 
   ChangeNotifierProvider<SupplierProvider>(
-    create: (context) => SupplierProvider(
-        supplierRepository: context.read<SupplierRepository>()),
+    create: (context) => SupplierProvider(supplierRepository: context.read<SupplierRepository>()),
   ),
 
   // Repositorio para cargar las sucursales en el detalle del ticket
 
   Provider<BranchofficeRepository>(
-    create: (context) => BranchofficeRepositoryImpl(
-        branchofficeService: BranchofficeService(
-            http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => BranchofficeRepositoryImpl(branchofficeService: BranchofficeService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<BranchofficeProvider>(
-    create: (context) => BranchofficeProvider(
-        branchofficeRepository: context.read<BranchofficeRepository>()),
+    create: (context) => BranchofficeProvider(branchofficeRepository: context.read<BranchofficeRepository>()),
   ),
 
   // Repositorio para cargar los supervisores en el detalle del ticket
 
   Provider<SupervisorRepository>(
-    create: (context) => SupervisorRepositoryImpl(
-        supervisorService:
-            SupervisorService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => SupervisorRepositoryImpl(supervisorService: SupervisorService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<SupervisorProvider>(
-    create: (context) => SupervisorProvider(
-        supervisorRepository: context.read<SupervisorRepository>()),
+    create: (context) => SupervisorProvider(supervisorRepository: context.read<SupervisorRepository>()),
   ),
 
   // Repositorio para asignar el ticket
 
   Provider<AssignRepository>(
-    create: (context) => AssignRepositoryImpl(
-        assignService:
-            AssignService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => AssignRepositoryImpl(assignService: AssignService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<AssignProvider>(
-    create: (context) =>
-        AssignProvider(assignRepository: context.read<AssignRepository>()),
+    create: (context) => AssignProvider(assignRepository: context.read<AssignRepository>()),
   ),
 
   // Repositorio para agregar un mensaje al ticket
 
   Provider<AddMessageRepository>(
-    create: (context) => AddMessageRepositoryImpl(
-        addMessageService:
-            AddMessageService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => AddMessageRepositoryImpl(addMessageService: AddMessageService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<AddMessageProvider>(
-    create: (context) => AddMessageProvider(
-        addMessageRepository: context.read<AddMessageRepository>()),
+    create: (context) => AddMessageProvider(addMessageRepository: context.read<AddMessageRepository>()),
   ),
 
   // Repositorio para cargar mensajes de seguimiento
 
   Provider<TrackingRepository>(
-    create: (context) => TrackingRepositoryImpl(
-        trackingService:
-            TrackingService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => TrackingRepositoryImpl(trackingService: TrackingService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<TrackingProvider>(
-    create: (context) => TrackingProvider(
-        trackingRepository: context.read<TrackingRepository>()),
+    create: (context) => TrackingProvider(trackingRepository: context.read<TrackingRepository>()),
   ),
 
   // Repositorio para agendar un ticket
 
   Provider<ScheduleRepository>(
-    create: (context) => ScheduleRepositoryImpl(
-        scheduleService:
-            ScheduleService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => ScheduleRepositoryImpl(scheduleService: ScheduleService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<ScheduleProvider>(
-    create: (context) => ScheduleProvider(
-        scheduleRepository: context.read<ScheduleRepository>()),
+    create: (context) => ScheduleProvider(scheduleRepository: context.read<ScheduleRepository>()),
   ),
 
   // Repositorio para cotizar un ticket
   Provider<PriceRepository>(
-    create: (context) => PriceRepositoryImpl(
-        priceService:
-            PriceService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => PriceRepositoryImpl(priceService: PriceService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<PriceProvider>(
-    create: (context) =>
-        PriceProvider(priceRepository: context.read<PriceRepository>()),
+    create: (context) => PriceProvider(priceRepository: context.read<PriceRepository>()),
   ),
 
   // Repositorio para suspender un ticket
 
   Provider<SuspendRepository>(
-    create: (context) => SuspendRepositoryImpl(
-        suspendService:
-            SuspendService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => SuspendRepositoryImpl(suspendService: SuspendService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<SuspendProvider>(
-    create: (context) =>
-        SuspendProvider(suspendRepository: context.read<SuspendRepository>()),
+    create: (context) => SuspendProvider(suspendRepository: context.read<SuspendRepository>()),
   ),
 
   // Repositorio para activar un ticket
 
   Provider<ActivateRepository>(
-    create: (context) => ActivateRepositoryImpl(
-        activateService:
-            ActivateService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => ActivateRepositoryImpl(activateService: ActivateService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<ActivateProvider>(
-    create: (context) => ActivateProvider(
-        activateRepository: context.read<ActivateRepository>()),
+    create: (context) => ActivateProvider(activateRepository: context.read<ActivateRepository>()),
   ),
 
   // Repositorio para cancelar un ticket
 
   Provider<CancelRepository>(
-    create: (context) => CancelRepositoryImpl(
-        cancelService:
-            CancelService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => CancelRepositoryImpl(cancelService: CancelService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<CancelProvider>(
-    create: (context) =>
-        CancelProvider(cancelRepository: context.read<CancelRepository>()),
+    create: (context) => CancelProvider(cancelRepository: context.read<CancelRepository>()),
   ),
 
   // Repositorio para realizar un ticket
 
   Provider<DoneRepositroy>(
-    create: (context) => DoneRepositoryImpl(
-        doneService:
-            DoneService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => DoneRepositoryImpl(doneService: DoneService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<DoneProvider>(
-    create: (context) =>
-        DoneProvider(doneRepositroy: context.read<DoneRepositroy>()),
+    create: (context) => DoneProvider(doneRepositroy: context.read<DoneRepositroy>()),
   ),
 
   // Repositorio para aprobar un ticket
 
   Provider<ApproveRepository>(
-    create: (context) => ApproveRepositoryImpl(
-        approveService:
-            ApproveService(http: Http(http.Client(), AppConstants.baseUrl))),
+    create: (context) => ApproveRepositoryImpl(approveService: ApproveService(http: Http(http.Client(), AppConstants.baseUrl))),
   ),
 
   ChangeNotifierProvider<ApproveProvider>(
-    create: (context) =>
-        ApproveProvider(approveRepository: context.read<ApproveRepository>()),
+    create: (context) => ApproveProvider(approveRepository: context.read<ApproveRepository>()),
   ),
 ];

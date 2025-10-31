@@ -139,47 +139,47 @@ class NewTicketViewVM with ChangeNotifier {
   }
 
   Future<void> saveTicket(BuildContext context) async {
-    _isLoading = true;
-    _finishSaveTicket = false;
-    notifyListeners();
+    // _isLoading = true;
+    // _finishSaveTicket = false;
+    // notifyListeners();
 
-    SaveTicketModel ticket = SaveTicketModel(
-        id: 0,
-        fkTypeMaintenance: 1,
-        fkPCL: _selectedCustomer!.id,
-        fkCBO: _selectedBranch!.id,
-        fkStatusMaintenance: 1,
-        fkCustomerBranchofficeDevice: _selectedDevice!.id,
-        folio: 0,
-        description: _title,
-        area: _area,
-        reason: _description,
-        photoevidence: jsonEncode(_photoEvidenceModel),
-        createdAt: DateTime.now(),
-        createdByPartner: null,
-        createdByCustomer: null);
+    // SaveTicketModel ticket = SaveTicketModel(
+    //     id: 0,
+    //     fkTypeMaintenance: 1,
+    //     fkPCL: _selectedCustomer!.id,
+    //     fkCBO: _selectedBranch!.id,
+    //     fkStatusMaintenance: 1,
+    //     fkCustomerBranchofficeDevice: _selectedDevice!.id,
+    //     folio: 0,
+    //     description: _title,
+    //     area: _area,
+    //     reason: _description,
+    //     photoevidence: jsonEncode(_photoEvidenceModel),
+    //     createdAt: DateTime.now(),
+    //     createdByPartner: null,
+    //     createdByCustomer: null);
 
-    final result = await Provider.of<NewTicketRepository>(context, listen: false).saveTicket(ticket);
+    // final result = await Provider.of<NewTicketRepository>(context, listen: false).saveTicket(ticket);
 
-    result.when((failure) {
-      final message = {
-        GeneralFailure.noData: 'No information',
-        GeneralFailure.unknown: 'Error',
-        GeneralFailure.network: 'No Internet',
-        GeneralFailure.clientError: 'Client side connection failure',
-        GeneralFailure.serverError: 'Server side connection failure',
-      }[failure];
+    // result.when((failure) {
+    //   final message = {
+    //     GeneralFailure.noData: 'No information',
+    //     GeneralFailure.unknown: 'Error',
+    //     GeneralFailure.network: 'No Internet',
+    //     GeneralFailure.clientError: 'Client side connection failure',
+    //     GeneralFailure.serverError: 'Server side connection failure',
+    //   }[failure];
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
-    }, (guardado) async {
-      if (guardado) {
-        _finishSaveTicket = true;
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
+    // }, (guardado) async {
+    //   if (guardado) {
+    //     _finishSaveTicket = true;
 
-        notifyListeners();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo determinar por quien fue creado el ticket <Partner, Supplier o Customer>')));
-      }
-    });
+    //     notifyListeners();
+    //   } else {
+    //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo determinar por quien fue creado el ticket <Partner, Supplier o Customer>')));
+    //   }
+    // });
   }
 
   Future<void> loadCustomer(BuildContext context) async {
@@ -260,29 +260,29 @@ class NewTicketViewVM with ChangeNotifier {
   }
 
   Future<void> loadDevices(BuildContext context, BranchOfficeModel branch) async {
-    _isLoading = true;
-    notifyListeners();
+    // _isLoading = true;
+    // notifyListeners();
 
-    _devices = [];
-    final result = await Provider.of<NewTicketRepository>(context, listen: false).loadDevices(branch.id);
+    // _devices = [];
+    // final result = await Provider.of<NewTicketRepository>(context, listen: false).loadDevices(branch.id);
 
-    result.when((failure) {
-      final message = {
-        GeneralFailure.noData: 'No information',
-        GeneralFailure.unknown: 'Error',
-        GeneralFailure.network: 'No Internet',
-        GeneralFailure.clientError: 'Client side connection failure',
-        GeneralFailure.serverError: 'Server side connection failure',
-      }[failure];
+    // result.when((failure) {
+    //   final message = {
+    //     GeneralFailure.noData: 'No information',
+    //     GeneralFailure.unknown: 'Error',
+    //     GeneralFailure.network: 'No Internet',
+    //     GeneralFailure.clientError: 'Client side connection failure',
+    //     GeneralFailure.serverError: 'Server side connection failure',
+    //   }[failure];
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
-    }, (devices) {
-      _devices = devices;
-    });
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
+    // }, (devices) {
+    //   _devices = devices;
+    // });
 
-    _selectedDevice = _devices.isNotEmpty ? _devices[0] : null;
-    _isLoading = false;
-    notifyListeners();
+    // _selectedDevice = _devices.isNotEmpty ? _devices[0] : null;
+    // _isLoading = false;
+    // notifyListeners();
   }
 
   Future<void> deviceSelectedAction(DeviceModel device) async {

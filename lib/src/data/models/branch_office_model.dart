@@ -1,51 +1,52 @@
+import 'package:mantiz/src/data/models/ticket_model.dart';
+
 class BranchOfficeModel {
-  int id;
-  int fkSubcompany;
-  String description;
-  String location;
-  String latitud;
-  String longitud;
-  String? imagen;
+  String branchofficeId;
+  String branchoffice;
+  String address;
+  String latitude;
+  String longitude;
   String clave;
-  String subcompany;
-  String uuidBO;
+  List<TicketModel> tickets;
 
-  BranchOfficeModel(
-      {required this.id,
-      required this.fkSubcompany,
-      required this.description,
-      required this.location,
-      required this.latitud,
-      required this.longitud,
-      required this.imagen,
-      required this.clave,
-      required this.subcompany,
-      required this.uuidBO});
+  BranchOfficeModel({
+    required this.branchofficeId,
+    required this.branchoffice,
+    required this.address,
+    required this.latitude,
+    required this.longitude,
+    required this.clave,
+    required this.tickets,
+  });
 
-  factory BranchOfficeModel.fromJson(Map<String, dynamic> json) {
-    return BranchOfficeModel(
-        id: int.parse(json['id'].toString()),
-        fkSubcompany: int.parse(json['fkSubcompany'].toString()),
-        description: json['description'],
-        location: json['location'],
-        latitud: json['latitud'],
-        longitud: json['longitud'],
-        imagen: json['imagen'],
-        clave: json['clave'],
-        subcompany: json['subcompany'],
-        uuidBO: json['uuidBO']);
-  }
+  BranchOfficeModel.init()
+      : branchofficeId = '',
+        branchoffice = '',
+        address = '',
+        latitude = '',
+        longitude = '',
+        clave = '',
+        tickets = [];
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'fkSubcompany': fkSubcompany,
-        'description': description,
-        'location': location,
-        'latitud': latitud,
-        'longitud': longitud,
-        'imagen': imagen,
-        'clave': clave,
-        'subcompany': subcompany,
-        'uuidBO': uuidBO
-      };
+  // factory BranchOfficeModel.fromJson(Map<String, dynamic> json) {
+  //   return BranchOfficeModel(
+  //     branchofficeId: json['branchofficeId'],
+  //     branchoffice: json['branchoffice'],
+  //     address: json['address'],
+  //     latitude: json['latitude'],
+  //     longitude: json['longitude'],
+  //     clave: json['clave'],
+  //     tickets: TicketModel.fromJson(json['tickets']),
+  //   );
+  // }
+
+  // Map<String, dynamic> toJson() => {
+  //       'branchofficeId': branchofficeId,
+  //       'branchoffice': branchoffice,
+  //       'address': address,
+  //       'latitude': latitude,
+  //       'longitude': longitude,
+  //       'clave': clave,
+  //       'tickets': tickets.toJson(),
+  //     };
 }

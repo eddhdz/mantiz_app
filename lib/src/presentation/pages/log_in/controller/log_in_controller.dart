@@ -14,9 +14,7 @@ class LogInController extends ChangeNotifier {
   String _userName = '', _password = '';
   bool _fetching = false, _mounted = true, _isVisible = false;
 
-  LogInController(
-      {required AuthenticationRepository authenticationRepository,
-      required FirebaseMessaging fbm})
+  LogInController({required AuthenticationRepository authenticationRepository, required FirebaseMessaging fbm})
       : _authenticationRepository = authenticationRepository,
         _fbm = fbm;
 
@@ -46,10 +44,8 @@ class LogInController extends ChangeNotifier {
 
   Future<String?> getFBMToken() async {
     try {
-      NotificationSettings settings =
-          await _fbm.requestPermission(alert: true, badge: true, sound: true);
-      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
-          settings.authorizationStatus == AuthorizationStatus.provisional) {
+      NotificationSettings settings = await _fbm.requestPermission(alert: true, badge: true, sound: true);
+      if (settings.authorizationStatus == AuthorizationStatus.authorized || settings.authorizationStatus == AuthorizationStatus.provisional) {
         String? token = await _fbm.getToken();
         if (token != null) {
           return token;
@@ -74,8 +70,7 @@ class LogInController extends ChangeNotifier {
     List<int> bytes = utf8.encode(combinedData);
     Digest mobileUuid = md5.convert(bytes);
 
-    final result = await _authenticationRepository.signIn(
-        _userName, _password, mobileUuid.toString(), firebasetoken);
+    final result = await _authenticationRepository.signIn(_userName, _password, mobileUuid.toString(), firebasetoken);
     result.when((failure) {
       onFetchingChanged(false);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -84,7 +79,8 @@ class LogInController extends ChangeNotifier {
         ),
       );
     }, (userEntity) async {
-      Navigator.pushReplacementNamed(context, Routes.home);
+      // Navigator.pushReplacementNamed(context, Routes.home);
+      Navigator.pushReplacementNamed(context, Routes.startingPoint);
     });
   }
 

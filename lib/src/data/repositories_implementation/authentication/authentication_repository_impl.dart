@@ -2,8 +2,8 @@ import 'package:mantiz/src/data/models/authentication/login_response_model.dart'
 
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
-import '../../models/user_model.dart';
 import '../../../domain/repositories/authentication/authentication_repository.dart';
+import '../../models/user.dart';
 import '../../services/remote/authentication/authentication_service.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -36,14 +36,12 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     String password,
     String mobileUuid,
     String? firebasetoken,
-    
   ) async {
     final loginResult = await _authenticationApi.createSessionWithLogIn(
       username: userName,
       password: password,
       mobileUuid: mobileUuid,
       firebasetoken: firebasetoken,
-      
     );
     return loginResult.when(
       (failure) {
@@ -58,6 +56,19 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           key: 'useruuid',
           value: profileUser.list[0].profile.user.useruuid,
         );
+
+        //! Cambiar según el tipo al que pertenezca el usuario ...
+        _secureStorage.write(
+          key: 'typeuser',
+          value: 'Partner',
+        );
+
+        _secureStorage.write(
+          key: 'typerol',
+          value: 'Administrator',
+        );
+        //! =====================================================
+
         return Either.right(profileUser);
       },
     );

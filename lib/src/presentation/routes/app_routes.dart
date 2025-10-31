@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/presentation/pages/first_page/view/first_page_view.dart';
+import 'package:mantiz/src/presentation/pages/second_page/view/second_page_view.dart';
+import 'package:mantiz/src/presentation/pages/starting_point.dart/view/starting_point_view.dart';
+import 'package:mantiz/src/presentation/pages/third_page/view/third_page_view.dart';
 
 import '../../data/models/models.dart';
 import '../pages/views.dart';
@@ -27,14 +31,31 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (_) => const NewTicketView(),
       );
+    case Routes.startingPoint:
+      return MaterialPageRoute(
+        builder: (_) => const StartingPointView(),
+      );
+    case Routes.first_page:
+      return MaterialPageRoute(
+        builder: (_) => const FirstPageView(maintenances: []),
+      );
+    case Routes.second_page:
+      return MaterialPageRoute(
+        builder: (_) => const SecondPageView(branchOffices: []),
+      );
+    case Routes.third_page:
+      return MaterialPageRoute(
+        builder: (_) => const ThirdPageView(tickets: []),
+      );
+
     case Routes.detailTicket:
       if (settings.arguments is MaintenancesModel) {
-        final MaintenancesModel maintenance =
-            settings.arguments as MaintenancesModel;
+        final MaintenancesModel maintenance = settings.arguments as MaintenancesModel;
         return MaterialPageRoute(
           builder: (_) => DetailTicketView(maintenance: maintenance),
         );
       }
+
       return MaterialPageRoute(
         builder: (_) => const Scaffold(
           body: Center(
