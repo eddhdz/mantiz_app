@@ -166,19 +166,27 @@ class CustomAsignTo extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(
-                height: 1,
+                height: 15,
+              ),
+              Icon(
+                Icons.account_circle_outlined,
+                size: 60,
+                color: blueNeutralGlobalColor,
               ),
               Expanded(
                   child: Center(
                       child: GeneralText(
-                mensaje: 'El ticket no tiene asignada una persona',
+                mensaje: 'El ticket no se encuentra asignado una persona',
                 maxLines: 3,
                 overFlow: TextOverflow.ellipsis,
                 size: 20,
                 weight: FontWeight.normal,
                 color: blackPanter,
                 align: TextAlign.center,
-              )))
+              ))),
+              SizedBox(
+                height: 15,
+              )
             ],
           ),
         ),

@@ -74,6 +74,7 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/suspended_by_reposi
 import 'package:mantiz/src/domain/repositories/ticket_detail/tracking_repository.dart';
 import 'package:mantiz/src/presentation/pages/first_page/controller/first_page_controller.dart';
 import 'package:mantiz/src/presentation/pages/starting_point.dart/controller/starting_point_controller.dart';
+import 'package:mantiz/src/presentation/pages/third_page/controller/third_page_controller.dart';
 
 import '../data/http/http.dart';
 import '../data/repositories_implementation/authentication/authentication_repository_impl.dart';
@@ -106,6 +107,7 @@ List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider.value(value: HomeViewVm()),
   ChangeNotifierProvider.value(value: NewTicketViewVM()),
   ChangeNotifierProvider.value(value: FirstPageController()),
+  ChangeNotifierProvider.value(value: ThirdPageController([])),
 
   Provider<NewTicketRepository>(create: (_) => NewTicketRepositoryImpl(NewTicketApi(Http(http.Client(), AppConstants.baseUrl)), const FlutterSecureStorage())),
   // Repositorio para conexion
