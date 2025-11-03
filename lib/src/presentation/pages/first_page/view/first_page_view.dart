@@ -19,7 +19,7 @@ class FirstPageView extends StatelessWidget {
       appBar: AppBar(
           backgroundColor: whiteGlobalColor,
           title: const GeneralText(
-            mensaje: 'Mantenimientos',
+            mensaje: 'Cliente(s)',
             maxLines: 1,
             overFlow: TextOverflow.ellipsis,
             size: 17,

@@ -44,61 +44,94 @@ class SecondPageView extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     color: veryLightGray,
                     child: Column(children: <Widget>[
-                      //! Clave ...
                       Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: Row(children: <Widget>[
                             const SizedBox(width: 5),
-                            const GeneralText(
-                                mensaje: 'Clave:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left),
                             GeneralText(
-                                mensaje: branchOffices[index].clave,
+                                mensaje: '${branchOffices[index].clave.toUpperCase()} - ${branchOffices[index].branchoffice}',
                                 maxLines: 1,
                                 overFlow: TextOverflow.ellipsis,
-                                size: 14,
-                                weight: FontWeight.normal,
+                                size: 15,
+                                weight: FontWeight.bold,
                                 color: blackPanter,
                                 align: TextAlign.left),
                             const SizedBox(width: 5),
                           ])),
 
-                      //! branch id ...
+                      const SizedBox(height: 10),
+
                       Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: Row(children: <Widget>[
                             const SizedBox(width: 5),
-                            const GeneralText(
-                                mensaje: 'Cliente:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left),
                             Expanded(
                                 child: GeneralText(
-                                    mensaje: branchOffices[index].branchofficeId,
-                                    maxLines: 1,
+                                    mensaje: branchOffices[index].address,
+                                    maxLines: 5,
                                     overFlow: TextOverflow.ellipsis,
-                                    size: 14,
+                                    size: 15,
                                     weight: FontWeight.normal,
                                     color: blackPanter,
                                     align: TextAlign.left)),
                             const SizedBox(width: 5),
                           ])),
 
+                      //! Clave ...
+                      // Container(
+                      //     padding: const EdgeInsets.symmetric(vertical: 5),
+                      //     child: Row(children: <Widget>[
+                      //       const SizedBox(width: 5),
+                      //       const GeneralText(
+                      //           mensaje: 'Clave:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left),
+                      //       GeneralText(
+                      //           mensaje: branchOffices[index].clave,
+                      //           maxLines: 1,
+                      //           overFlow: TextOverflow.ellipsis,
+                      //           size: 14,
+                      //           weight: FontWeight.normal,
+                      //           color: blackPanter,
+                      //           align: TextAlign.left),
+                      //       const SizedBox(width: 5),
+                      //     ])),
+
+                      //! branch id ...
+                      // Container(
+                      //     padding: const EdgeInsets.symmetric(vertical: 5),
+                      //     child: Row(children: <Widget>[
+                      //       const SizedBox(width: 5),
+                      //       const GeneralText(
+                      //           mensaje: 'Cliente:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left),
+                      //       Expanded(
+                      //           child: GeneralText(
+                      //               mensaje: branchOffices[index].branchofficeId,
+                      //               maxLines: 1,
+                      //               overFlow: TextOverflow.ellipsis,
+                      //               size: 14,
+                      //               weight: FontWeight.normal,
+                      //               color: blackPanter,
+                      //               align: TextAlign.left)),
+                      //       const SizedBox(width: 5),
+                      //     ])),
+
                       //! branch name ...
-                      Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Row(children: <Widget>[
-                            const SizedBox(width: 5),
-                            const GeneralText(
-                                mensaje: 'Nombre:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left),
-                            Expanded(
-                                child: GeneralText(
-                                    mensaje: branchOffices[index].branchoffice,
-                                    maxLines: 1,
-                                    overFlow: TextOverflow.ellipsis,
-                                    size: 14,
-                                    weight: FontWeight.normal,
-                                    color: blackPanter,
-                                    align: TextAlign.left)),
-                            const SizedBox(width: 5),
-                          ])),
+                      // Container(
+                      //     padding: const EdgeInsets.symmetric(vertical: 5),
+                      //     child: Row(children: <Widget>[
+                      //       const SizedBox(width: 5),
+                      //       const GeneralText(
+                      //           mensaje: 'Nombre:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left),
+                      //       Expanded(
+                      //           child: GeneralText(
+                      //               mensaje: branchOffices[index].branchoffice,
+                      //               maxLines: 1,
+                      //               overFlow: TextOverflow.ellipsis,
+                      //               size: 14,
+                      //               weight: FontWeight.normal,
+                      //               color: blackPanter,
+                      //               align: TextAlign.left)),
+                      //       const SizedBox(width: 5),
+                      //     ])),
                     ]),
                   ));
             },
