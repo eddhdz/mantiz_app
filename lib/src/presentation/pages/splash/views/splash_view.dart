@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mantiz/src/domain/enums.dart';
+import 'package:mantiz/src/domain/providers/session/session_provider.dart';
 import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
 
 import '../../../../domain/repositories/authentication/authentication_repository.dart';
@@ -31,28 +34,29 @@ class _SplashViewState extends State<SplashView> {
       context,
       listen: false,
     );
-    final authenticationRepository = Provider.of<AuthenticationRepository>(
-      context,
-      listen: false,
-    );
+
+    FlutterSecureStorage secureStorage = const FlutterSecureStorage();
     final sessionRepository =
-        Provider.of<SessionRepository>(context, listen: false);
+        Provider.of<SessionProvider>(context, listen: false);
     final hasInternet = await connectivityRepository.hasInternet;
-    final sessionActive = await sessionRepository.isSessionActive;
+    final mobileUuid = await secureStorage.read(key: 'mobileuuid');
+    final firebaseToken = await secureStorage.read(key: 'firebasetoken');
+
     await Future.delayed(const Duration(seconds: 2));
 
     if (hasInternet) {
-      if (sessionActive) {
-        final user = await authenticationRepository.getUserData();
-        if (mounted) {
-          if (user != null) {
-            _goTo(Routes.home);
-          } else {
-            _goTo(Routes.logIn);
-          }
-        }
-      } else if (mounted) {
+      if (mobileUuid == null || firebaseToken == null) {
         _goTo(Routes.logIn);
+      } else {
+        await sessionRepository.fetchIsSessionActive(
+          mobileUuid,
+          firebaseToken,
+        );
+        if (sessionRepository.status == DataStatus.success) {
+          _goTo(Routes.home);
+        } else {
+          _goTo(Routes.logIn);
+        }
       }
     } else {
       _goTo(Routes.offline);
