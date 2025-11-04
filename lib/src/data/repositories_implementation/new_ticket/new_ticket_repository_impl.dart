@@ -97,24 +97,24 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
 
         final json = Map<String, dynamic>.from(jsonDecode(responseDevices));
 
-        for (var item in json['devices'] as List) {
-          Map<String, dynamic> device = Map<String, dynamic>.from(jsonDecode(item['device']));
+        // for (var item in json['devices'] as List) {
+        //   Map<String, dynamic> device = Map<String, dynamic>.from(jsonDecode(item['device']));
 
-          DeviceModel deviceModel = DeviceModel(
-              id: int.parse(item['id'].toString()),
-              code: item['code'],
-              uuidDevice: device['uuidDevice'],
-              description: device['description'],
-              barCode: device['barcode'],
-              specs: device['specs'],
-              subCategory: device['subcategory'],
-              category: device['category'],
-              product: device['product'],
-              typeService: device['typeservice'],
-              brand: device['brand']);
+        //   DeviceModel deviceModel = DeviceModel(
+        //       id: int.parse(item['id'].toString()),
+        //       code: item['code'],
+        //       uuidDevice: device['uuidDevice'],
+        //       description: device['description'],
+        //       barCode: device['barcode'],
+        //       specs: device['specs'],
+        //       subCategory: device['subcategory'],
+        //       category: device['category'],
+        //       product: device['product'],
+        //       typeService: device['typeservice'],
+        //       brand: device['brand']);
 
-          devices.add(deviceModel);
-        }
+        //   devices.add(deviceModel);
+        // }
 
         return Either.right(devices);
       },
@@ -134,23 +134,23 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
 
         final json = Map<String, dynamic>.from(jsonDecode(responseBranch));
 
-        for (var item in json['branchoffices'] as List) {
-          Map<String, dynamic> branchOffice = Map<String, dynamic>.from(jsonDecode(item['branchoffice']));
+        // for (var item in json['branchoffices'] as List) {
+        //   Map<String, dynamic> branchOffice = Map<String, dynamic>.from(jsonDecode(item['branchoffice']));
 
-          BranchOfficeModel branchOfficeModel = BranchOfficeModel(
-              id: int.parse(item['id'].toString()),
-              fkSubcompany: int.parse(branchOffice['fkSubcompany'].toString()),
-              description: branchOffice['description'],
-              location: branchOffice['location'],
-              latitud: branchOffice['latitud'],
-              longitud: branchOffice['longitud'],
-              imagen: branchOffice['imagen'],
-              clave: branchOffice['clave'],
-              subcompany: branchOffice['subcompany'],
-              uuidBO: item['uuidBO']);
+        //   BranchOfficeModel branchOfficeModel = BranchOfficeModel(
+        //       id: int.parse(item['id'].toString()),
+        //       fkSubcompany: int.parse(branchOffice['fkSubcompany'].toString()),
+        //       description: branchOffice['description'],
+        //       location: branchOffice['location'],
+        //       latitud: branchOffice['latitud'],
+        //       longitud: branchOffice['longitud'],
+        //       imagen: branchOffice['imagen'],
+        //       clave: branchOffice['clave'],
+        //       subcompany: branchOffice['subcompany'],
+        //       uuidBO: item['uuidBO']);
 
-          branchs.add(branchOfficeModel);
-        }
+        //   branchs.add(branchOfficeModel);
+        // }
 
         return Either.right(branchs);
       },
