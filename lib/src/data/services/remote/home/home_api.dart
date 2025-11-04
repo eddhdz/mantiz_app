@@ -1,3 +1,5 @@
+import 'package:mantiz/src/presentation/constants/app_constants.dart';
+
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
 import '../../../http/http.dart';
@@ -7,37 +9,20 @@ class HomeApi {
 
   HomeApi(this._http);
 
-  Future<Either<GeneralFailure, dynamic>> loadMaintenances(
-      int fkPartnerProfile, String role) async {
-    // ignore: unused_local_variable
-    var a = 1000;
-    String path;
+  Future<Either<GeneralFailure, dynamic>> loadMaintenances(String? userUuid) async {
     Map<String, dynamic> body;
 
-    switch (role) {
-      case 'partner':
-        path = '/Api_Mantiz/api/mantiz/v1/mysql/tickets';
-        body = {'id': fkPartnerProfile};
-        break;
-      case 'customer':
-        path = '/Api_Mantiz/api/mantiz/v1/mysql/tickets/customers';
-        body = {'id': fkPartnerProfile};
-        break;
-      case 'supplier':
-        path = '/Api_Mantiz/api/mantiz/v1/mysql/tickets/suppliers';
-        body = {
-          'id': 0,
-          'fkProfile': fkPartnerProfile,
-        };
-        break;
-      default:
-        return Either.left(GeneralFailure.noData);
+    if (userUuid == null || userUuid.isEmpty) {
+      return Either.left(GeneralFailure.noData);
     }
 
     var result = await _http.request(
-      path,
+      '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/maintenances',
       method: HttpMethod.post,
-      body: body,
+      body: {
+        'useruuid': userUuid,
+        'createdat': DateTime.now().toIso8601String(),
+      },
     );
 
     return result.when((failure) {

@@ -1,7 +1,8 @@
 class AppConstants {
   AppConstants._();
   static const String baseUrl = 'https://servicios.sidon.mx';
-  static const String testUrl = 'http://172.168.10.20';
+  // static const String testUrl = 'http://192.168.200.200'; // Compu César ...
+  static const String testUrl = 'http://172.168.10.20'; // Ecosat ...
 
   //slash o dots
   static const String symbol = ':';

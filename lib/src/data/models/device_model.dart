@@ -1,55 +1,55 @@
 class DeviceModel {
-  int id;
+  String deviceId;
+  String name;
   String code;
-  String uuidDevice;
-  String description;
-  String barCode;
-  String specs;
-  String subCategory;
-  String category;
-  String product;
-  String typeService;
-  String brand;
+  String barcode;
+  String? typedevice;
+  String? priority;
+  String? levelpriority;
+  String? rating;
 
-  DeviceModel(
-      {required this.id,
-      required this.code,
-      required this.uuidDevice,
-      required this.description,
-      required this.barCode,
-      required this.specs,
-      required this.subCategory,
-      required this.category,
-      required this.product,
-      required this.typeService,
-      required this.brand});
+  DeviceModel({
+    required this.deviceId,
+    required this.name,
+    required this.code,
+    required this.barcode,
+    required this.typedevice,
+    required this.priority,
+    required this.levelpriority,
+    required this.rating,
+  });
 
-  factory DeviceModel.fromJson(Map<String, dynamic> json) {
-    return DeviceModel(
-        id: int.parse(json['id'].toString()),
-        code: json['code'],
-        uuidDevice: json['uuidDevice'],
-        description: json['description'],
-        barCode: json['barCode'],
-        specs: json['specs'],
-        subCategory: json['subCategory'],
-        category: json['category'],
-        product: json['product'],
-        typeService: json['typeService'],
-        brand: json['brand']);
-  }
+  DeviceModel.init()
+      : deviceId = '',
+        name = '',
+        code = '',
+        barcode = '',
+        typedevice = '',
+        priority = '',
+        levelpriority = '',
+        rating = '';
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'code': code,
-        'uuidDevice': uuidDevice,
-        'description': description,
-        'barCode': barCode,
-        'specs': specs,
-        'subCategory': subCategory,
-        'category': category,
-        'product': product,
-        'typeService': typeService,
-        'brand': brand
-      };
+  // factory DeviceModel.fromJson(Map<String, dynamic> json) {
+  //   return DeviceModel(
+  //     deviceId: int.parse(json['deviceId'].toString()),
+  //     name: json['name'],
+  //     code: json['code'],
+  //     barcode: json['barcode'],
+  //     typedevice: json['typedevice'],
+  //     priority: json['priority'],
+  //     levelpriority: json['levelpriority'],
+  //     rating: json['rating'],
+  //   );
+  // }
+
+  // Map<String, dynamic> toJson() => {
+  //       'deviceId': deviceId,
+  //       'name': name,
+  //       'code': code,
+  //       'barcode': barcode,
+  //       'typedevice': typedevice,
+  //       'priority': priority,
+  //       'levelpriority': levelpriority,
+  //       'rating': rating,
+  //     };
 }

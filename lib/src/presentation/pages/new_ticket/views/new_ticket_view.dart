@@ -222,8 +222,8 @@ class _NewTicketViewState extends State<NewTicketView> {
                           items: vm.branchs.map((BranchOfficeModel branch) {
                             return DropdownMenuItem<BranchOfficeModel>(
                                 value: branch,
-                                child: GeneralText(
-                                    mensaje: '${branch.id} - ${branch.description}',
+                                child: const GeneralText(
+                                    mensaje: 'hola', // '${branch.id} - ${branch.description}',
                                     maxLines: 1,
                                     overFlow: TextOverflow.ellipsis,
                                     size: 15,
@@ -259,8 +259,8 @@ class _NewTicketViewState extends State<NewTicketView> {
                           items: vm.devices.map((DeviceModel device) {
                             return DropdownMenuItem<DeviceModel>(
                                 value: device,
-                                child: GeneralText(
-                                    mensaje: '${device.id} - ${device.description} - ${device.product}',
+                                child: const GeneralText(
+                                    mensaje: 'mundo', //! '${device.id} - ${device.description} - ${device.product}',
                                     maxLines: 1,
                                     overFlow: TextOverflow.ellipsis,
                                     size: 15,

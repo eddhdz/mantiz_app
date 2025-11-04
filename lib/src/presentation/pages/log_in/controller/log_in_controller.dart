@@ -100,7 +100,7 @@ class LogInController extends ChangeNotifier {
     }, (userEntity) async {
       _secureStorage.write(key: 'mobileuuid', value: mobileUuid);
       _secureStorage.write(key: 'firebasetoken', value: firebasetoken);
-      Navigator.pushReplacementNamed(context, Routes.home);
+      Navigator.pushReplacementNamed(context, Routes.startingPoint);
     });
   }
 

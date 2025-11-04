@@ -7,21 +7,38 @@ import '../../../../domain/repositories/home/home_repository.dart';
 import 'package:provider/provider.dart';
 
 class HomeViewVm with ChangeNotifier {
-  List<MaintenancesModel> allTickets = [];
+  List<MaintenancesModel> _allMaintenances = [];
+  List<MaintenancesModel> get allMaintenances => _allMaintenances;
 
-  List<MaintenancesModel> _visibleTickets = [];
-  List<MaintenancesModel> get visibleTickets => _visibleTickets;
+  MaintenancesModel? _selectedMaintenance = MaintenancesModel.init();
+  MaintenancesModel? get selectedMaintenance => _selectedMaintenance;
+
+  // List<MaintenancesModel> _visibleTickets = [];
+  // List<MaintenancesModel> get visibleTickets => _visibleTickets;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<void> loadAllTickets(BuildContext context) async {
+  void selectMaintenanceById(BuildContext context, String idCustomer) {
+    try {
+      var a = 1000;
+
+      _selectedMaintenance = allMaintenances.firstWhere((m) => m.id.toString().toLowerCase() == idCustomer.toLowerCase());
+      notifyListeners();
+    } catch (ex) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(ex.toString())));
+    }
+  }
+
+  Future<void> loadMaintenances(BuildContext context) async {
     _isLoading = true;
-    allTickets = [];
-    _visibleTickets = [];
+    _allMaintenances = [];
+    // _visibleTickets = [];
     notifyListeners();
 
     final result = await Provider.of<HomeRepository>(context, listen: false).loadMaintenances();
+
+    var a = 1000;
 
     result.when((failure) {
       final message = {
@@ -34,26 +51,29 @@ class HomeViewVm with ChangeNotifier {
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
     }, (maintenances) {
-      _visibleTickets = allTickets = maintenances;
+      _allMaintenances = maintenances;
+      _selectedMaintenance = _allMaintenances.first;
+
+      // _visibleTickets = allTickets = maintenances;
     });
 
     _isLoading = false;
     notifyListeners();
   }
 
-  Future<void> filterTickets(BuildContext context, String value) async {
-    _isLoading = true;
-    _visibleTickets = [];
-    notifyListeners();
+  // Future<void> filterTickets(BuildContext context, String value) async {
+  //   _isLoading = true;
+  //   _visibleTickets = [];
+  //   notifyListeners();
 
-    _visibleTickets = allTickets
-        .where((ticket) =>
-            ticket.description.toLowerCase().contains(value.toLowerCase()) ||
-            ticket.customer.toLowerCase().contains(value.toLowerCase()) ||
-            ticket.status.toLowerCase().contains(value.toLowerCase()))
-        .toList();
+  //   _visibleTickets = allTickets
+  //       .where((ticket) =>
+  //           ticket.description.toLowerCase().contains(value.toLowerCase()) ||
+  //           ticket.customer.toLowerCase().contains(value.toLowerCase()) ||
+  //           ticket.status.toLowerCase().contains(value.toLowerCase()))
+  //       .toList();
 
-    _isLoading = false;
-    notifyListeners();
-  }
+  //   _isLoading = false;
+  //   notifyListeners();
+  // }
 }

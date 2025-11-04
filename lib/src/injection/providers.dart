@@ -1,6 +1,7 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:mantiz/src/data/repositories_implementation/session/session_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/starting_point/starting_point_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/activate_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/add_message_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/approve_repository_impl.dart';
@@ -19,6 +20,7 @@ import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspen
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspended_by_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/tracking_repository_impl.dart';
 import 'package:mantiz/src/data/services/remote/session/session_service.dart';
+import 'package:mantiz/src/data/services/remote/starting_point/starting_point_api.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/activate_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/add_message_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/approve_service.dart';
@@ -55,6 +57,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/suspend_provider.dart'
 import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/tracking_provider.dart';
 import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
+import 'package:mantiz/src/domain/repositories/starting_point/starting_point_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/activate_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/add_message_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/approve_repository.dart';
@@ -72,7 +75,9 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/supplier_repository
 import 'package:mantiz/src/domain/repositories/ticket_detail/suspend_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/suspended_by_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/tracking_repository.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:mantiz/src/presentation/pages/first_page/controller/first_page_controller.dart';
+import 'package:mantiz/src/presentation/pages/starting_point.dart/controller/starting_point_controller.dart';
+import 'package:mantiz/src/presentation/pages/third_page/controller/third_page_controller.dart';
 
 import '../data/http/http.dart';
 import '../data/repositories_implementation/authentication/authentication_repository_impl.dart';
@@ -104,8 +109,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider.value(value: HomeViewVm()),
-
   ChangeNotifierProvider.value(value: NewTicketViewVM()),
+  ChangeNotifierProvider.value(value: FirstPageController()),
+  ChangeNotifierProvider.value(value: ThirdPageController([])),
 
   Provider<NewTicketRepository>(
       create: (_) => NewTicketRepositoryImpl(
@@ -167,7 +173,17 @@ List<SingleChildWidget> appProviders = [
     create: (_) => HomeRepositoryImpl(
         HomeApi(Http(
           http.Client(),
-          AppConstants.baseUrl,
+          AppConstants.testUrl,
+        )),
+        const FlutterSecureStorage()),
+  ),
+
+  ChangeNotifierProvider.value(value: StartingPointController()),
+  Provider<StartingPointRepository>(
+    create: (_) => StartingPointImpl(
+        StartingPointApi(Http(
+          http.Client(),
+          AppConstants.testUrl,
         )),
         const FlutterSecureStorage()),
   ),

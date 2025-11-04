@@ -24,7 +24,7 @@ class EmptyListView extends StatelessWidget {
               backGround: blueLightGlobalColor,
               foreGround: whiteGlobalColor,
               onPressed: () async {
-                await vm.loadAllTickets(context);
+                // await vm.loadAllTickets(context);
               },
               label: 'Recargar pantalla',
               heroTag: 'btnAddTicket'),
