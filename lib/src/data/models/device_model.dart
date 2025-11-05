@@ -6,7 +6,7 @@ class DeviceModel {
   String? typedevice;
   String? priority;
   String? levelpriority;
-  String? rating;
+  int? rating;
 
   DeviceModel({
     required this.deviceId,
@@ -27,7 +27,7 @@ class DeviceModel {
         typedevice = '',
         priority = '',
         levelpriority = '',
-        rating = '';
+        rating = 0;
 
   // factory DeviceModel.fromJson(Map<String, dynamic> json) {
   //   return DeviceModel(

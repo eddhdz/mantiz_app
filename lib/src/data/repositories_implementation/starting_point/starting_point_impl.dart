@@ -19,7 +19,8 @@ class StartingPointImpl implements StartingPointRepository {
   StartingPointImpl(this._startingPointApi, this._storage);
 
   @override
-  Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances() async {
+  Future<Either<GeneralFailure, List<MaintenancesModel>>>
+      loadMaintenances() async {
     String? userUuid = await _storage.read(key: 'useruuid');
 
     final homeResult = await _startingPointApi.loadMaintenances(userUuid);
@@ -46,7 +47,8 @@ class StartingPointImpl implements StartingPointRepository {
               //! CreatedBy ...
               UserModel createdBy = UserModel.init();
               if (ticketMap['createdby'] != null) {
-                var createdByMap = Map<String, dynamic>.from(ticketMap['createdby']);
+                var createdByMap =
+                    Map<String, dynamic>.from(ticketMap['createdby']);
                 createdBy = UserModel(
                   useruuid: createdByMap['useruuid'],
                   name: createdByMap['name'],
@@ -58,7 +60,8 @@ class StartingPointImpl implements StartingPointRepository {
               //! PhotoEvidence ...
               PhotoEvidenceModel photoevidence = PhotoEvidenceModel.init();
               if (ticketMap['photoevidence'] != null) {
-                var photoevidenceMap = Map<String, dynamic>.from(ticketMap['photoevidence']);
+                var photoevidenceMap =
+                    Map<String, dynamic>.from(ticketMap['photoevidence']);
                 photoevidence = PhotoEvidenceModel(
                   uuid: photoevidenceMap['uuid'],
                   uuidapp: photoevidenceMap['uuidapp'],
@@ -70,12 +73,14 @@ class StartingPointImpl implements StartingPointRepository {
 
               AttendanceModel attendance = AttendanceModel.init();
               if (ticketMap['attendance'] != null) {
-                var attendanceMap = Map<String, dynamic>.from(ticketMap['attendance']);
+                var attendanceMap =
+                    Map<String, dynamic>.from(ticketMap['attendance']);
 
                 //! AsignedTo ...
                 UserModel asignedto = UserModel.init();
                 if (attendanceMap['asignedto'] != null) {
-                  var asignedtoMap = Map<String, dynamic>.from(attendanceMap['asignedto']);
+                  var asignedtoMap =
+                      Map<String, dynamic>.from(attendanceMap['asignedto']);
 
                   asignedto = UserModel(
                     useruuid: asignedtoMap['useruuid'],
@@ -106,10 +111,10 @@ class StartingPointImpl implements StartingPointRepository {
                   name: deviceMap['name'],
                   code: deviceMap['code'],
                   barcode: deviceMap['barcode'],
-                  typedevice: deviceMap['typedevice'],
-                  priority: deviceMap['priority'],
-                  levelpriority: deviceMap['levelpriority'],
-                  rating: deviceMap['rating'],
+                  typedevice: deviceMap['typedevice'] ?? '',
+                  priority: deviceMap['priority'] ?? '',
+                  levelpriority: deviceMap['levelpriority'] ?? '',
+                  rating: deviceMap['rating'] ?? 0,
                 );
 
                 devices.add(deviceModel);

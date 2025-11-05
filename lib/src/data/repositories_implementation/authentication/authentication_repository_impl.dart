@@ -60,12 +60,12 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         //! Cambiar según el tipo al que pertenezca el usuario ...
         _secureStorage.write(
           key: 'typeuser',
-          value: 'Partner',
+          value: profileUser.list[0].profile.user.typeuser,
         );
 
         _secureStorage.write(
           key: 'typerol',
-          value: 'Administrator',
+          value: profileUser.list[0].profile.user.typerole,
         );
         //! =====================================================
 

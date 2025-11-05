@@ -1,5 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mantiz/src/data/repositories_implementation/session/logout_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/session/session_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/starting_point/starting_point_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/activate_repository_impl.dart';
@@ -19,6 +20,7 @@ import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suppli
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspend_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspended_by_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/tracking_repository_impl.dart';
+import 'package:mantiz/src/data/services/remote/session/logout_service.dart';
 import 'package:mantiz/src/data/services/remote/session/session_service.dart';
 import 'package:mantiz/src/data/services/remote/starting_point/starting_point_api.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/activate_service.dart';
@@ -38,6 +40,7 @@ import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.
 import 'package:mantiz/src/data/services/remote/ticket_detail/suspend_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/suspended_by_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/tracking_service.dart';
+import 'package:mantiz/src/domain/providers/session/logout_provider.dart';
 import 'package:mantiz/src/domain/providers/session/session_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/activate_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/add_message_provider.dart';
@@ -56,6 +59,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart
 import 'package:mantiz/src/domain/providers/ticket_detail/suspend_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/tracking_provider.dart';
+import 'package:mantiz/src/domain/repositories/session/logout_repository.dart';
 import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
 import 'package:mantiz/src/domain/repositories/starting_point/starting_point_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/activate_repository.dart';
@@ -105,7 +109,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider.value(value: HomeViewVm()),
@@ -168,6 +171,22 @@ List<SingleChildWidget> appProviders = [
       secureStorage: const FlutterSecureStorage(),
     ),
   ),
+
+//! Repositorio para cerrar sesión
+
+  Provider<LogoutRepository>(
+    create: (context) => LogoutRepositoryImpl(
+        logoutService:
+            LogoutService(http: Http(http.Client(), AppConstants.testUrl)),
+        secureStorage: const FlutterSecureStorage()),
+  ),
+
+  ChangeNotifierProvider<LogoutProvider>(
+    create: (context) =>
+        LogoutProvider(logoutRepository: context.read<LogoutRepository>()),
+  ),
+
+//! =============================================
 
   Provider<HomeRepository>(
     create: (_) => HomeRepositoryImpl(
