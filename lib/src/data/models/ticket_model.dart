@@ -18,7 +18,7 @@ class TicketModel {
   String? updatedat;
   PhotoEvidenceModel photoevidence;
   AttendanceModel attendance;
-  List<DeviceModel> devices;
+  // List<DeviceModel> devices;
 
   TicketModel({
     required this.ticketId,
@@ -35,7 +35,7 @@ class TicketModel {
     this.updatedat,
     required this.photoevidence,
     required this.attendance,
-    required this.devices,
+    // required this.devices,
   });
 
   TicketModel.init()
@@ -52,8 +52,8 @@ class TicketModel {
         updatedby = null,
         updatedat = null,
         photoevidence = PhotoEvidenceModel.init(),
-        attendance = AttendanceModel.init(),
-        devices = [];
+        attendance = AttendanceModel.init();
+  // devices = [];
 
   // factory TicketModel.fromJson(Map<String, dynamic> json) {
   //   return TicketModel(

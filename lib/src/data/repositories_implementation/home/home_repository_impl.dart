@@ -23,7 +23,8 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl(this._homeApi, this._storage);
 
   @override
-  Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances() async {
+  Future<Either<GeneralFailure, List<MaintenancesModel>>>
+      loadMaintenances() async {
     // String? fkPartnerLicence = await _storage.read(key: 'fkPartnerLicence');
     // String? fkProfileCustomer = await _storage.read(key: 'FkCustomer');
     // String? fkProfileSupplier = await _storage.read(key: 'FkSupplierProfile');
@@ -63,7 +64,8 @@ class HomeRepositoryImpl implements HomeRepository {
               //! CreatedBy ...
               UserModel createdBy = UserModel.init();
               if (ticketMap['createdby'] != null) {
-                var createdByMap = Map<String, dynamic>.from(ticketMap['createdby']);
+                var createdByMap =
+                    Map<String, dynamic>.from(ticketMap['createdby']);
                 createdBy = UserModel(
                   useruuid: createdByMap['useruuid'],
                   name: createdByMap['name'],
@@ -77,7 +79,8 @@ class HomeRepositoryImpl implements HomeRepository {
               //! PhotoEvidence ...
               PhotoEvidenceModel photoevidence = PhotoEvidenceModel.init();
               if (ticketMap['photoevidence'] != null) {
-                var photoevidenceMap = Map<String, dynamic>.from(ticketMap['photoevidence']);
+                var photoevidenceMap =
+                    Map<String, dynamic>.from(ticketMap['photoevidence']);
                 photoevidence = PhotoEvidenceModel(
                   uuid: photoevidenceMap['uuid'],
                   uuidapp: photoevidenceMap['uuidapp'],
@@ -91,12 +94,14 @@ class HomeRepositoryImpl implements HomeRepository {
 
               AttendanceModel attendance = AttendanceModel.init();
               if (ticketMap['attendance'] != null) {
-                var attendanceMap = Map<String, dynamic>.from(ticketMap['attendance']);
+                var attendanceMap =
+                    Map<String, dynamic>.from(ticketMap['attendance']);
 
                 //! AsignedTo ...
                 UserModel asignedto = UserModel.init();
                 if (attendanceMap['asignedto'] != null) {
-                  var asignedtoMap = Map<String, dynamic>.from(attendanceMap['asignedto']);
+                  var asignedtoMap =
+                      Map<String, dynamic>.from(attendanceMap['asignedto']);
 
                   asignedto = UserModel(
                     useruuid: asignedtoMap['useruuid'],
@@ -144,19 +149,19 @@ class HomeRepositoryImpl implements HomeRepository {
               //! Ticket ...
               TicketModel ticketModel = TicketModel.init();
               ticketModel = TicketModel(
-                  ticketId: int.parse(ticketMap['ticketId'].toString()),
-                  folio: ticketMap['folio'],
-                  title: ticketMap['title'],
-                  reason: ticketMap['reason'],
-                  type: ticketMap['type'],
-                  area: ticketMap['area'],
-                  status: ticketMap['status'],
-                  scheduleat: ticketMap['scheduleat'],
-                  createdBy: createdBy,
-                  createdat: ticketMap['createdat'],
-                  photoevidence: photoevidence,
-                  attendance: attendance,
-                  devices: devices);
+                ticketId: int.parse(ticketMap['ticketId'].toString()),
+                folio: ticketMap['folio'],
+                title: ticketMap['title'],
+                reason: ticketMap['reason'],
+                type: ticketMap['type'],
+                area: ticketMap['area'],
+                status: ticketMap['status'],
+                scheduleat: ticketMap['scheduleat'],
+                createdBy: createdBy,
+                createdat: ticketMap['createdat'],
+                photoevidence: photoevidence,
+                attendance: attendance,
+              );
 
               // //! Tickets ...
               tickets.add(ticketModel);

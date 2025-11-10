@@ -101,41 +101,41 @@ class StartingPointImpl implements StartingPointRepository {
               }
 
               //! Devices ...
-              List<DeviceModel> devices = [];
-              for (var device in ticket['devices'] as List) {
-                var deviceMap = Map<String, dynamic>.from(device);
+              // List<DeviceModel> devices = [];
+              // for (var device in ticket['devices'] as List) {
+              //   var deviceMap = Map<String, dynamic>.from(device);
 
-                DeviceModel deviceModel = DeviceModel.init();
-                deviceModel = DeviceModel(
-                  deviceId: deviceMap['deviceId'],
-                  name: deviceMap['name'],
-                  code: deviceMap['code'],
-                  barcode: deviceMap['barcode'],
-                  typedevice: deviceMap['typedevice'] ?? '',
-                  priority: deviceMap['priority'] ?? '',
-                  levelpriority: deviceMap['levelpriority'] ?? '',
-                  rating: deviceMap['rating'] ?? 0,
-                );
+              //   DeviceModel deviceModel = DeviceModel.init();
+              //   deviceModel = DeviceModel(
+              //     deviceId: deviceMap['deviceId'],
+              //     name: deviceMap['name'],
+              //     code: deviceMap['code'],
+              //     barcode: deviceMap['barcode'],
+              //     typedevice: deviceMap['typedevice'] ?? '',
+              //     priority: deviceMap['priority'] ?? '',
+              //     levelpriority: deviceMap['levelpriority'] ?? '',
+              //     rating: deviceMap['rating'] ?? 0,
+              //   );
 
-                devices.add(deviceModel);
-              }
+              //   devices.add(deviceModel);
+              // }
 
               //! Ticket ...
               TicketModel ticketModel = TicketModel.init();
               ticketModel = TicketModel(
-                  ticketId: int.parse(ticketMap['ticketId'].toString()),
-                  folio: ticketMap['folio'],
-                  title: ticketMap['title'],
-                  reason: ticketMap['reason'],
-                  type: ticketMap['type'],
-                  area: ticketMap['area'],
-                  status: ticketMap['status'],
-                  scheduleat: ticketMap['scheduleat'],
-                  createdBy: createdBy,
-                  createdat: ticketMap['createdat'],
-                  photoevidence: photoevidence,
-                  attendance: attendance,
-                  devices: devices);
+                ticketId: int.parse(ticketMap['ticketId'].toString()),
+                folio: ticketMap['showFolio'],
+                title: ticketMap['title'],
+                reason: ticketMap['reason'],
+                type: ticketMap['type'],
+                area: ticketMap['area'],
+                status: ticketMap['status'],
+                scheduleat: ticketMap['scheduleat'],
+                createdBy: createdBy,
+                createdat: ticketMap['createdat'],
+                photoevidence: photoevidence,
+                attendance: attendance,
+              );
 
               // //! Tickets ...
               tickets.add(ticketModel);

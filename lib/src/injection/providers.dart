@@ -30,6 +30,7 @@ import 'package:mantiz/src/data/services/remote/ticket_detail/assign_service.dar
 import 'package:mantiz/src/data/services/remote/ticket_detail/assigned_to_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/branch_office_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/cancel_service.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/detail_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/done_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/price_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/prized_by_service.dart';
@@ -49,6 +50,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/assigned_to_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/branchoffice_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/cancel_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/detail_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/done_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/price_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
@@ -69,6 +71,8 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/assign_repository.d
 import 'package:mantiz/src/domain/repositories/ticket_detail/assigned_to_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/cancel_repository.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/detail_repository.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/detail_repository_impl.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/done_repositroy.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/price_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/prized_by_repository.dart';
@@ -205,6 +209,23 @@ List<SingleChildWidget> appProviders = [
           AppConstants.testUrl,
         )),
         const FlutterSecureStorage()),
+  ),
+
+// -----------------------------------------------------------------------------
+// DETALLE DEL TICKET: Repositorio para cargar el detall del ticket
+// -----------------------------------------------------------------------------
+
+  Provider<DetailRepository>(
+    create: (context) => DetailRepositoryImpl(
+      detailService: DetailService(
+        http: Http(http.Client(), AppConstants.testUrl),
+      ),
+    ),
+  ),
+
+  ChangeNotifierProvider<DetailProvider>(
+    create: (context) =>
+        DetailProvider(detailRepository: context.read<DetailRepository>()),
   ),
 
   // Repositorio para verificar si el ticket esta asignado

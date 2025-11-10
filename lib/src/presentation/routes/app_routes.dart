@@ -5,6 +5,7 @@ import 'package:mantiz/src/presentation/pages/starting_point.dart/view/starting_
 import 'package:mantiz/src/presentation/pages/third_page/view/third_page_view.dart';
 
 import '../../data/models/models.dart';
+import '../../data/models/ticket_model.dart';
 import '../pages/views.dart';
 import 'routes.dart';
 
@@ -49,16 +50,17 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       );
 
     case Routes.detailTicket:
-      if (settings.arguments is MaintenancesModel) {
-        final MaintenancesModel maintenance = settings.arguments as MaintenancesModel;
+      if (settings.arguments is TicketModel) {
+        final TicketModel ticket = settings.arguments as TicketModel;
         return MaterialPageRoute(
-          builder: (_) => DetailTicketView(maintenance: maintenance),
+          builder: (_) => DetailTicketView(ticket: ticket),
         );
       }
 
       return MaterialPageRoute(
-        builder: (_) => const Scaffold(
-          body: Center(
+        builder: (_) => Scaffold(
+          appBar: AppBar(),
+          body: const Center(
             child: Text('Error: parametro de ticket no encontrado'),
           ),
         ),
