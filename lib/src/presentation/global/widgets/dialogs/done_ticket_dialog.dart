@@ -12,12 +12,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class DoneTicketDialog extends StatelessWidget {
-  final int fkMaintenance;
-  final int doneByPartner;
+  final int ticketId;
+  final int userId;
   const DoneTicketDialog({
     super.key,
-    required this.fkMaintenance,
-    required this.doneByPartner,
+    required this.ticketId,
+    required this.userId,
   });
 
   @override
@@ -178,8 +178,8 @@ class DoneTicketDialog extends StatelessWidget {
                       final String? base64Photo = evidencePhoto != null ? base64Encode(evidencePhoto!.readAsBytesSync()) : null;
                       final String? base64Photo360 = evidencePhoto360 != null ? base64Encode(evidencePhoto360!.readAsBytesSync()) : null;
                       await provider.fetchDoneTicket(
-                        fkMaintenance,
-                        doneByPartner,
+                        ticketId,
+                        userId,
                         finishReason,
                         base64Photo ?? '',
                         base64Photo360 ?? '',
@@ -193,7 +193,7 @@ class DoneTicketDialog extends StatelessWidget {
                         );
                         String message = 'Ticket finalizado desde app movil: $finishReason';
 
-                        await addMessageProvider.addMessage(fkMaintenance, doneByPartner, message);
+                        await addMessageProvider.addMessage(ticketId, userId, message);
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Row(

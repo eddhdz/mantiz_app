@@ -15,8 +15,8 @@ class DoneProvider extends ChangeNotifier {
   GeneralFailure? get errorMessage => _errorMessage;
 
   Future<void> fetchDoneTicket(
-    int fkMaintenance,
-    int doneByPartner,
+    int ticketId,
+    int userId,
     String evidence,
     String evidencePhoto,
     String evidencePhoto360,
@@ -26,8 +26,8 @@ class DoneProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await _doneRepositroy.done(
-      fkMaintenance,
-      doneByPartner,
+      ticketId,
+      userId,
       evidence,
       evidencePhoto,
       evidencePhoto360,

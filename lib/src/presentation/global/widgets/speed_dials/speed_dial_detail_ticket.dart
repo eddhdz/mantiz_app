@@ -335,8 +335,8 @@ class SpeedDialDetailTicket extends StatelessWidget {
             context: context,
             builder: (context) {
               return DoneTicketDialog(
-                fkMaintenance: ticketId,
-                doneByPartner: userId,
+                ticketId: ticketId,
+                userId: userId,
               );
             },
           );
