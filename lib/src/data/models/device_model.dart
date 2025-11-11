@@ -32,6 +32,4 @@ class DeviceModel {
         levelpriority = '',
         rating = 0,
         failures = [];
-
-  
 }

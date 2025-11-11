@@ -1,7 +1,10 @@
 //! flutter ...
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //! imports locales ...
+import '../../../../domain/enums.dart';
+import '../../../../domain/providers/session/logout_provider.dart';
 import '../../../routes/routes.dart';
 import '../../colors.dart';
 
@@ -13,6 +16,7 @@ class InitialFloatingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final logoutProvider = Provider.of<LogoutProvider>(context, listen: false);
     return SpeedDial(
       icon: Icons.keyboard_control,
       iconTheme: const IconThemeData(color: blackPanter),
@@ -46,11 +50,21 @@ class InitialFloatingButton extends StatelessWidget {
             ),
             label: 'Salir',
             onTap: () async {
-              Navigator.pushNamedAndRemoveUntil(
-                  // ignore: use_build_context_synchronously
-                  context,
-                  Routes.logIn,
-                  (route) => false);
+              await logoutProvider.fetchLogOut();
+              if (logoutProvider.status == DataStatus.success) {
+                if (context.mounted) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      Routes.logIn,
+                      (route) => false);
+                }
+              } else {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Error al cerrar sesión.')));
+                }
+              }
             }),
       ],
     );

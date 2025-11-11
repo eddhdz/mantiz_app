@@ -1,5 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mantiz/src/data/repositories_implementation/session/logout_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/session/session_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/starting_point/starting_point_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/activate_repository_impl.dart';
@@ -19,6 +20,7 @@ import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suppli
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspend_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspended_by_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/tracking_repository_impl.dart';
+import 'package:mantiz/src/data/services/remote/session/logout_service.dart';
 import 'package:mantiz/src/data/services/remote/session/session_service.dart';
 import 'package:mantiz/src/data/services/remote/starting_point/starting_point_api.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/activate_service.dart';
@@ -28,6 +30,7 @@ import 'package:mantiz/src/data/services/remote/ticket_detail/assign_service.dar
 import 'package:mantiz/src/data/services/remote/ticket_detail/assigned_to_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/branch_office_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/cancel_service.dart';
+import 'package:mantiz/src/data/services/remote/ticket_detail/detail_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/done_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/price_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/prized_by_service.dart';
@@ -38,7 +41,9 @@ import 'package:mantiz/src/data/services/remote/ticket_detail/suppliers_service.
 import 'package:mantiz/src/data/services/remote/ticket_detail/suspend_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/suspended_by_service.dart';
 import 'package:mantiz/src/data/services/remote/ticket_detail/tracking_service.dart';
+import 'package:mantiz/src/domain/providers/session/logout_provider.dart';
 import 'package:mantiz/src/domain/providers/session/session_provider.dart';
+import 'package:mantiz/src/domain/providers/session/user_session_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/activate_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/add_message_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/approve_provider.dart';
@@ -46,6 +51,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/assign_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/assigned_to_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/branchoffice_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/cancel_provider.dart';
+import 'package:mantiz/src/domain/providers/ticket_detail/detail_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/done_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/price_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
@@ -56,6 +62,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart
 import 'package:mantiz/src/domain/providers/ticket_detail/suspend_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/tracking_provider.dart';
+import 'package:mantiz/src/domain/repositories/session/logout_repository.dart';
 import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
 import 'package:mantiz/src/domain/repositories/starting_point/starting_point_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/activate_repository.dart';
@@ -65,6 +72,8 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/assign_repository.d
 import 'package:mantiz/src/domain/repositories/ticket_detail/assigned_to_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/cancel_repository.dart';
+import 'package:mantiz/src/domain/repositories/ticket_detail/detail_repository.dart';
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/detail_repository_impl.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/done_repositroy.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/price_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/prized_by_repository.dart';
@@ -105,7 +114,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider.value(value: HomeViewVm()),
@@ -171,6 +179,32 @@ List<SingleChildWidget> appProviders = [
     ),
   ),
 
+// -----------------------------------------------------------------------------
+// CARGA DE DATOS DE USUARIO: Provider para cargar los datos del usuario
+// -----------------------------------------------------------------------------
+
+  ChangeNotifierProvider(
+    create: (context) => UserSessionProvider(),
+  ),
+
+// -----------------------------------------------------------------------------
+// CERRAR SESION: Provider y repositorio para cerrar sesion
+// -----------------------------------------------------------------------------
+
+  Provider<LogoutRepository>(
+    create: (context) => LogoutRepositoryImpl(
+        logoutService:
+            LogoutService(http: Http(http.Client(), AppConstants.testUrl)),
+        secureStorage: const FlutterSecureStorage()),
+  ),
+
+  ChangeNotifierProvider<LogoutProvider>(
+    create: (context) =>
+        LogoutProvider(logoutRepository: context.read<LogoutRepository>()),
+  ),
+
+//! =============================================
+
   Provider<HomeRepository>(
     create: (_) => HomeRepositoryImpl(
         HomeApi(Http(
@@ -188,6 +222,23 @@ List<SingleChildWidget> appProviders = [
           AppConstants.testUrl,
         )),
         const FlutterSecureStorage()),
+  ),
+
+// -----------------------------------------------------------------------------
+// DETALLE DEL TICKET: Repositorio para cargar el detall del ticket
+// -----------------------------------------------------------------------------
+
+  Provider<DetailRepository>(
+    create: (context) => DetailRepositoryImpl(
+      detailService: DetailService(
+        http: Http(http.Client(), AppConstants.testUrl),
+      ),
+    ),
+  ),
+
+  ChangeNotifierProvider<DetailProvider>(
+    create: (context) =>
+        DetailProvider(detailRepository: context.read<DetailRepository>()),
   ),
 
   // Repositorio para verificar si el ticket esta asignado

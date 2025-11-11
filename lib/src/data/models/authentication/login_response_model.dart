@@ -80,6 +80,7 @@ class ProfileModel {
 // -----------------------------------------------------------------------------
 /// Modelo para el objeto 'user'.
 class UserModel {
+  final int userId;
   final String useruuid;
   final String name;
   final String email;
@@ -91,6 +92,7 @@ class UserModel {
   final int isActive;
 
   UserModel({
+    required this.userId,
     required this.useruuid,
     required this.name,
     required this.email,
@@ -104,6 +106,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
+      userId: json['userId'],
       useruuid: json['useruuid'],
       name: json['name'],
       email: json['email'],
