@@ -30,7 +30,7 @@ class StartingPointController with ChangeNotifier {
     final typeuser = await _secureStorage.read(key: 'typeuser');
     final typerole = await _secureStorage.read(key: 'typerol');
 
-    final result = await Provider.of<StartingPointRepository>(context, listen: false).loadMaintenances();
+    final result = await Provider.of<StartingPointRepository>((context.mounted) ? context : context, listen: false).loadMaintenances();
 
     result.when((failure) {
       final message = {

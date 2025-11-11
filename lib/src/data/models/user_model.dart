@@ -1,5 +1,3 @@
-import 'package:mantiz/src/data/models/user.dart';
-
 class UserModel {
   String useruuid;
   String name;
@@ -13,25 +11,9 @@ class UserModel {
     required this.phone,
   });
 
-  UserModel.init()
+  UserModel.onInit()
       : useruuid = '',
         name = '',
         email = '',
         phone = '';
-
-  // factory UserModel.fromJson(Map<String, dynamic> json) {
-  //   return UserModel(
-  //     useruuid: json['useruuid'],
-  //     name: json['name'],
-  //     email: json['email'],
-  //     phone: json['phone'],
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() => {
-  //       'useruuid': useruuid,
-  //       'name': name,
-  //       'email': email,
-  //       'phone': phone,
-  //     };
 }

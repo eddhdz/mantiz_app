@@ -17,25 +17,12 @@ class SavePhotoModel {
     required this.createdAt,
   });
 
-  factory SavePhotoModel.fromJson(Map<String, dynamic> json) {
-    return SavePhotoModel(
-      uuidapp: json['uuidapp'],
-      uuid: (json['uuid'] != null) ? json['uuid'] : '',
-      name: json['name'],
-      type: json['type'],
-      url: (json['url'] != null) ? json['url'] : '',
-      im64: json['im64'],
-      createdAt: DateTime.parse(json['createdAt'].toString()),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        'uuidapp': uuidapp,
-        'uuid': uuid,
-        'name': name,
-        'type': type,
-        'url': url,
-        'im64': im64,
-        'createdAt': createdAt.toIso8601String(),
-      };
+  SavePhotoModel.onInit()
+      : uuidapp = '',
+        uuid = '',
+        name = '',
+        type = '',
+        url = null,
+        im64 = '',
+        createdAt = DateTime.now();
 }

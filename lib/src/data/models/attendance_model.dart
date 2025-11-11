@@ -18,25 +18,7 @@ class AttendanceModel {
   AttendanceModel.init()
       : atentionat = '',
         atentiontime = '',
-        asignedto = UserModel.init(),
+        asignedto = UserModel.onInit(),
         asignedat = '',
         estimatedtime = '';
-
-  // factory AttendanceModel.fromJson(Map<String, dynamic> json) {
-  //   return AttendanceModel(
-  //     atentionat: json['atentionat'],
-  //     atentiontime: json['atentiontime'],
-  //     asignedto: UserModel.fromJson(json['asignedto']),
-  //     asignedat: json['asignedat'],
-  //     estimatedtime: json['estimatedtime'],
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() => {
-  //       'atentionat': atentionat,
-  //       'atentiontime': atentiontime,
-  //       'asignedto': asignedto.toJson(),
-  //       'asignedat': asignedat,
-  //       'estimatedtime': estimatedtime,
-  //     };
 }

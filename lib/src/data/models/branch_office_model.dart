@@ -1,4 +1,5 @@
 import 'package:mantiz/src/data/models/ticket_model.dart';
+import 'package:mantiz/src/data/models/zone_model.dart';
 
 class BranchOfficeModel {
   String branchofficeId;
@@ -8,16 +9,17 @@ class BranchOfficeModel {
   String longitude;
   String clave;
   List<TicketModel> tickets;
+  List<ZoneModel> zones;
 
-  BranchOfficeModel({
-    required this.branchofficeId,
-    required this.branchoffice,
-    required this.address,
-    required this.latitude,
-    required this.longitude,
-    required this.clave,
-    required this.tickets,
-  });
+  BranchOfficeModel(
+      {required this.branchofficeId,
+      required this.branchoffice,
+      required this.address,
+      required this.latitude,
+      required this.longitude,
+      required this.clave,
+      required this.tickets,
+      required this.zones});
 
   BranchOfficeModel.init()
       : branchofficeId = '',
@@ -26,27 +28,6 @@ class BranchOfficeModel {
         latitude = '',
         longitude = '',
         clave = '',
-        tickets = [];
-
-  // factory BranchOfficeModel.fromJson(Map<String, dynamic> json) {
-  //   return BranchOfficeModel(
-  //     branchofficeId: json['branchofficeId'],
-  //     branchoffice: json['branchoffice'],
-  //     address: json['address'],
-  //     latitude: json['latitude'],
-  //     longitude: json['longitude'],
-  //     clave: json['clave'],
-  //     tickets: TicketModel.fromJson(json['tickets']),
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() => {
-  //       'branchofficeId': branchofficeId,
-  //       'branchoffice': branchoffice,
-  //       'address': address,
-  //       'latitude': latitude,
-  //       'longitude': longitude,
-  //       'clave': clave,
-  //       'tickets': tickets.toJson(),
-  //     };
+        tickets = [],
+        zones = [];
 }

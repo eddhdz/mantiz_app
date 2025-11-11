@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/data/models/device_model.dart';
 
+import '../../../../data/models/device_model.dart';
+import '../../../../data/models/failure_model.dart';
 import '../../../../data/models/models.dart';
+import '../../../../data/models/zone_model.dart';
 import '../../../global/colors.dart';
-import '../../../global/widgets/customs/custom_dialog_general.dart';
-import '../../../global/widgets/customs/custom_dialog_question.dart';
+import '../../../global/viewers/image_viewer.dart';
+import '../../../global/viewers/video_viewer.dart';
 import '../../../global/widgets/buttons/general_button.dart';
 import '../../../global/widgets/containers/rounded_container.dart';
+import '../../../global/widgets/customs/custom_dialog_general.dart';
 import '../../../global/widgets/texts/general_text.dart';
 import '../../../global/widgets/texts/general_text_form.dart';
-import 'new_ticket_view_vm.dart';
 
 import 'package:provider/provider.dart';
+import '../../../routes/routes.dart';
+import 'new_ticket_view_vm.dart';
 
 class NewTicketView extends StatefulWidget {
   const NewTicketView({super.key});
@@ -21,9 +25,8 @@ class NewTicketView extends StatefulWidget {
 }
 
 class _NewTicketViewState extends State<NewTicketView> {
-  TextEditingController titleController = TextEditingController();
+  // TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController areaController = TextEditingController();
 
   @override
   void initState() {
@@ -38,9 +41,9 @@ class _NewTicketViewState extends State<NewTicketView> {
 
   @override
   void dispose() {
-    titleController.dispose();
+    // titleController.dispose();
     descriptionController.dispose();
-    areaController.dispose();
+    // areaController.dispose();
 
     super.dispose();
   }
@@ -50,347 +53,409 @@ class _NewTicketViewState extends State<NewTicketView> {
     final vm = Provider.of<NewTicketViewVM>(context);
     Size screenSize = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: whiteGlobalColor,
-      appBar: AppBar(
+    return WillPopScope(
+        child: Scaffold(
           backgroundColor: whiteGlobalColor,
-          title: const GeneralText(
-              mensaje: 'Nuevo ticket', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.center),
-          actions: [(vm.isLoading) ? const Image(image: AssetImage('lib/src/assets/customs/Wait03@4x.gif'), fit: BoxFit.scaleDown) : Container()]),
-      body: SingleChildScrollView(
-          child: SizedBox(
-              child: Form(
-                  key: vm.formKey,
-                  child: Column(children: <Widget>[
-                    const Row(children: <Widget>[
-                      //!
-                      SizedBox(width: 10),
-                      GeneralText(mensaje: 'Título:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.start)
-                    ]),
-                    const SizedBox(height: 5),
-                    Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: GeneralTextForm(
-                            properties: GeneralTextPropertiesModel(
-                                label: '',
-                                enable: true,
-                                objectsColor: mediumGray,
-                                textColor: blackPanter,
-                                obscureText: false,
-                                validator: (value) => vm.generalValidator(value),
-                                onChange: (value) => vm.onTitleChange(value),
-                                controller: titleController,
-                                keyboard: TextInputType.text,
-                                minLines: 1,
-                                maxLines: 1))),
+          appBar: AppBar(
+              backgroundColor: whiteGlobalColor,
+              title: const GeneralText(
+                  mensaje: 'Nuevo ticket', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.center),
+              actions: [(vm.isLoading) ? const Image(image: AssetImage('lib/src/assets/customs/Wait03@4x.gif'), fit: BoxFit.scaleDown) : Container()]),
+          body: SingleChildScrollView(
+              child: SizedBox(
+                  child: Form(
+                      key: vm.formKey,
+                      child: Column(children: <Widget>[
+                        //!
+                        const SizedBox(height: 5),
+                        const Row(children: <Widget>[
+                          SizedBox(width: 10),
+                          GeneralText(
+                              mensaje: 'Descripción:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
+                        ]),
+                        const SizedBox(height: 10),
+                        Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: GeneralTextForm(
+                                properties: GeneralTextPropertiesModel(
+                                    label: '',
+                                    enable: true,
+                                    objectsColor: mediumGray,
+                                    textColor: blackPanter,
+                                    obscureText: false,
+                                    validator: (value) => vm.generalValidator(value),
+                                    onChange: (value) {
+                                      vm.onChangeDescription(value);
 
-                    //!
-                    const SizedBox(height: 5),
-                    const Row(children: <Widget>[
-                      SizedBox(width: 10),
-                      GeneralText(
-                          mensaje: 'Descripción:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
-                    ]),
-                    const SizedBox(height: 10),
-                    Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: GeneralTextForm(
-                            properties: GeneralTextPropertiesModel(
-                                label: '',
-                                enable: true,
-                                objectsColor: mediumGray,
-                                textColor: blackPanter,
-                                obscureText: false,
-                                validator: (value) => vm.generalValidator(value),
-                                onChange: (value) => vm.onDescriptionChange(value),
-                                controller: descriptionController,
-                                keyboard: TextInputType.multiline,
-                                minLines: 1,
-                                maxLines: 3))),
+                                      descriptionController.text = value;
+                                    },
+                                    controller: descriptionController,
+                                    keyboard: TextInputType.multiline,
+                                    minLines: 1,
+                                    maxLines: 3))),
 
-                    //!
-                    const SizedBox(height: 5),
-                    const Row(children: <Widget>[
-                      SizedBox(width: 10),
-                      GeneralText(mensaje: 'Evidencia:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
-                    ]),
-                    const SizedBox(height: 10),
-                    RoundedContainer(
-                        containerPropertiesModel: ContainerPropertiesModel(
-                            height: screenSize.height * 0.2,
+                        //!
+                        const SizedBox(height: 5),
+                        const Row(children: <Widget>[
+                          SizedBox(width: 10),
+                          GeneralText(
+                              mensaje: 'Cliente:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
+                        ]),
+                        const SizedBox(height: 5),
+                        Container(
                             width: screenSize.width,
                             margin: const EdgeInsets.symmetric(horizontal: 10),
-                            alignment: Alignment.center,
-                            backColor: blueExtraLightGlobalColor,
-                            borderColor: mediumGray,
-                            borderWidth: 2,
-                            shadowColor: whiteGlobalColor,
-                            rounded: 20,
-                            widget: Row(children: [
-                              const SizedBox(width: 10),
-                              GeneralButton(
-                                  text: 'Cargar evidencia',
-                                  onPressed: () async {
-                                    bool? yesOrNo = await showDialog(
-                                        context: context,
-                                        builder: (build) {
-                                          return const CustomDialogQuestion(
-                                              title: 'Evidencia', descriptions: '¿Deseas tomar foto o cargar imágen?', btnOk: 'Cámara', btnNotOk: 'Galería', altura: 200);
-                                        });
-
-                                    if (yesOrNo != null) {
-                                      await vm.vmInit();
-
-                                      if (yesOrNo) {
-                                        //! Abrimos cámara para tomar foto ...
-                                        await vm.goToCamera();
-                                      } else {
-                                        //! Cargamos una imágen de la galería ...
-                                        await vm.selectImage();
-                                      }
-                                    }
-                                  },
-                                  color: vm.evidenceColor,
-                                  textColor: blackPanter),
-                              Expanded(child: Container()),
-                              RoundedContainer(
-                                  containerPropertiesModel: ContainerPropertiesModel(
-                                      height: screenSize.height * 0.15,
-                                      width: screenSize.width * 0.3,
-                                      alignment: Alignment.center,
-                                      backColor: whiteGlobalColor,
-                                      borderColor: mediumGray,
-                                      shadowColor: blueExtraLightGlobalColor,
-                                      rounded: 1,
-                                      borderWidth: 2,
-                                      widget: (vm.evidence == null)
-                                          ? const Image(image: AssetImage('lib/src/assets/camera.png'), fit: BoxFit.scaleDown)
-                                          : Image.file(vm.evidence!, fit: BoxFit.scaleDown),
-                                      margin: const EdgeInsets.all(0))),
-                              const SizedBox(width: 10),
-                            ]))),
-
-                    //!
-                    const SizedBox(height: 5),
-                    const Row(children: <Widget>[
-                      SizedBox(width: 10),
-                      GeneralText(mensaje: 'Cliente:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
-                    ]),
-                    const SizedBox(height: 5),
-                    Container(
-                        width: screenSize.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: DropdownButtonFormField<CustomerModel>(
-                          value: vm.selectedCustomer,
-                          items: vm.customers.map((CustomerModel customer) {
-                            return DropdownMenuItem<CustomerModel>(
-                                value: customer,
-                                child: GeneralText(
-                                    mensaje: '${customer.id} - ${customer.customer}',
-                                    maxLines: 1,
-                                    overFlow: TextOverflow.ellipsis,
-                                    size: 15,
-                                    weight: FontWeight.normal,
-                                    color: blackPanter,
-                                    align: TextAlign.start));
-                          }).toList(),
-                          onChanged: (CustomerModel? value) {
-                            if (value != null) {
-                              vm.customerSelectedAction(context, value);
-                            }
-                          },
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 3, color: mediumGray),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          )),
-                          validator: (value) => vm.validatorCustomer(value),
-                        )),
-
-                    //!
-                    const SizedBox(height: 5),
-                    const Row(children: <Widget>[
-                      SizedBox(width: 10),
-                      GeneralText(mensaje: 'Sucursal:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
-                    ]),
-                    const SizedBox(height: 5),
-                    Container(
-                        width: screenSize.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: DropdownButtonFormField<BranchOfficeModel>(
-                          value: vm.selectedBranch,
-                          items: vm.branchs.map((BranchOfficeModel branch) {
-                            return DropdownMenuItem<BranchOfficeModel>(
-                                value: branch,
-                                child: const GeneralText(
-                                    mensaje: 'hola', // '${branch.id} - ${branch.description}',
-                                    maxLines: 1,
-                                    overFlow: TextOverflow.ellipsis,
-                                    size: 15,
-                                    weight: FontWeight.normal,
-                                    color: blackPanter,
-                                    align: TextAlign.start));
-                          }).toList(),
-                          onChanged: (BranchOfficeModel? value) {
-                            if (value != null) {
-                              vm.branchSelectedAction(context, value);
-                            }
-                          },
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 3, color: mediumGray),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          )),
-                          validator: (value) => vm.validatorBranch(value),
-                        )),
-
-                    //!
-                    const SizedBox(height: 5),
-                    const Row(children: <Widget>[
-                      SizedBox(width: 10),
-                      GeneralText(mensaje: 'Equipos:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
-                    ]),
-                    const SizedBox(height: 5),
-                    Container(
-                        width: screenSize.width,
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: DropdownButtonFormField<DeviceModel>(
-                          value: vm.selectedDevice,
-                          items: vm.devices.map((DeviceModel device) {
-                            return DropdownMenuItem<DeviceModel>(
-                                value: device,
-                                child: const GeneralText(
-                                    mensaje: 'mundo', //! '${device.id} - ${device.description} - ${device.product}',
-                                    maxLines: 1,
-                                    overFlow: TextOverflow.ellipsis,
-                                    size: 15,
-                                    weight: FontWeight.normal,
-                                    color: blackPanter,
-                                    align: TextAlign.start));
-                          }).toList(),
-                          onChanged: (DeviceModel? value) {
-                            if (value != null) {
-                              vm.deviceSelectedAction(value);
-                            }
-                          },
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 3, color: mediumGray),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          )),
-                          validator: (value) => vm.validatorDevice(value),
-                        )),
-
-                    //!
-                    const SizedBox(height: 5),
-                    const Row(children: <Widget>[
-                      SizedBox(width: 10),
-                      GeneralText(mensaje: 'Área:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
-                    ]),
-                    const SizedBox(height: 5),
-                    Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        child: GeneralTextForm(
-                            properties: GeneralTextPropertiesModel(
-                                label: '',
-                                enable: true,
-                                objectsColor: mediumGray,
-                                textColor: blackPanter,
-                                obscureText: false,
-                                validator: (value) => vm.generalValidator(value),
-                                onChange: (value) => vm.onAreaChange(value),
-                                controller: areaController,
-                                keyboard: TextInputType.text,
-                                minLines: 1,
-                                maxLines: 1))),
-
-                    //!
-                    const SizedBox(height: 10),
-                    RoundedContainer(
-                        containerPropertiesModel: ContainerPropertiesModel(
-                            height: 2,
-                            width: screenSize.width,
-                            alignment: Alignment.center,
-                            backColor: lockWidget,
-                            borderColor: lockWidget,
-                            shadowColor: lockWidget,
-                            rounded: 0,
-                            borderWidth: 0,
-                            widget: const SizedBox(),
-                            margin: const EdgeInsets.all(0))),
-
-                    //!
-                    const SizedBox(height: 10),
-                    Row(children: <Widget>[
-                      const SizedBox(width: 30),
-                      GeneralButton(
-                          text: 'Cancelar',
-                          onPressed: () async {
-                            await vm.vmInit();
-
-                            if (!context.mounted) return;
-                            await vm.loadCustomer(context);
-
-                            titleController.text = descriptionController.text = areaController.text = '';
-
-                            if (!context.mounted) return;
-                            Navigator.of(context).pop();
-                          },
-                          color: lightGray,
-                          textColor: blackPanter),
-                      const Expanded(child: SizedBox()),
-                      GeneralButton(
-                          text: 'Crear',
-                          onPressed: () async {
-                            if (vm.formKey.currentState!.validate()) {
-                              String desc = '', url = '';
-
-                              //! Realizar primero el guardado de la imágen (obtener json correspondiente) ...
-                              if (vm.base64Image.isEmpty) {
-                                desc = 'Debes tener cargada una imágen.';
-                                url = 'lib/src/assets/customs/Exception@4x.png';
-                              } else {
-                                await vm.savePhoto(context);
-                                if (vm.finishSavePhoto) {
-                                  if (context.mounted) {
-                                    await vm.saveTicket(context);
-                                  }
-
-                                  if (vm.finishSaveTicket) {
-                                    desc = 'Ticket guardado satisfactoriamente';
-                                    url = 'lib/src/assets/customs/Information@4x.png';
-                                  } else {
-                                    desc = 'Ocurrió un error al guardar el ticket, vuelve a intentar el procedimiento';
-                                    url = 'lib/src/assets/customs/Exception@4x.png';
-                                  }
-                                } else {
-                                  desc = 'Ocurrió un error al guardar la foto, vuelve a intentar el procedimiento';
-                                  url = 'lib/src/assets/customs/Exception@4x.png';
+                            child: DropdownButtonFormField<CustomerModel>(
+                              value: vm.selectedCustomer,
+                              items: vm.customers.map((CustomerModel customer) {
+                                return DropdownMenuItem<CustomerModel>(
+                                    value: customer,
+                                    child: GeneralText(
+                                        mensaje: customer.customer,
+                                        maxLines: 1,
+                                        overFlow: TextOverflow.ellipsis,
+                                        size: 15,
+                                        weight: FontWeight.normal,
+                                        color: blackPanter,
+                                        align: TextAlign.start));
+                              }).toList(),
+                              onChanged: (CustomerModel? value) {
+                                if (value != null) {
+                                  vm.customerSelectedAction(context, value);
                                 }
-                              }
+                              },
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                borderSide: BorderSide(width: 3, color: mediumGray),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )),
+                              validator: (value) => vm.validatorCustomer(value),
+                            )),
 
-                              if (!context.mounted) return;
-                              await showDialog(
-                                  context: context,
-                                  builder: (build) {
-                                    return CustomDialogGeneral(descriptions: desc, text: 'Ok', urlImage: url, altura: 260);
-                                  });
+                        //!
+                        const SizedBox(height: 5),
+                        const Row(children: <Widget>[
+                          SizedBox(width: 10),
+                          GeneralText(
+                              mensaje: 'Sucursal:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
+                        ]),
+                        const SizedBox(height: 5),
+                        Container(
+                            width: screenSize.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: DropdownButtonFormField<BranchOfficeModel>(
+                              value: vm.selectedBranch,
+                              items: vm.branchs.map((BranchOfficeModel branch) {
+                                return DropdownMenuItem<BranchOfficeModel>(
+                                    value: branch,
+                                    child: GeneralText(
+                                        mensaje: branch.branchoffice,
+                                        maxLines: 1,
+                                        overFlow: TextOverflow.ellipsis,
+                                        size: 15,
+                                        weight: FontWeight.normal,
+                                        color: blackPanter,
+                                        align: TextAlign.start));
+                              }).toList(),
+                              onChanged: (BranchOfficeModel? value) {
+                                if (value != null) {
+                                  vm.branchSelectedAction(context, value);
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                borderSide: BorderSide(width: 3, color: mediumGray),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )),
+                              // validator: (value) => vm.validatorCustomer(value),
+                            )),
 
-                              await vm.vmInit();
+                        //!
+                        const SizedBox(height: 5),
+                        const Row(children: <Widget>[
+                          SizedBox(width: 10),
+                          GeneralText(mensaje: 'Zona:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
+                        ]),
+                        const SizedBox(height: 5),
+                        Container(
+                            width: screenSize.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: DropdownButtonFormField<ZoneModel>(
+                              value: vm.selectedZones,
+                              items: vm.zones.map((ZoneModel zone) {
+                                return DropdownMenuItem<ZoneModel>(
+                                    value: zone,
+                                    child: GeneralText(
+                                        mensaje: zone.zone,
+                                        maxLines: 1,
+                                        overFlow: TextOverflow.ellipsis,
+                                        size: 15,
+                                        weight: FontWeight.normal,
+                                        color: blackPanter,
+                                        align: TextAlign.start));
+                              }).toList(),
+                              onChanged: (ZoneModel? value) {
+                                if (value != null) {
+                                  vm.zonesSelectedAction(context, value);
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                borderSide: BorderSide(width: 3, color: mediumGray),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )),
+                              // validator: (value) => vm.validatorCustomer(value),
+                            )),
 
-                              if (!context.mounted) return;
-                              await vm.loadCustomer(context);
+                        //!
+                        const SizedBox(height: 5),
+                        const Row(children: <Widget>[
+                          SizedBox(width: 10),
+                          GeneralText(
+                              mensaje: 'Dispositivo:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
+                        ]),
+                        const SizedBox(height: 5),
+                        Container(
+                            width: screenSize.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: DropdownButtonFormField<DeviceModel>(
+                              value: vm.selectedDevice,
+                              items: vm.devices.map((DeviceModel device) {
+                                return DropdownMenuItem<DeviceModel>(
+                                    value: device,
+                                    child: Row(children: [
+                                      SizedBox(
+                                          width: 200,
+                                          child: GeneralText(
+                                              mensaje: '${device.name}-${device.priority}',
+                                              maxLines: 1,
+                                              overFlow: TextOverflow.ellipsis,
+                                              size: 15,
+                                              weight: FontWeight.normal,
+                                              color: blackPanter,
+                                              align: TextAlign.start)),
+                                      const SizedBox(width: 5),
+                                      Row(
+                                          children: List.generate(
+                                              5,
+                                              (index) => Icon(
+                                                    index < device.rating! ? Icons.star : Icons.star_border,
+                                                    color: greenPrincipal,
+                                                    size: 18,
+                                                  )))
+                                    ]));
+                              }).toList(),
+                              onChanged: (DeviceModel? value) {
+                                if (value != null) {
+                                  vm.deviceSelectedAction(context, value);
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                borderSide: BorderSide(width: 3, color: mediumGray),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )),
+                              // validator: (value) => vm.validatorCustomer(value),
+                            )),
 
-                              titleController.text = descriptionController.text = areaController.text = '';
-                            } else {}
-                          },
-                          color: lightGray,
-                          textColor: blackPanter),
-                      const SizedBox(width: 30),
-                    ]),
+                        //!
+                        const SizedBox(height: 5),
+                        const Row(children: <Widget>[
+                          SizedBox(width: 10),
+                          GeneralText(mensaje: 'Falla:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
+                        ]),
+                        const SizedBox(height: 5),
+                        Container(
+                            width: screenSize.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: DropdownButtonFormField<FailureModel>(
+                              value: vm.selectedFailures,
+                              items: vm.failures.map((FailureModel failure) {
+                                return DropdownMenuItem<FailureModel>(
+                                    value: failure,
+                                    child: GeneralText(
+                                        mensaje: failure.description,
+                                        maxLines: 1,
+                                        overFlow: TextOverflow.ellipsis,
+                                        size: 15,
+                                        weight: FontWeight.normal,
+                                        color: blackPanter,
+                                        align: TextAlign.start));
+                              }).toList(),
+                              onChanged: (FailureModel? value) {
+                                if (value != null) {
+                                  vm.failureSelectedAction(context, value);
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(
+                                borderSide: BorderSide(width: 3, color: mediumGray),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )),
+                              // validator: (value) => vm.validatorCustomer(value),
+                            )),
 
-                    const SizedBox(height: 40),
-                  ])))),
-    );
+                        const Row(children: <Widget>[
+                          //!
+                          SizedBox(width: 10),
+                          GeneralText(
+                              mensaje: 'Título:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.start)
+                        ]),
+                        const SizedBox(height: 5),
+                        Row(children: [
+                          const SizedBox(width: 10),
+                          Expanded(
+                              child: GeneralText(
+                            mensaje: (vm.selectedBranch == null) ? '' : '${vm.selectedBranch!.clave}-${vm.selectedZones!.zone}-${vm.selectedDevice!.code}',
+                            maxLines: 1,
+                            overFlow: TextOverflow.ellipsis,
+                            size: 18,
+                            weight: FontWeight.bold,
+                            color: blueNeutralGlobalColor,
+                            align: TextAlign.center,
+                          )),
+                          const SizedBox(width: 10),
+                        ]),
+
+                        //!
+                        const SizedBox(height: 5),
+                        const Row(children: <Widget>[
+                          SizedBox(width: 10),
+                          GeneralText(
+                              mensaje: 'Evidencia:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)
+                        ]),
+                        const SizedBox(height: 10),
+
+                        Column(children: [
+                          RoundedContainer(
+                              containerPropertiesModel: ContainerPropertiesModel(
+                                  height: 230,
+                                  width: screenSize.width,
+                                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                                  alignment: Alignment.center,
+                                  backColor: blueExtraLightGlobalColor,
+                                  borderColor: mediumGray,
+                                  borderWidth: 2,
+                                  shadowColor: whiteGlobalColor,
+                                  rounded: 20,
+                                  widget: Row(children: [
+                                    const SizedBox(width: 10),
+                                    Column(children: [
+                                      Expanded(child: Container()),
+                                      GeneralButton(text: 'Imagen galería', onPressed: () => vm.pickImage(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
+                                      // GeneralButton(text: 'Tomar imagen', onPressed: () => vm.takePhoto(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
+                                      // GeneralButton(text: 'Video galería', onPressed: () => vm.pickVideo(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
+                                      // GeneralButton(text: 'Tomar video', onPressed: () => vm.recordVideo(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
+                                      Expanded(child: Container()),
+
+                                      // const SizedBox(width: 10),
+                                    ]),
+                                    Expanded(child: Container()),
+                                    Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                      RoundedContainer(
+                                          containerPropertiesModel: ContainerPropertiesModel(
+                                              height: 130,
+                                              width: 170,
+                                              alignment: Alignment.center,
+                                              backColor: whiteGlobalColor,
+                                              borderColor: mediumGray,
+                                              shadowColor: blueExtraLightGlobalColor,
+                                              rounded: 1,
+                                              borderWidth: 2,
+                                              widget: (vm.pathVideoImage == null || vm.pathVideoImage!.isEmpty)
+                                                  ? const Image(image: AssetImage('lib/src/assets/camera.png'), fit: BoxFit.scaleDown)
+                                                  : (vm.typeFile == 'no conocido')
+                                                      ? const Image(image: AssetImage('lib/src/assets/camera.png'), fit: BoxFit.scaleDown)
+                                                      : (vm.typeFile!.contains('video'))
+                                                          ? VideoViewer(path: vm.pathVideoImage!, loop: true)
+                                                          : ImageViewer(file: vm.evidence!),
+                                              margin: const EdgeInsets.all(0))),
+                                    ]),
+                                    const SizedBox(width: 10),
+                                  ]))),
+                          // Expanded(child: Container()),
+                        ]),
+
+                        //!
+                        const SizedBox(height: 20),
+                        Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                          const SizedBox(width: 30),
+                          GeneralButton(
+                              text: 'Cancelar',
+                              minimumSize: const Size(130, 50),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              onPressed: () async {
+                                await vm.vmInit();
+
+                                if (!context.mounted) return;
+
+                                descriptionController.text = '';
+
+                                // Navigator.of(context).pop();
+                                Navigator.pushNamedAndRemoveUntil(context, Routes.startingPoint, (route) => false);
+                              },
+                              color: mediumGray,
+                              textColor: whiteGlobalColor),
+                          const SizedBox(width: 20),
+                          GeneralButton(
+                              text: 'Crear',
+                              minimumSize: const Size(130, 50),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              onPressed: () async {
+                                if (vm.formKey.currentState!.validate()) {
+                                  String desc = '', url = '';
+
+                                  //! Realizar primero el guardado de la imágen (obtener json correspondiente) ...
+                                  if (vm.base64 == null && vm.base64!.isEmpty) {
+                                    desc = 'Debes tener cargada una imágen.';
+                                    url = 'lib/src/assets/customs/Exception@4x.png';
+                                  } else {
+                                    await vm.savePhoto(context);
+                                    if (vm.finishSavePhoto) {
+                                      if (context.mounted) {
+                                        await vm.saveTicket(context);
+                                      }
+
+                                      if (vm.finishSaveTicket) {
+                                        desc = 'Ticket guardado satisfactoriamente';
+                                        url = 'lib/src/assets/customs/Information@4x.png';
+                                      } else {
+                                        desc = 'Ocurrió un error al guardar el ticket, vuelve a intentar el procedimiento';
+                                        url = 'lib/src/assets/customs/Exception@4x.png';
+                                      }
+                                    } else {
+                                      desc = 'Ocurrió un error al guardar la foto, vuelve a intentar el procedimiento';
+                                      url = 'lib/src/assets/customs/Exception@4x.png';
+                                    }
+                                  }
+
+                                  if (!context.mounted) return;
+                                  await showDialog(
+                                      context: context,
+                                      builder: (build) {
+                                        return CustomDialogGeneral(descriptions: desc, text: 'Ok', urlImage: url, altura: 260);
+                                      });
+
+                                  await vm.vmInit();
+
+                                  if (!context.mounted) return;
+                                  await vm.loadCustomer(context);
+
+                                  descriptionController.text = '';
+                                } else {
+                                  var b = 1000;
+                                }
+                              },
+                              color: mediumGray,
+                              textColor: whiteGlobalColor),
+                          const SizedBox(width: 30),
+                        ]),
+
+                        const SizedBox(height: 120),
+                      ])))),
+        ),
+        onWillPop: () async => false);
   }
 }

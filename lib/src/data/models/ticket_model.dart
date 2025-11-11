@@ -1,5 +1,4 @@
 import 'package:mantiz/src/data/models/attendance_model.dart';
-import 'package:mantiz/src/data/models/device_model.dart';
 import 'package:mantiz/src/data/models/photo_evidence_model.dart';
 import 'package:mantiz/src/data/models/user_model.dart';
 
@@ -18,7 +17,6 @@ class TicketModel {
   String? updatedat;
   PhotoEvidenceModel photoevidence;
   AttendanceModel attendance;
-  // List<DeviceModel> devices;
 
   TicketModel({
     required this.ticketId,
@@ -35,7 +33,6 @@ class TicketModel {
     this.updatedat,
     required this.photoevidence,
     required this.attendance,
-    // required this.devices,
   });
 
   TicketModel.init()
@@ -47,48 +44,10 @@ class TicketModel {
         area = '',
         status = '',
         scheduleat = '',
-        createdBy = UserModel.init(),
+        createdBy = UserModel.onInit(),
         createdat = '',
         updatedby = null,
         updatedat = null,
-        photoevidence = PhotoEvidenceModel.init(),
+        photoevidence = PhotoEvidenceModel.onInit(),
         attendance = AttendanceModel.init();
-  // devices = [];
-
-  // factory TicketModel.fromJson(Map<String, dynamic> json) {
-  //   return TicketModel(
-  //       ticketId: int.parse(json['ticketId'].toString()),
-  //       folio: json['folio'],
-  //       title: json['title'],
-  //       reason: json['reason'],
-  //       type: json['type'],
-  //       area: json['area'],
-  //       status: json['status'],
-  //       scheduleat: json['scheduleat'],
-  //       createdBy: UserModel.fromJson(json['createdBy']),
-  //       createdat: json['createdat'],
-  //       updatedby: json['updatedby'] != null ? UserModel.fromJson(json['updatedby']) : null,
-  //       updatedat: json['updatedat'],
-  //       photoevidence: PhotoEvidenceModel.fromJson(json['photoevidence']),
-  //       attendance: AttendanceModel.fromJson(json['attendance']),
-  //       devices: json['devices']);
-  // }
-
-  // Map<String, dynamic> toJson() => {
-  //       'ticketId': ticketId,
-  //       'folio': folio,
-  //       'title': title,
-  //       'reason': reason,
-  //       'type': type,
-  //       'area': area,
-  //       'status': status,
-  //       'scheduleat': scheduleat,
-  //       'createdBy': createdBy.toJson(),
-  //       'createdat': createdat,
-  //       'updatedby': updatedby?.toJson(),
-  //       'updatedat': updatedat,
-  //       'photoevidence': photoevidence.toJson(),
-  //       'attendance': attendance.toJson(),
-  //       'devices': devices,
-  //     };
 }
