@@ -13,35 +13,18 @@ class PhotoEvidenceModel {
     required this.url,
   });
 
-  PhotoEvidenceModel.init()
-      : uuid = '',
-        uuidapp = '',
-        name = '',
-        type = '',
-        url = '';
-
   PhotoEvidenceModel.onInit()
       : uuid = '',
         uuidapp = '',
         name = '',
         type = '',
-        url = '';
+        url = null;
 
-  // factory PhotoEvidenceModel.fromJson(Map<String, dynamic> json) {
-  //   return PhotoEvidenceModel(
-  //     uuid: json['uuid'],
-  //     uuidapp: json['uuidapp'],
-  //     name: json['name'],
-  //     type: json['type'],
-  //     url: json['url'],
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() => {
-  //       'uuid': uuid,
-  //       'uuidapp': uuidapp,
-  //       'name': name,
-  //       'type': type,
-  //       'url': url,
-  //     };
+  Map<String, dynamic> toJson() => {
+        'uuid': uuid,
+        'uuidapp': uuidapp,
+        'name': name,
+        'type': type,
+        'url': url,
+      };
 }

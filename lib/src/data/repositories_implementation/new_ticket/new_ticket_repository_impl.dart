@@ -6,9 +6,11 @@ import '../../models/branch_office_model.dart';
 import '../../models/customer_model.dart';
 import '../../models/device_model.dart';
 import '../../../domain/repositories/new_ticket/new_ticket_repository.dart';
+import '../../models/failure_model.dart';
 import '../../models/photo_evidence_model.dart';
 import '../../models/save_photo_model.dart';
 import '../../models/save_ticket_model.dart';
+import '../../models/zone_model.dart';
 import '../../services/remote/new_ticket/new_ticket_api.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -26,23 +28,19 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
     return saveResult.when((failure) {
       return Either.left(failure);
     }, (save) {
-      PhotoEvidenceModel photo = PhotoEvidenceModel.onInit();
-
       final json = Map<String, dynamic>.from(jsonDecode(save));
-      if (json['response']['id'] > 0) {
-        if ((json['list'] as List).isNotEmpty) {
-          photo = PhotoEvidenceModel(
-            uuid: json['list'][0]['uuid'],
-            uuidapp: json['list'][0]['uuidapp'],
-            name: json['list'][0]['name'],
-            type: json['list'][0]['type'],
-            url: json['list'][0]['url'],
-          );
-        } else {
-          return Either.left(GeneralFailure.clientError);
-        }
-      } else {
-        return Either.left(GeneralFailure.clientError);
+
+      var a = 1000;
+
+      PhotoEvidenceModel photo = PhotoEvidenceModel.onInit();
+      for (var item in json['list'] as List) {
+        photo = PhotoEvidenceModel(
+          uuid: item['uuid'],
+          uuidapp: item['uuidapp'],
+          name: item['name'],
+          type: item['type'],
+          url: item['url'],
+        );
       }
 
       return Either.right(photo);
@@ -51,29 +49,12 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
 
   @override
   Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel ticket) async {
-    final allStorage = await _storage.readAll();
-
-    //! En este punto nos falta saber si el ticket fue creado por un <Partner> o un <customer> ...
-    List<String> keys = ['Partner', 'Supplier', 'Customer'];
-    String? target;
-    int? valor;
-
-    for (var key in keys) {
-      if (allStorage.containsKey(key)) {
-        target = key;
-        valor = int.parse(allStorage[target].toString());
-
-        break;
-      }
+    String? useruuid = await _storage.read(key: 'useruuid');
+    if (useruuid == null || useruuid.isEmpty) {
+      return Either.left(GeneralFailure.noData);
     }
 
-    if (target == 'Partner') {
-      ticket.createdByPartner = valor;
-    } else if (target == 'Customer') {
-      ticket.createdByCustomer = valor;
-    } else {
-      return Either.right(false);
-    }
+    ticket.useruuid = useruuid;
 
     final saveResult = await _newTicketApi.saveTicket(ticket);
 
@@ -85,105 +66,89 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
   }
 
   @override
-  Future<Either<GeneralFailure, List<DeviceModel>>> loadDevices(int fkCBO) async {
-    final deviceResult = await _newTicketApi.loadDevices(fkCBO);
-
-    return deviceResult.when(
-      (failure) {
-        return Either.left(failure);
-      },
-      (responseDevices) {
-        List<DeviceModel> devices = [];
-
-        final json = Map<String, dynamic>.from(jsonDecode(responseDevices));
-
-        // for (var item in json['devices'] as List) {
-        //   Map<String, dynamic> device = Map<String, dynamic>.from(jsonDecode(item['device']));
-
-        //   DeviceModel deviceModel = DeviceModel(
-        //       id: int.parse(item['id'].toString()),
-        //       code: item['code'],
-        //       uuidDevice: device['uuidDevice'],
-        //       description: device['description'],
-        //       barCode: device['barcode'],
-        //       specs: device['specs'],
-        //       subCategory: device['subcategory'],
-        //       category: device['category'],
-        //       product: device['product'],
-        //       typeService: device['typeservice'],
-        //       brand: device['brand']);
-
-        //   devices.add(deviceModel);
-        // }
-
-        return Either.right(devices);
-      },
-    );
-  }
-
-  @override
-  Future<Either<GeneralFailure, List<BranchOfficeModel>>> loadBranchs(int fkCustomer) async {
-    final branchResult = await _newTicketApi.loadBranchs(fkCustomer);
-
-    return branchResult.when(
-      (failure) {
-        return Either.left(failure);
-      },
-      (responseBranch) {
-        List<BranchOfficeModel> branchs = [];
-
-        final json = Map<String, dynamic>.from(jsonDecode(responseBranch));
-
-        // for (var item in json['branchoffices'] as List) {
-        //   Map<String, dynamic> branchOffice = Map<String, dynamic>.from(jsonDecode(item['branchoffice']));
-
-        //   BranchOfficeModel branchOfficeModel = BranchOfficeModel(
-        //       id: int.parse(item['id'].toString()),
-        //       fkSubcompany: int.parse(branchOffice['fkSubcompany'].toString()),
-        //       description: branchOffice['description'],
-        //       location: branchOffice['location'],
-        //       latitud: branchOffice['latitud'],
-        //       longitud: branchOffice['longitud'],
-        //       imagen: branchOffice['imagen'],
-        //       clave: branchOffice['clave'],
-        //       subcompany: branchOffice['subcompany'],
-        //       uuidBO: item['uuidBO']);
-
-        //   branchs.add(branchOfficeModel);
-        // }
-
-        return Either.right(branchs);
-      },
-    );
-  }
-
-  @override
   Future<Either<GeneralFailure, List<CustomerModel>>> loadCustomers() async {
-    final partner = await _storage.read(key: 'fkPartnerLicence');
+    String? userUuid = await _storage.read(key: 'useruuid');
 
-    final newResult = await _newTicketApi.loadCustomers(int.parse(partner!));
+    final newResult = await _newTicketApi.loadCustomers(userUuid);
+
+    var a = 1000;
 
     return newResult.when(
       (failure) {
         return Either.left(failure);
       },
       (responseCustomers) {
-        List<CustomerModel> customers = [];
+        List<CustomerModel> listCustomers = [];
+        List<BranchOfficeModel> listBranchOffices = [];
+        List<ZoneModel> listZones = [];
+        List<DeviceModel> listDevices = [];
+        List<FailureModel> listFailures = [];
 
         final json = Map<String, dynamic>.from(jsonDecode(responseCustomers));
 
-        for (var item in json['customers'] as List) {
-          CustomerModel customerModel = CustomerModel(
-              id: int.parse(item['id'].toString()),
-              fkPartner: int.parse(item['fkPartner'].toString()),
-              partner: item['partner'],
-              fkCustomer: int.parse(item['fkCustomer'].toString()),
-              customer: item['customer']);
+        listCustomers = [];
+        CustomerModel customerModel = CustomerModel.onInit();
+        for (var list in json['list'] as List) {
+          listBranchOffices = [];
+          BranchOfficeModel branchOfficeModel = BranchOfficeModel.init();
+          for (var branch in list['branchoffices'] as List) {
+            listZones = [];
+            ZoneModel zoneModel = ZoneModel.onInit();
+            for (var zone in branch['zones'] as List) {
+              listDevices = [];
+              DeviceModel deviceModel = DeviceModel.init();
+              for (var device in zone['devices'] as List) {
+                listFailures = [];
+                FailureModel failureModel = FailureModel.onInit();
+                for (var failure in device['failures'] as List) {
+                  failureModel = FailureModel(id: int.parse(failure['id'].toString()), description: failure['description']);
 
-          customers.add(customerModel);
+                  //! Failures ...
+                  listFailures.add(failureModel);
+                }
+
+                deviceModel = DeviceModel(
+                    deviceId: device['deviceId'].toString(),
+                    name: device['name'],
+                    code: device['code'],
+                    barcode: device['barcode'] ?? '',
+                    typedevice: (device['typedevice'] ?? ''),
+                    priority: device['priority'] ?? '',
+                    levelpriority: device['levelpriority'] ?? '',
+                    rating: device['rating'] ?? 0,
+                    failures: listFailures);
+
+                //! Devices ...
+                listDevices.add(deviceModel);
+              }
+
+              zoneModel = ZoneModel(zone: zone['zone'], devices: listDevices, zoneId: zone['zoneId']);
+
+              //! zones ...
+              listZones.add(zoneModel);
+            }
+
+            branchOfficeModel = BranchOfficeModel(
+                branchofficeId: branch['branchofficeId'].toString(),
+                branchoffice: branch['branchoffice'],
+                address: branch['address'],
+                latitude: branch['latitude'],
+                longitude: branch['longitude'],
+                clave: branch['clave'],
+                tickets: [],
+                zones: listZones);
+
+            //! branchoffices ...
+            listBranchOffices.add(branchOfficeModel);
+          }
+
+          customerModel = CustomerModel(customer: list['customer'], branchoffices: listBranchOffices);
+
+          //! Customers ...
+          listCustomers.add(customerModel);
         }
 
-        return Either.right(customers);
+        return Either.right(listCustomers);
       },
     );
   }

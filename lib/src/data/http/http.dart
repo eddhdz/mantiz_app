@@ -41,24 +41,31 @@ class Http {
       };
       switch (method) {
         case HttpMethod.get:
-          response = await _client.get(
-            url,
-            headers: headers,
-          );
+          response = await _client
+              .get(
+                url,
+                headers: headers,
+              )
+              .timeout(const Duration(seconds: 120));
           break;
         case HttpMethod.post:
-          response = await _client.post(
-            url,
-            headers: headers,
-            body: bodyString,
-          );
+          response = await _client
+              .post(
+                url,
+                headers: headers,
+                body: bodyString,
+              )
+              .timeout(const Duration(seconds: 120));
+
           break;
         case HttpMethod.delete:
-          response = await _client.delete(
-            url,
-            headers: headers,
-            body: bodyString,
-          );
+          response = await _client
+              .delete(
+                url,
+                headers: headers,
+                body: bodyString,
+              )
+              .timeout(const Duration(seconds: 120));
           break;
       }
       final statusCode = response.statusCode;
