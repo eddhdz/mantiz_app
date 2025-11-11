@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mantiz/src/data/models/ticket_detail/ticket_list_response_model.dart';
+import 'package:mantiz/src/domain/providers/session/user_session_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/detail_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
@@ -11,6 +12,7 @@ import '../../../../data/models/ticket_model.dart';
 
 import '../../../../domain/enums.dart';
 import '../../../../domain/providers/ticket_detail/assigned_to_provider.dart';
+import '../../../global/widgets/speed_dials/speed_dial_detail_ticket.dart';
 import '../../../routes/routes.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -54,6 +56,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
 
   @override
   Widget build(BuildContext context) {
+    final userSession = Provider.of<UserSessionProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detalle del servicio"),
@@ -286,43 +289,25 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           );
         },
       ),
-      // floatingActionButton: widget.maintenance.status == 'Cancelado'
-      //     ? null
-      //     : Consumer3<AssignedToProvider, ScheduleForProvider,
-      //         SuspendedByProvider>(
-      //         builder: (context, assignedProvider, scheduleProvider,
-      //             suspendProvider, child) {
-      //           String assignCurrentStatus = widget.maintenance.status;
-      //           String scheduleCurrentStatus = widget.maintenance.status;
-      //           String suspendCurrentStatus = widget.maintenance.status;
+      floatingActionButton: Consumer<DetailProvider>(
+        builder: (context, provider, child) {
+          if (provider.status == DataStatus.loading ||
+              provider.detail == null) {
+            return const SizedBox.shrink();
+          }
 
-      //           if (assignedProvider.status == DataStatus.loaded &&
-      //               assignedProvider.assigned != null &&
-      //               assignedProvider.assigned!.isNotEmpty) {
-      //             assignCurrentStatus = 'Asignado';
-      //           }
+          final TicketDetailModel ticketData = provider.detail!;
+          if (ticketData.status == 'Cancelado') {
+            return const SizedBox.shrink();
+          }
 
-      //           if (scheduleProvider.status == DataStatus.loaded &&
-      //               scheduleProvider.scheduled != null &&
-      //               scheduleProvider.scheduled!.isNotEmpty) {
-      //             scheduleCurrentStatus = 'Agendado';
-      //           }
-
-      //           if (suspendProvider.status == DataStatus.loaded &&
-      //               suspendProvider.suspensions != null &&
-      //               suspendProvider.suspensions!.isNotEmpty) {
-      //             suspendCurrentStatus = 'Suspendido';
-      //           }
-
-      //           return SpeedDialDetailTicket(
-      //             fkMaintenance: widget.maintenance.id,
-      //             assignStatus: assignCurrentStatus,
-      //             scheduleStatus: scheduleCurrentStatus,
-      //             generalStatus: widget.maintenance.status,
-      //             suspendStatus: suspendCurrentStatus,
-      //           );
-      //         },
-      // ),
+          return SpeedDialDetailTicket(
+            ticketId: ticketData.ticketId,
+            userId: userSession.currentUser!.userId,
+            status: ticketData.status,
+          );
+        },
+      ),
     );
   }
 

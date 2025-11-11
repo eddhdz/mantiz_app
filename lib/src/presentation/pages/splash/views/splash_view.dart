@@ -48,7 +48,7 @@ class _SplashViewState extends State<SplashView> {
       if (mobileUuid == null || firebaseToken == null) {
         _goTo(Routes.logIn);
       } else {
-        await sessionRepository.fetchIsSessionActive(
+        await sessionRepository.fetchIsSessionActive(context,
           mobileUuid,
           firebaseToken,
         );

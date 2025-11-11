@@ -43,6 +43,7 @@ import 'package:mantiz/src/data/services/remote/ticket_detail/suspended_by_servi
 import 'package:mantiz/src/data/services/remote/ticket_detail/tracking_service.dart';
 import 'package:mantiz/src/domain/providers/session/logout_provider.dart';
 import 'package:mantiz/src/domain/providers/session/session_provider.dart';
+import 'package:mantiz/src/domain/providers/session/user_session_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/activate_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/add_message_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/approve_provider.dart';
@@ -72,7 +73,7 @@ import 'package:mantiz/src/domain/repositories/ticket_detail/assigned_to_reposit
 import 'package:mantiz/src/domain/repositories/ticket_detail/branchoffice_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/cancel_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/detail_repository.dart';
-import 'package:mantiz/src/domain/repositories/ticket_detail/detail_repository_impl.dart';
+import 'package:mantiz/src/data/repositories_implementation/ticket_detail/detail_repository_impl.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/done_repositroy.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/price_repository.dart';
 import 'package:mantiz/src/domain/repositories/ticket_detail/prized_by_repository.dart';
@@ -176,7 +177,17 @@ List<SingleChildWidget> appProviders = [
     ),
   ),
 
-//! Repositorio para cerrar sesión
+// -----------------------------------------------------------------------------
+// CARGA DE DATOS DE USUARIO: Provider para cargar los datos del usuario
+// -----------------------------------------------------------------------------
+
+  ChangeNotifierProvider(
+    create: (context) => UserSessionProvider(),
+  ),
+
+// -----------------------------------------------------------------------------
+// CERRAR SESION: Provider y repositorio para cerrar sesion
+// -----------------------------------------------------------------------------
 
   Provider<LogoutRepository>(
     create: (context) => LogoutRepositoryImpl(
