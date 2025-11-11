@@ -29,6 +29,13 @@ class GeneralTextForm extends StatelessWidget {
         labelStyle: TextStyle(
           color: properties.textColor,
         ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: properties.objectsColor,
+            width: 2.0,
+          ),
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(

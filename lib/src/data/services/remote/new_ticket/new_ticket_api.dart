@@ -10,10 +10,13 @@ class NewTicketApi {
 
   NewTicketApi(this._http);
 
-  Future<Either<GeneralFailure, dynamic>> savePhoto(
-      SavePhotoModel photo) async {
+  Future<Either<GeneralFailure, dynamic>> savePhoto(SavePhotoModel photo) async {
+    var a = 1000;
+
     final result = await _http.request(
-      '/${AppConstants.apiImagePort}/V1/images/add',
+      (photo.type.toLowerCase().contains('image'))
+          ? '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/images/add'
+          : '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/videos/add',
       method: HttpMethod.post,
       body: {
         'uuidapp': photo.uuidapp,
@@ -25,6 +28,8 @@ class NewTicketApi {
         'createdAt': photo.createdAt.toIso8601String()
       },
     );
+
+    var b = 1000;
 
     return result.when((failure) {
       if (failure.statusCode == null) {
@@ -43,27 +48,30 @@ class NewTicketApi {
     });
   }
 
-  Future<Either<GeneralFailure, bool>> saveTicket(
-      SaveTicketModel ticket) async {
+  Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel ticket) async {
+    var a = 1000;
+
     final result = await _http.request(
-      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/tickets/add',
+      '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/maintenances/add',
       method: HttpMethod.post,
       body: {
-        'id': ticket.id,
+        'ticketId': ticket.ticketId,
         'fkTypeMaintenance': ticket.fkTypeMaintenance,
-        'fkPLC': ticket.fkPCL,
         'fkCBO': ticket.fkCBO,
-        'fkStatusMaintenance': ticket.fkStatusMaintenance,
+        'fkTypeStatusMaintenance': ticket.fkTypeStatusMaintenance,
+        'fkZone': ticket.fkZone,
         'folio': ticket.folio,
-        'description': ticket.description,
-        'area': ticket.area,
+        'title': ticket.title,
         'reason': ticket.reason,
-        'photoevidence': ticket.photoevidence,
-        'createdAt': ticket.createdAt.toIso8601String(),
-        'createdByPartner': ticket.createdByPartner,
-        'createdByCustomer': ticket.createdByCustomer
+        'photo': ticket.photo,
+        'createdat': ticket.createdat.toIso8601String(),
+        'createdby': ticket.createdby,
+        'useruuid': ticket.useruuid,
+        'devicefailuresids': ticket.devicefailuresids
       },
     );
+
+    var b = 1000;
 
     return result.when((failure) {
       if (failure.statusCode == null) {
@@ -82,60 +90,15 @@ class NewTicketApi {
     });
   }
 
-  Future<Either<GeneralFailure, dynamic>> loadDevices(int fkCBO) async {
+  Future<Either<GeneralFailure, dynamic>> loadCustomers(String? userUuid) async {
+    if (userUuid == null || userUuid.isEmpty) {
+      return Either.left(GeneralFailure.noData);
+    }
+
     final result = await _http.request(
-      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/customers/branchoffices/devices',
+      '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/maintenances/enrollstructure',
       method: HttpMethod.post,
-      body: {'fkCBO': fkCBO},
-    );
-
-    return result.when((failure) {
-      if (failure.statusCode == null) {
-        return Either.left(GeneralFailure.noData);
-      } else if (failure.exception is NetworkException) {
-        return Either.left(GeneralFailure.network);
-      } else if (failure.statusCode! >= 400 && failure.statusCode! <= 499) {
-        return Either.left(GeneralFailure.clientError);
-      } else if (failure.statusCode! >= 500 && failure.statusCode! <= 599) {
-        return Either.left(GeneralFailure.serverError);
-      } else {
-        return Either.left(GeneralFailure.unknown);
-      }
-    }, (responseBody) {
-      return Either.right(responseBody);
-    });
-  }
-
-  Future<Either<GeneralFailure, dynamic>> loadBranchs(int fkCustomer) async {
-    final result = await _http.request(
-      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/customers/branchoffices',
-      method: HttpMethod.post,
-      body: {'fkCustomer': fkCustomer},
-    );
-
-    return result.when((failure) {
-      if (failure.statusCode == null) {
-        return Either.left(GeneralFailure.noData);
-      } else if (failure.exception is NetworkException) {
-        return Either.left(GeneralFailure.network);
-      } else if (failure.statusCode! >= 400 && failure.statusCode! <= 499) {
-        return Either.left(GeneralFailure.clientError);
-      } else if (failure.statusCode! >= 500 && failure.statusCode! <= 599) {
-        return Either.left(GeneralFailure.serverError);
-      } else {
-        return Either.left(GeneralFailure.unknown);
-      }
-    }, (responseBody) {
-      return Either.right(responseBody);
-    });
-  }
-
-  Future<Either<GeneralFailure, dynamic>> loadCustomers(
-      int fkPartnerLicence) async {
-    final result = await _http.request(
-      '/${AppConstants.apiMantizPort}/api/mantiz/v1/mysql/partners/licences/customers',
-      method: HttpMethod.post,
-      body: {'fkPartnerLicence': fkPartnerLicence},
+      body: {'useruuid': userUuid, 'createdat': DateTime.now().toIso8601String()},
     );
 
     return result.when((failure) {

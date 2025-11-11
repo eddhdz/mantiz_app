@@ -61,7 +61,7 @@ class HomeRepositoryImpl implements HomeRepository {
               var ticketMap = Map<String, dynamic>.from(ticket);
 
               //! CreatedBy ...
-              UserModel createdBy = UserModel.init();
+              UserModel createdBy = UserModel.onInit();
               if (ticketMap['createdby'] != null) {
                 var createdByMap = Map<String, dynamic>.from(ticketMap['createdby']);
                 createdBy = UserModel(
@@ -75,7 +75,7 @@ class HomeRepositoryImpl implements HomeRepository {
               var a = 1000;
 
               //! PhotoEvidence ...
-              PhotoEvidenceModel photoevidence = PhotoEvidenceModel.init();
+              PhotoEvidenceModel photoevidence = PhotoEvidenceModel.onInit();
               if (ticketMap['photoevidence'] != null) {
                 var photoevidenceMap = Map<String, dynamic>.from(ticketMap['photoevidence']);
                 photoevidence = PhotoEvidenceModel(
@@ -94,7 +94,7 @@ class HomeRepositoryImpl implements HomeRepository {
                 var attendanceMap = Map<String, dynamic>.from(ticketMap['attendance']);
 
                 //! AsignedTo ...
-                UserModel asignedto = UserModel.init();
+                UserModel asignedto = UserModel.onInit();
                 if (attendanceMap['asignedto'] != null) {
                   var asignedtoMap = Map<String, dynamic>.from(attendanceMap['asignedto']);
 
@@ -120,26 +120,6 @@ class HomeRepositoryImpl implements HomeRepository {
 
               var e = 1000;
 
-              //! Devices ...
-              List<DeviceModel> devices = [];
-              for (var device in ticket['devices'] as List) {
-                var deviceMap = Map<String, dynamic>.from(device);
-
-                DeviceModel deviceModel = DeviceModel.init();
-                deviceModel = DeviceModel(
-                  deviceId: deviceMap['deviceId'],
-                  name: deviceMap['name'],
-                  code: deviceMap['code'],
-                  barcode: deviceMap['barcode'],
-                  typedevice: deviceMap['typedevice'],
-                  priority: deviceMap['priority'],
-                  levelpriority: deviceMap['levelpriority'],
-                  rating: deviceMap['rating'],
-                );
-
-                devices.add(deviceModel);
-              }
-
               var f = 1000;
               //! Ticket ...
               TicketModel ticketModel = TicketModel.init();
@@ -155,8 +135,7 @@ class HomeRepositoryImpl implements HomeRepository {
                   createdBy: createdBy,
                   createdat: ticketMap['createdat'],
                   photoevidence: photoevidence,
-                  attendance: attendance,
-                  devices: devices);
+                  attendance: attendance);
 
               // //! Tickets ...
               tickets.add(ticketModel);
@@ -167,14 +146,14 @@ class HomeRepositoryImpl implements HomeRepository {
             var branchofficeMap = Map<String, dynamic>.from(branch);
             BranchOfficeModel branchofficeModel = BranchOfficeModel.init();
             branchofficeModel = BranchOfficeModel(
-              branchofficeId: branchofficeMap['branchofficeId'],
-              branchoffice: branchofficeMap['branchoffice'],
-              address: branchofficeMap['address'],
-              latitude: branchofficeMap['latitude'],
-              longitude: branchofficeMap['longitude'],
-              clave: branchofficeMap['clave'],
-              tickets: tickets,
-            );
+                branchofficeId: branchofficeMap['branchofficeId'],
+                branchoffice: branchofficeMap['branchoffice'],
+                address: branchofficeMap['address'],
+                latitude: branchofficeMap['latitude'],
+                longitude: branchofficeMap['longitude'],
+                clave: branchofficeMap['clave'],
+                tickets: tickets,
+                zones: []);
 
             //! brachoffice ...
             branchoffices.add(branchofficeModel);
