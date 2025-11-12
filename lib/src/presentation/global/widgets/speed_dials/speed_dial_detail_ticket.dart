@@ -60,8 +60,8 @@ class SpeedDialDetailTicket extends StatelessWidget {
             context: context,
             builder: (context) {
               return ApproveTicketDialog(
-                fkMaintenance: ticketId,
-                approveByPartner: userId,
+                ticketId: ticketId,
+                userId: userId,
               );
             },
           );

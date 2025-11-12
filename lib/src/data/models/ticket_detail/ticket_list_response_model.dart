@@ -359,7 +359,7 @@ class FinishModel {
   final int finishId;
   final String finishedat;
   final String reason;
-  final String? photo;
+  final PhotoModel? photo;
   final String? photo360;
   final CreatedByModel finishedby;
 
@@ -377,7 +377,7 @@ class FinishModel {
       finishId: json['finishId'],
       finishedat: json['finishedat'],
       reason: json['reason'],
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       photo360: json['photo360'],
       finishedby: CreatedByModel.fromJson(json['finishedby']),
     );
@@ -487,6 +487,36 @@ class SuspendModel {
       suspendedat: json['suspendedat'],
       reason: json['reason'],
       suspendedby: CreatedByModel.fromJson(json['suspendedby']),
+    );
+  }
+}
+
+// -----------------------------------------------------------------------------
+// MODELO: PhotoModel
+// -----------------------------------------------------------------------------
+
+class PhotoModel {
+  final String uuid;
+  final String uuidapp;
+  final String name;
+  final String type;
+  final String? url; // Asumiendo que puede venir como String vacío o null
+
+  PhotoModel({
+    required this.uuid,
+    required this.uuidapp,
+    required this.name,
+    required this.type,
+    required this.url,
+  });
+
+  factory PhotoModel.fromJson(Map<String, dynamic> json) {
+    return PhotoModel(
+      uuid: json['uuid'],
+      uuidapp: json['uuidapp'],
+      name: json['name'],
+      type: json['type'],
+      url: json['url'],
     );
   }
 }

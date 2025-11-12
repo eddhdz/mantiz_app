@@ -9,15 +9,11 @@ class ApproveRepositoryImpl implements ApproveRepository {
   ApproveRepositoryImpl({required ApproveService approveService})
       : _approveService = approveService;
   @override
-  Future<Either<GeneralFailure, int>> approve(
-      int fkMaintenance,
-      int finishByPartner,
-      String evidence,
-      String evidencePhoto,
-      String evidencePhoto360) {
+  Future<Either<GeneralFailure, int>> approve(int ticketId, int userId,
+      String evidence, String evidencePhoto, String evidencePhoto360) {
     return _approveService.approveTicket(
-      fkMaintenance,
-      finishByPartner,
+      ticketId,
+      userId,
       evidence,
       evidencePhoto,
       evidencePhoto360,
