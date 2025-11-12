@@ -330,7 +330,7 @@ class DoneModel {
   final int doneId;
   final String doneat;
   final String reason;
-  final String? photo; // Puede ser null
+  final PhotoModel? photo; // Puede ser null
   final String? photo360; // Puede ser null
   final CreatedByModel doneby;
 
@@ -348,7 +348,7 @@ class DoneModel {
       doneId: json['doneId'],
       doneat: json['doneat'],
       reason: json['reason'],
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       photo360: json['photo360'],
       doneby: CreatedByModel.fromJson(json['doneby']),
     );
@@ -388,7 +388,7 @@ class OpenModel {
   final int openId;
   final String openedat;
   final String reason;
-  final String? photo;
+  final PhotoModel? photo;
   final String? photo360;
   final CreatedByModel openedby;
 
@@ -406,7 +406,7 @@ class OpenModel {
       openId: json['openId'],
       openedat: json['openedat'],
       reason: json['reason'],
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       photo360: json['photo360'],
       openedby: CreatedByModel.fromJson(json['openedby']),
     );
@@ -417,7 +417,7 @@ class RejectModel {
   final int rejectId;
   final String rejectedat;
   final String reason;
-  final String? photo;
+  final PhotoModel? photo;
   final String? photo360;
   final CreatedByModel rejectedby;
 
@@ -435,7 +435,7 @@ class RejectModel {
       rejectId: json['rejectId'],
       rejectedat: json['rejectedat'],
       reason: json['reason'],
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       photo360: json['photo360'],
       rejectedby: CreatedByModel.fromJson(json['rejectedby']),
     );
