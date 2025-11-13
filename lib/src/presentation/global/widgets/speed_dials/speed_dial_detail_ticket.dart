@@ -345,7 +345,7 @@ class SpeedDialDetailTicket extends StatelessWidget {
     ];
 
     List<SpeedDialChild> childrenToShow;
-    if (status == 'Finalizado') {
+    if (status.toLowerCase() == 'finalizado') {
       childrenToShow = doneSpeedDialChildren;
     } else {
       childrenToShow = allSpeedDialChildren;

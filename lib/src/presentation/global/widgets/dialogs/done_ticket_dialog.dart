@@ -24,61 +24,60 @@ class DoneTicketDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController notesController = TextEditingController();
-    final ImagePicker picker = ImagePicker();
-    File? evidencePhoto;
+    // final ImagePicker picker = ImagePicker();
     File? evidencePhoto360;
     final vm = Provider.of<NewTicketViewVM>(context);
 
     return StatefulBuilder(
       builder: (BuildContext context, setState) {
-        Future<ImageSource?> showImageSourceDialog(BuildContext context) async {
-          return showDialog<ImageSource>(
-            context: context,
-            builder: (BuildContext dialogContext) {
-              return AlertDialog(
-                title: const Text('Seleccionar origen'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      GestureDetector(
-                        child: const Text('Cámara'),
-                        onTap: () {
-                          Navigator.of(dialogContext).pop(ImageSource.camera);
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      GestureDetector(
-                        child: const Text('Galería'),
-                        onTap: () {
-                          Navigator.of(dialogContext).pop(ImageSource.gallery);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        }
+        // Future<ImageSource?> showImageSourceDialog(BuildContext context) async {
+        //   return showDialog<ImageSource>(
+        //     context: context,
+        //     builder: (BuildContext dialogContext) {
+        //       return AlertDialog(
+        //         title: const Text('Seleccionar origen'),
+        //         content: SingleChildScrollView(
+        //           child: ListBody(
+        //             children: <Widget>[
+        //               GestureDetector(
+        //                 child: const Text('Cámara'),
+        //                 onTap: () {
+        //                   Navigator.of(dialogContext).pop(ImageSource.camera);
+        //                 },
+        //               ),
+        //               const SizedBox(height: 16),
+        //               GestureDetector(
+        //                 child: const Text('Galería'),
+        //                 onTap: () {
+        //                   Navigator.of(dialogContext).pop(ImageSource.gallery);
+        //                 },
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       );
+        //     },
+        //   );
+        // }
 
-        Future<void> pickImage(bool is360) async {
-          final ImageSource? source = await showImageSourceDialog(context);
-          if (source == null) return; // User canceled the dialog
+        // Future<void> pickImage(bool is360) async {
+        //   final ImageSource? source = await showImageSourceDialog(context);
+        //   if (source == null) return; // User canceled the dialog
 
-          final XFile? pickedFile = await picker.pickImage(
-            source: source,
-            imageQuality: 50,
-          );
-          if (pickedFile != null) {
-            setState(() {
-              if (is360) {
-                evidencePhoto360 = File(pickedFile.path);
-              } else {
-                evidencePhoto = File(pickedFile.path);
-              }
-            });
-          }
-        }
+        //   final XFile? pickedFile = await picker.pickImage(
+        //     source: source,
+        //     imageQuality: 50,
+        //   );
+        //   if (pickedFile != null) {
+        //     setState(() {
+        //       if (is360) {
+        //         evidencePhoto360 = File(pickedFile.path);
+        //       } else {
+        //         evidencePhoto = File(pickedFile.path);
+        //       }
+        //     });
+        //   }
+        // }
 
         return AlertDialog(
           title: const Text('Terminar servicio'),
