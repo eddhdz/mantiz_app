@@ -15,14 +15,13 @@ class AddMessageProvider extends ChangeNotifier {
   DataStatus get status => _status;
   GeneralFailure? get errorMessage => _errorMessage;
 
-  Future<void> addMessage(
-      int fkMaintenance, int fkProfile, String message) async {
+  Future<void> addMessage(int ticketId, int userId, String message) async {
     _status = DataStatus.loading;
     _errorMessage = null;
     notifyListeners();
 
-    final result = await _addMessageRepository.addMessage(
-        fkMaintenance, fkProfile, message);
+    final result =
+        await _addMessageRepository.addMessage(ticketId, userId, message);
 
     result.when((failure) {
       _errorMessage = failure;

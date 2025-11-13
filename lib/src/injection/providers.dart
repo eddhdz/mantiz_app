@@ -350,12 +350,14 @@ List<SingleChildWidget> appProviders = [
         AssignProvider(assignRepository: context.read<AssignRepository>()),
   ),
 
-  // Repositorio para agregar un mensaje al ticket
+// -----------------------------------------------------------------------------
+// AGREGAR MENSAJE: Provider y repositorio para agregar un mensaje al chat de seguimiento
+// -----------------------------------------------------------------------------
 
   Provider<AddMessageRepository>(
     create: (context) => AddMessageRepositoryImpl(
         addMessageService:
-            AddMessageService(http: Http(http.Client(), AppConstants.baseUrl))),
+            AddMessageService(http: Http(http.Client(), AppConstants.testUrl))),
   ),
 
   ChangeNotifierProvider<AddMessageProvider>(
@@ -363,12 +365,14 @@ List<SingleChildWidget> appProviders = [
         addMessageRepository: context.read<AddMessageRepository>()),
   ),
 
-  // Repositorio para cargar mensajes de seguimiento
+// -----------------------------------------------------------------------------
+// LEER MENSAJES: Provider y repositorio para leer el historial de mensajes de seguimiento
+// -----------------------------------------------------------------------------
 
   Provider<TrackingRepository>(
     create: (context) => TrackingRepositoryImpl(
         trackingService:
-            TrackingService(http: Http(http.Client(), AppConstants.baseUrl))),
+            TrackingService(http: Http(http.Client(), AppConstants.testUrl))),
   ),
 
   ChangeNotifierProvider<TrackingProvider>(

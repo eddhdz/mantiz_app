@@ -9,7 +9,6 @@ import '../../../../domain/providers/ticket_detail/done_provider.dart';
 import '../../../routes/routes.dart';
 import '../../colors.dart';
 
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class DoneTicketDialog extends StatelessWidget {

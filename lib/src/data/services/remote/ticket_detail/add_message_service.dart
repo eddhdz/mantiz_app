@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
+import 'package:mantiz/src/presentation/constants/app_constants.dart';
 
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
@@ -13,22 +14,22 @@ class AddMessageService {
   AddMessageService({required Http http}) : _http = http;
 
   Future<Either<GeneralFailure, int>> addMessage(
-    int fkMaintenance,
-    int fkProfile,
+    int ticketId,
+    int userId,
     String message,
   ) async {
     try {
       final String currentDate =
           DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
       final result = await _http.request(
-          '/Api_Mantiz/api/mantiz/v1/mysql/tickets/chats/add',
+          '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/maintenances/chats/add',
           method: HttpMethod.post,
           body: {
-            "id": 0,
-            "fkMaintenance": fkMaintenance,
-            "fkProfile": fkProfile,
+            "chatId": 0,
+            "ticketId": ticketId,
             "body": message,
-            "createdAt": currentDate
+            "createdby": userId,
+            "createdat": currentDate
           });
       return result.when((failure) => Either.left(GeneralFailure.unknown),
           (responseBody) {

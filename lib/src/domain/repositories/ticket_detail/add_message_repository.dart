@@ -3,8 +3,8 @@ import '../../enums.dart';
 
 abstract class AddMessageRepository {
   Future<Either<GeneralFailure, int>> addMessage(
-    int fkMaintenance,
-    int fkProfile,
+    int ticketId,
+    int userId,
     String message,
   );
 }
