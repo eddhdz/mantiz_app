@@ -3,8 +3,8 @@ import '../../enums.dart';
 
 abstract class ApproveRepository {
   Future<Either<GeneralFailure, int>> approve(
-    int fkMaintenance,
-    int finishByPartner,
+    int ticketId,
+    int userId,
     String evidence,
     String evidencePhoto,
     String evidencePhoto360,

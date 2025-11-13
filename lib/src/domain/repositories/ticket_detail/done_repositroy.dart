@@ -3,8 +3,8 @@ import '../../enums.dart';
 
 abstract class DoneRepositroy {
   Future<Either<GeneralFailure, int>> done(
-    int fkMaintenance,
-    int doneByPartner,
+    int ticketID,
+    int userId,
     String evidence,
     String evidencePhoto,
     String evidencePhoto360,

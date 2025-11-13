@@ -330,7 +330,7 @@ class DoneModel {
   final int doneId;
   final String doneat;
   final String reason;
-  final String? photo; // Puede ser null
+  final PhotoModel? photo; // Puede ser null
   final String? photo360; // Puede ser null
   final CreatedByModel doneby;
 
@@ -348,7 +348,7 @@ class DoneModel {
       doneId: json['doneId'],
       doneat: json['doneat'],
       reason: json['reason'],
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       photo360: json['photo360'],
       doneby: CreatedByModel.fromJson(json['doneby']),
     );
@@ -359,7 +359,7 @@ class FinishModel {
   final int finishId;
   final String finishedat;
   final String reason;
-  final String? photo;
+  final PhotoModel? photo;
   final String? photo360;
   final CreatedByModel finishedby;
 
@@ -377,7 +377,7 @@ class FinishModel {
       finishId: json['finishId'],
       finishedat: json['finishedat'],
       reason: json['reason'],
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       photo360: json['photo360'],
       finishedby: CreatedByModel.fromJson(json['finishedby']),
     );
@@ -388,7 +388,7 @@ class OpenModel {
   final int openId;
   final String openedat;
   final String reason;
-  final String? photo;
+  final PhotoModel? photo;
   final String? photo360;
   final CreatedByModel openedby;
 
@@ -406,7 +406,7 @@ class OpenModel {
       openId: json['openId'],
       openedat: json['openedat'],
       reason: json['reason'],
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       photo360: json['photo360'],
       openedby: CreatedByModel.fromJson(json['openedby']),
     );
@@ -417,7 +417,7 @@ class RejectModel {
   final int rejectId;
   final String rejectedat;
   final String reason;
-  final String? photo;
+  final PhotoModel? photo;
   final String? photo360;
   final CreatedByModel rejectedby;
 
@@ -435,7 +435,7 @@ class RejectModel {
       rejectId: json['rejectId'],
       rejectedat: json['rejectedat'],
       reason: json['reason'],
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       photo360: json['photo360'],
       rejectedby: CreatedByModel.fromJson(json['rejectedby']),
     );
@@ -487,6 +487,36 @@ class SuspendModel {
       suspendedat: json['suspendedat'],
       reason: json['reason'],
       suspendedby: CreatedByModel.fromJson(json['suspendedby']),
+    );
+  }
+}
+
+// -----------------------------------------------------------------------------
+// MODELO: PhotoModel
+// -----------------------------------------------------------------------------
+
+class PhotoModel {
+  final String uuid;
+  final String uuidapp;
+  final String name;
+  final String type;
+  final String? url; // Asumiendo que puede venir como String vacío o null
+
+  PhotoModel({
+    required this.uuid,
+    required this.uuidapp,
+    required this.name,
+    required this.type,
+    required this.url,
+  });
+
+  factory PhotoModel.fromJson(Map<String, dynamic> json) {
+    return PhotoModel(
+      uuid: json['uuid'],
+      uuidapp: json['uuidapp'],
+      name: json['name'],
+      type: json['type'],
+      url: json['url'],
     );
   }
 }

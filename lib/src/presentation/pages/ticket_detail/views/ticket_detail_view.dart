@@ -297,7 +297,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           }
 
           final TicketDetailModel ticketData = provider.detail!;
-          if (ticketData.status == 'Cancelado') {
+          if (ticketData.status.toLowerCase() == 'realizado') {
             return const SizedBox.shrink();
           }
 

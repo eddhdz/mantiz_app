@@ -60,8 +60,8 @@ class SpeedDialDetailTicket extends StatelessWidget {
             context: context,
             builder: (context) {
               return ApproveTicketDialog(
-                fkMaintenance: ticketId,
-                approveByPartner: userId,
+                ticketId: ticketId,
+                userId: userId,
               );
             },
           );
@@ -335,8 +335,8 @@ class SpeedDialDetailTicket extends StatelessWidget {
             context: context,
             builder: (context) {
               return DoneTicketDialog(
-                fkMaintenance: ticketId,
-                doneByPartner: userId,
+                ticketId: ticketId,
+                userId: userId,
               );
             },
           );
@@ -345,7 +345,7 @@ class SpeedDialDetailTicket extends StatelessWidget {
     ];
 
     List<SpeedDialChild> childrenToShow;
-    if (status == 'Finalizado') {
+    if (status.toLowerCase() == 'finalizado') {
       childrenToShow = doneSpeedDialChildren;
     } else {
       childrenToShow = allSpeedDialChildren;

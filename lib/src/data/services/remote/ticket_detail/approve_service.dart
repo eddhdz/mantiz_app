@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mantiz/src/data/models/ticket_detail/assign_response_model.dart';
 import 'package:mantiz/src/domain/either.dart';
 import 'package:mantiz/src/domain/enums.dart';
+import 'package:mantiz/src/presentation/constants/app_constants.dart';
 
 import '../../../http/http.dart';
 
@@ -13,8 +14,8 @@ class ApproveService {
   ApproveService({required Http http}) : _http = http;
 
   Future<Either<GeneralFailure, int>> approveTicket(
-    int fkMaintenance,
-    int finishByPartner,
+    int ticketId,
+    int userId,
     String evidence,
     String evidencePhoto,
     String evidencePhoto360,
@@ -24,18 +25,16 @@ class ApproveService {
           DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
       final result = await _http.request(
-          '/Api_Mantiz/api/mantiz/v1/mysql/tickets/finishes/add',
+          '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/maintenances/dones/add',
           method: HttpMethod.post,
           body: {
-            "id": 0,
-            "fkMaintenance": fkMaintenance,
-            "finishByPartner": finishByPartner,
-            "fkCBODevice": null,
-            "finishByCustomer": null,
-            "evidence": evidence,
-            "evidencePhoto": evidencePhoto,
-            "evidencePhoto360": evidencePhoto360,
-            "createdAt": currrentDate
+            "doneId": 0,
+            "ticketId": ticketId,
+            "reason": evidence,
+            "photo": evidencePhoto,
+            "photo360": evidencePhoto360,
+            "createdby": userId,
+            "createdat": currrentDate
           });
 
       return result.when((failure) => Either.left(GeneralFailure.unknown),
@@ -46,7 +45,7 @@ class ApproveService {
         final AssignResponseModel finishData =
             AssignResponseModel.fromJson(parsedBody);
 
-        if (finishData.response.id == 1) {
+        if (finishData.response.id == 2) {
           return Either.right(finishData.response.id);
         } else {
           return Either.left(GeneralFailure.clientError);

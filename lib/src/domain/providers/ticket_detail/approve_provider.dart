@@ -16,8 +16,8 @@ class ApproveProvider extends ChangeNotifier {
   GeneralFailure? get errorMessage => _errorMessage;
 
   Future<void> fetchApproveTicket(
-    int fkMaintenance,
-    int finishByPartner,
+    int ticketId,
+    int userId,
     String evidence,
     String evidencePhoto,
     String evidencePhoto360,
@@ -27,8 +27,8 @@ class ApproveProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await _approveRepository.approve(
-      fkMaintenance,
-      finishByPartner,
+      ticketId,
+      userId,
       evidence,
       evidencePhoto,
       evidencePhoto360,
