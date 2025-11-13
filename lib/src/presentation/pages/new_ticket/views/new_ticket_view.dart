@@ -347,8 +347,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                                       GeneralButton(text: 'Video galería', onPressed: () => vm.pickVideo(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
                                       GeneralButton(text: 'Tomar video', onPressed: () => vm.recordVideo(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
                                       Expanded(child: Container()),
-
-                                      // const SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                     ]),
                                     Expanded(child: Container()),
                                     Column(mainAxisAlignment: MainAxisAlignment.center, children: [
