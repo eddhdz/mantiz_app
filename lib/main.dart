@@ -1,5 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mantiz/src/presentation/global/push_notifications/push_notifications_service.dart';
 
 import 'src/injection/providers.dart';
 import 'src/presentation/routes/app_routes.dart';
@@ -9,7 +9,19 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  //! Push notifications service ...
+  await PushNotificationService.initializeApp();
+
+  final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
+
+  PushNotificationService.messageBody.listen((message) {
+    final snackBar = SnackBar(content: Text(message));
+    messengerKey.currentState?.showSnackBar(snackBar);
+  });
+
+  // await Firebase.initializeApp();
+
   runApp(MultiProvider(
     providers: appProviders,
     child: const MyApp(),
