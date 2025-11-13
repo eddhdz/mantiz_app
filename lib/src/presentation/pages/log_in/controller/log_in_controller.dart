@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mantiz/src/data/models/authentication/login_response_model.dart';
 import 'package:mantiz/src/domain/providers/session/session_provider.dart';
 import 'package:mantiz/src/domain/providers/session/user_session_provider.dart';
+import 'package:mantiz/src/presentation/global/push_notifications/push_notifications_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../domain/repositories/authentication/authentication_repository.dart';
@@ -20,10 +21,7 @@ class LogInController extends ChangeNotifier {
   String _userName = '', _password = '';
   bool _fetching = false, _mounted = true, _isVisible = false;
 
-  LogInController(
-      {required AuthenticationRepository authenticationRepository,
-      required FirebaseMessaging fbm,
-      required FlutterSecureStorage secureStorage})
+  LogInController({required AuthenticationRepository authenticationRepository, required FirebaseMessaging fbm, required FlutterSecureStorage secureStorage})
       : _authenticationRepository = authenticationRepository,
         _fbm = fbm,
         _secureStorage = secureStorage;
@@ -54,10 +52,8 @@ class LogInController extends ChangeNotifier {
 
   Future<String?> getFBMToken() async {
     try {
-      NotificationSettings settings =
-          await _fbm.requestPermission(alert: true, badge: true, sound: true);
-      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
-          settings.authorizationStatus == AuthorizationStatus.provisional) {
+      NotificationSettings settings = await _fbm.requestPermission(alert: true, badge: true, sound: true);
+      if (settings.authorizationStatus == AuthorizationStatus.authorized || settings.authorizationStatus == AuthorizationStatus.provisional) {
         String? token = await _fbm.getToken();
         if (token != null) {
           return token;
@@ -77,12 +73,13 @@ class LogInController extends ChangeNotifier {
 
     onFetchingChanged(true);
 
-    String? firebasetoken = await getFBMToken();
+    // String? firebasetoken = await getFBMToken();
+    String? firebasetoken = await _secureStorage.read(key: 'firebasetoken');
+    firebasetoken ??= PushNotificationService.token;
 
     if (firebasetoken == null) {
       onFetchingChanged(false);
-      _showErrorSnackBar(
-          context, 'No se pudo obtener el token.Intenta de nuevo');
+      _showErrorSnackBar(context, 'No se pudo obtener el token.Intenta de nuevo');
       return;
     }
 
@@ -91,8 +88,7 @@ class LogInController extends ChangeNotifier {
     List<int> bytes = utf8.encode(combinedData);
     final String mobileUuid = md5.convert(bytes).toString();
 
-    final result = await _authenticationRepository.signIn(
-        _userName, _password, mobileUuid, firebasetoken);
+    final result = await _authenticationRepository.signIn(_userName, _password, mobileUuid, firebasetoken);
 
     result.when((failure) {
       onFetchingChanged(false);
@@ -103,11 +99,11 @@ class LogInController extends ChangeNotifier {
       );
     }, (userEntity) async {
       final UserModel userData = userEntity.list.first.profile.user;
-      final userSession =
-          Provider.of<UserSessionProvider>(context, listen: false);
+      final userSession = Provider.of<UserSessionProvider>(context, listen: false);
       userSession.setUser(userData);
       _secureStorage.write(key: 'mobileuuid', value: mobileUuid);
       _secureStorage.write(key: 'firebasetoken', value: firebasetoken);
+      debugPrint('Guarde mi token y es: $firebasetoken');
       Navigator.pushReplacementNamed(context, Routes.startingPoint);
     });
   }
@@ -120,8 +116,7 @@ class LogInController extends ChangeNotifier {
 
   void _showErrorSnackBar(BuildContext context, String message) {
     if (_mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 }
