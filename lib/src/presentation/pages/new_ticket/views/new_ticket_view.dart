@@ -343,9 +343,9 @@ class _NewTicketViewState extends State<NewTicketView> {
                                     Column(children: [
                                       Expanded(child: Container()),
                                       GeneralButton(text: 'Imagen galería', onPressed: () => vm.pickImage(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
-                                      // GeneralButton(text: 'Tomar imagen', onPressed: () => vm.takePhoto(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
-                                      // GeneralButton(text: 'Video galería', onPressed: () => vm.pickVideo(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
-                                      // GeneralButton(text: 'Tomar video', onPressed: () => vm.recordVideo(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
+                                      GeneralButton(text: 'Tomar imagen', onPressed: () => vm.takePhoto(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
+                                      GeneralButton(text: 'Video galería', onPressed: () => vm.pickVideo(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
+                                      GeneralButton(text: 'Tomar video', onPressed: () => vm.recordVideo(context), color: blueNeutralGlobalColor, textColor: whiteGlobalColor),
                                       Expanded(child: Container()),
 
                                       // const SizedBox(width: 10),
