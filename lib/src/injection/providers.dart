@@ -455,12 +455,14 @@ List<SingleChildWidget> appProviders = [
         DoneProvider(doneRepositroy: context.read<DoneRepositroy>()),
   ),
 
-  // Repositorio para aprobar un ticket
+// -----------------------------------------------------------------------------
+// APROBAR: Provider y repositorio para aprobar un ticket
+// -----------------------------------------------------------------------------
 
   Provider<ApproveRepository>(
     create: (context) => ApproveRepositoryImpl(
         approveService:
-            ApproveService(http: Http(http.Client(), AppConstants.baseUrl))),
+            ApproveService(http: Http(http.Client(), AppConstants.testUrl))),
   ),
 
   ChangeNotifierProvider<ApproveProvider>(
