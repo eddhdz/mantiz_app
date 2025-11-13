@@ -29,3 +29,7 @@ const Color mediumDarkGray = Color(0xFF424242);
 const Color mediumGray = Color(0xFF757575);
 const Color lightGray = Color(0xFFBDBDBD);
 const Color veryLightGray = Color(0xFFEEEEEE);
+
+//SIDON colors
+const Color sidonGreenLight = Color(0XFF00A681);
+const Color sidonGreenDark = Color(0XFF155238);
