@@ -48,7 +48,8 @@ class _SplashViewState extends State<SplashView> {
       if (mobileUuid == null || firebaseToken == null) {
         _goTo(Routes.logIn);
       } else {
-        await sessionRepository.fetchIsSessionActive(context,
+        await sessionRepository.fetchIsSessionActive(
+          context,
           mobileUuid,
           firebaseToken,
         );
@@ -70,7 +71,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: darkGray,
+      backgroundColor: sidonGreenDark,
       body: Center(
         child: Text('MANTIZ',
             style: TextStyle(

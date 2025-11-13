@@ -124,7 +124,7 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
   }
 
   Widget _buildMessageBubble({
-    required Message message,
+    required ChatMessageModel message,
     required bool isMyMessage,
   }) {
     final alignment =
@@ -165,7 +165,8 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
             ),
             const SizedBox(height: 4),
             Text(
-              DateFormat('dd-MM-yyyy h:mm a').format(message.createdAt),
+              DateFormat('dd-MM-yyyy h:mm a')
+                  .format(DateTime.parse(message.createdat)),
               style: TextStyle(
                 fontSize: 10,
                 color: textColor.withValues(alpha: 0.8),
@@ -175,7 +176,7 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
               height: 5,
             ),
             Text(
-              message.profile.fullname,
+              message.createdby.name,
               style: TextStyle(
                   fontSize: 10,
                   color: textColor.withValues(

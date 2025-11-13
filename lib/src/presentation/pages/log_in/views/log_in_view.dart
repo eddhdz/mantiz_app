@@ -16,7 +16,7 @@ class LogInView extends StatelessWidget {
     final controller = Provider.of<LogInController>(context);
 
     return Scaffold(
-      backgroundColor: mediumDarkGray,
+      backgroundColor: sidonGreenDark,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -24,7 +24,7 @@ class LogInView extends StatelessWidget {
               width: double.infinity,
               height: size.height * 0.5,
               decoration: const BoxDecoration(
-                color: mediumDarkGray,
+                color: sidonGreenDark,
               ),
               child: const Center(
                   child: Text(
@@ -41,7 +41,7 @@ class LogInView extends StatelessWidget {
               height: size.height * 0.5,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               decoration: const BoxDecoration(
-                color: lightGray,
+                color: veryLightGray,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
@@ -98,7 +98,7 @@ class LogInView extends StatelessWidget {
                             }),
                         GeneralButton(
                           text: 'Iniciar sesión',
-                          color: darkGray,
+                          color: sidonGreenDark,
                           textColor: veryLightGray,
                           onPressed: () {
                             final isValid = Form.of(formcontext).validate();

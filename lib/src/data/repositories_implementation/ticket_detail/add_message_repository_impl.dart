@@ -11,7 +11,7 @@ class AddMessageRepositoryImpl implements AddMessageRepository {
 
   @override
   Future<Either<GeneralFailure, int>> addMessage(
-      int fkMaintenance, int fkProfile, String message) {
-    return _addMessageService.addMessage(fkMaintenance, fkProfile, message);
+      int ticketId, int userId, String message) {
+    return _addMessageService.addMessage(ticketId, userId, message);
   }
 }

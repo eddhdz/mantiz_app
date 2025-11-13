@@ -1,26 +1,30 @@
-import 'dart:convert';
+// -----------------------------------------------------------------------------
+// MODELO PRINCIPAL: MessageResponseModel
+// -----------------------------------------------------------------------------
 
-// Modelo principal que mapea la respuesta completa de la API
 class MessageResponseModel {
   final Response response;
-  final List<Message> messages;
+  final List<TicketChatModel> list;
 
   MessageResponseModel({
     required this.response,
-    required this.messages,
+    required this.list,
   });
 
   factory MessageResponseModel.fromJson(Map<String, dynamic> json) {
     return MessageResponseModel(
-      response: Response.fromJson(json['response'] as Map<String, dynamic>),
-      messages: (json['messages'] as List<dynamic>)
-          .map((item) => Message.fromJson(item as Map<String, dynamic>))
+      response: Response.fromJson(json['response']),
+      list: (json['list'] as List<dynamic>)
+          .map((itemJson) => TicketChatModel.fromJson(itemJson))
           .toList(),
     );
   }
 }
 
-// Clase para el objeto de respuesta general (con el ID y mensaje)
+// -----------------------------------------------------------------------------
+// SUBMODELO: ResponseModel (Manejo de la respuesta genérica)
+// -----------------------------------------------------------------------------
+
 class Response {
   final int id;
   final String msgSpa;
@@ -32,91 +36,94 @@ class Response {
 
   factory Response.fromJson(Map<String, dynamic> json) {
     return Response(
-      id: json['id'] as int,
-      msgSpa: json['msgSpa'] as String,
+      id: json['id'],
+      msgSpa: json['msgSpa'],
     );
   }
 }
 
-// Clase para cada elemento de la lista 'messages'
-class Message {
-  final int id;
-  final int fkMaintenance;
-  final int fkSender;
-  final String body;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final DateTime? removedAt;
-  final String ticket;
-  final int folio;
-  final Profile profile; // El objeto anidado
+// -----------------------------------------------------------------------------
+// SUBMODELO: TicketChatModel (Contiene la lista de mensajes de chat)
+// -----------------------------------------------------------------------------
 
-  Message({
-    required this.id,
-    required this.fkMaintenance,
-    required this.fkSender,
-    required this.body,
-    required this.createdAt,
-    this.updatedAt,
-    this.removedAt,
-    required this.ticket,
+class TicketChatModel {
+  final int folio;
+  final String title;
+  final List<ChatMessageModel> chat;
+
+  TicketChatModel({
     required this.folio,
-    required this.profile,
+    required this.title,
+    required this.chat,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) {
-    // Decodifica el JSON anidado en el campo 'profile' que viene como un String
-    final Map<String, dynamic> profileJson =
-        jsonDecode(json['profile'] as String) as Map<String, dynamic>;
-
-    return Message(
-      id: json['id'] as int,
-      fkMaintenance: json['fkMaintenance'] as int,
-      fkSender: json['fkSender'] as int,
-      body: json['body'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'] as String)
-          : null,
-      removedAt: json['removedAt'] != null
-          ? DateTime.parse(json['removedAt'] as String)
-          : null,
-      ticket: json['ticket'] as String,
-      folio: json['folio'] as int,
-      profile: Profile.fromJson(profileJson),
+  factory TicketChatModel.fromJson(Map<String, dynamic> json) {
+    return TicketChatModel(
+      folio: json['folio'],
+      title: json['title'],
+      chat: (json['chat'] as List<dynamic>)
+          .map((itemJson) => ChatMessageModel.fromJson(itemJson))
+          .toList(),
     );
   }
 }
 
-// Clase para el JSON del perfil (el contenido del campo anidado)
-class Profile {
-  final int idProfile;
-  final String fullname;
+// -----------------------------------------------------------------------------
+// SUBMODELO: ChatMessageModel (Mensaje individual)
+// -----------------------------------------------------------------------------
+
+class ChatMessageModel {
+  final int chatId;
+  final String body;
+  final int fkSender;
+  final String createdat;
+  final String? updatedat; // Puede ser null
+  final CreatedByModel createdby;
+
+  ChatMessageModel({
+    required this.chatId,
+    required this.body,
+    required this.fkSender,
+    required this.createdat,
+    required this.updatedat,
+    required this.createdby,
+  });
+
+  factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
+    return ChatMessageModel(
+      chatId: json['chatId'],
+      body: json['body'],
+      fkSender: json['fkSender'],
+      createdat: json['createdat'],
+      updatedat: json['updatedat'],
+      createdby: CreatedByModel.fromJson(json['createdby']),
+    );
+  }
+}
+
+// -----------------------------------------------------------------------------
+// SUBMODELO: CreatedByModel (Reutilizado para el usuario que creó el mensaje)
+// -----------------------------------------------------------------------------
+
+class CreatedByModel {
+  final String useruuid;
+  final String name;
   final String email;
   final String phone;
-  final String userToken;
-  final String typeUser;
-  final String typeRole;
 
-  Profile({
-    required this.idProfile,
-    required this.fullname,
+  CreatedByModel({
+    required this.useruuid,
+    required this.name,
     required this.email,
     required this.phone,
-    required this.userToken,
-    required this.typeUser,
-    required this.typeRole,
   });
 
-  factory Profile.fromJson(Map<String, dynamic> json) {
-    return Profile(
-      idProfile: json['idProfile'] as int,
-      fullname: json['fullname'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      userToken: json['userToken'] as String,
-      typeUser: json['typeUser'] as String,
-      typeRole: json['typeRole'] as String,
+  factory CreatedByModel.fromJson(Map<String, dynamic> json) {
+    return CreatedByModel(
+      useruuid: json['useruuid'],
+      name: json['name'],
+      email: json['email'],
+      phone: json['phone'],
     );
   }
 }
