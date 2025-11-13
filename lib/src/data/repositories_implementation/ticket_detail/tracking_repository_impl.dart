@@ -11,7 +11,7 @@ class TrackingRepositoryImpl implements TrackingRepository {
       : _trackingService = trackingService;
   @override
   Future<Either<GeneralFailure, MessageResponseModel>> getTrackingMessages(
-      int fkMaintenance) {
-    return _trackingService.getTrackingMessages(fkMaintenance);
+      int ticketId) {
+    return _trackingService.getTrackingMessages(ticketId);
   }
 }

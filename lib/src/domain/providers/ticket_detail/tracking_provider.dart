@@ -10,20 +10,20 @@ class TrackingProvider extends ChangeNotifier {
   TrackingProvider({required TrackingRepository trackingRepository})
       : _trackingRepository = trackingRepository;
 
-  List<Message>? _messages;
+  List<ChatMessageModel>? _messages;
   DataStatus _status = DataStatus.initial;
   GeneralFailure? _errorMessage;
 
-  List<Message>? get messages => _messages;
+  List<ChatMessageModel>? get messages => _messages;
   DataStatus get status => _status;
   GeneralFailure? get errorMessage => _errorMessage;
 
-  Future<void> fetchMessages(int fkMaintenance) async {
+  Future<void> fetchMessages(int ticketId) async {
     _status = DataStatus.loading;
     _errorMessage = null;
     notifyListeners();
 
-    final result = await _trackingRepository.getTrackingMessages(fkMaintenance);
+    final result = await _trackingRepository.getTrackingMessages(ticketId);
 
     result.when((failure) {
       _errorMessage = failure;
@@ -33,7 +33,7 @@ class TrackingProvider extends ChangeNotifier {
         _status = DataStatus.error;
       }
     }, (responseModel) {
-      _messages = responseModel.messages;
+      _messages = responseModel.list.first.chat;
       _status = DataStatus.loaded;
     });
     notifyListeners();

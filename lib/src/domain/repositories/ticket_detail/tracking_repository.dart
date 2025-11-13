@@ -4,5 +4,5 @@ import '../../enums.dart';
 
 abstract class TrackingRepository {
   Future<Either<GeneralFailure, MessageResponseModel>> getTrackingMessages(
-      int fkMaintenance);
+      int ticketId);
 }

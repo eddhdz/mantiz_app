@@ -78,14 +78,14 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 //   );
                 //   return; // Detiene la ejecución
                 // }
-                // Navigator.pushNamed(
-                //     // ignore: use_build_context_synchronously
-                //     context,
-                //     Routes.trackingTicket,
-                //     arguments: [
-                //       widget.maintenance.id,
-                //       int.parse(currentFkProfile),
-                //     ]);
+                Navigator.pushNamed(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    Routes.trackingTicket,
+                    arguments: [
+                      widget.ticket.ticketId,
+                      userSession.currentUser!.userId,
+                    ]);
               },
               icon: const Icon(Icons.chat_rounded))
         ],
