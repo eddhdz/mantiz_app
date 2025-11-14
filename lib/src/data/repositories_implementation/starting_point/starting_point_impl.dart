@@ -18,8 +18,7 @@ class StartingPointImpl implements StartingPointRepository {
   StartingPointImpl(this._startingPointApi, this._storage);
 
   @override
-  Future<Either<GeneralFailure, List<MaintenancesModel>>>
-      loadMaintenances() async {
+  Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances() async {
     String? userUuid = await _storage.read(key: 'useruuid');
 
     final homeResult = await _startingPointApi.loadMaintenances(userUuid);
@@ -46,8 +45,7 @@ class StartingPointImpl implements StartingPointRepository {
               //! CreatedBy ...
               UserModel createdBy = UserModel.onInit();
               if (ticketMap['createdby'] != null) {
-                var createdByMap =
-                    Map<String, dynamic>.from(ticketMap['createdby']);
+                var createdByMap = Map<String, dynamic>.from(ticketMap['createdby']);
                 createdBy = UserModel(
                   useruuid: createdByMap['useruuid'],
                   name: createdByMap['name'],
@@ -59,27 +57,24 @@ class StartingPointImpl implements StartingPointRepository {
               //! PhotoEvidence ...
               PhotoEvidenceModel photoevidence = PhotoEvidenceModel.onInit();
               if (ticketMap['photoevidence'] != null) {
-                var photoevidenceMap =
-                    Map<String, dynamic>.from(ticketMap['photoevidence']);
+                var photoevidenceMap = Map<String, dynamic>.from(ticketMap['photoevidence']);
                 photoevidence = PhotoEvidenceModel(
                   uuid: photoevidenceMap['uuid'],
                   uuidapp: photoevidenceMap['uuidapp'],
                   name: photoevidenceMap['name'],
                   type: photoevidenceMap['type'],
-                  url: photoevidenceMap['url'],
+                  url: photoevidenceMap['url'] ?? '',
                 );
               }
 
               AttendanceModel attendance = AttendanceModel.init();
               if (ticketMap['attendance'] != null) {
-                var attendanceMap =
-                    Map<String, dynamic>.from(ticketMap['attendance']);
+                var attendanceMap = Map<String, dynamic>.from(ticketMap['attendance']);
 
                 //! AsignedTo ...
                 UserModel asignedto = UserModel.onInit();
                 if (attendanceMap['asignedto'] != null) {
-                  var asignedtoMap =
-                      Map<String, dynamic>.from(attendanceMap['asignedto']);
+                  var asignedtoMap = Map<String, dynamic>.from(attendanceMap['asignedto']);
 
                   asignedto = UserModel(
                     useruuid: asignedtoMap['useruuid'],
@@ -91,11 +86,11 @@ class StartingPointImpl implements StartingPointRepository {
 
                 //! Attendance ...
                 attendance = AttendanceModel(
-                  atentionat: attendanceMap['atentionat'],
-                  atentiontime: attendanceMap['atentiontime'],
+                  atentionat: attendanceMap['atentionat'] ?? '',
+                  atentiontime: attendanceMap['atentiontime'] ?? '',
                   asignedto: asignedto,
-                  asignedat: attendanceMap['asignedat'],
-                  estimatedtime: attendanceMap['estimatedtime'],
+                  asignedat: attendanceMap['asignedat'] ?? '',
+                  estimatedtime: attendanceMap['estimatedtime'] ?? '',
                 );
               }
 
@@ -104,12 +99,12 @@ class StartingPointImpl implements StartingPointRepository {
               ticketModel = TicketModel(
                   ticketId: int.parse(ticketMap['ticketId'].toString()),
                   folio: ticketMap['showFolio'],
-                  title: ticketMap['title'],
-                  reason: ticketMap['reason'],
+                  title: ticketMap['title'] ?? '',
+                  reason: ticketMap['reason'] ?? '',
                   type: ticketMap['type'],
                   area: ticketMap['area'],
                   status: ticketMap['status'],
-                  scheduleat: ticketMap['scheduleat'],
+                  scheduleat: ticketMap['scheduleat'] ?? '',
                   createdBy: createdBy,
                   createdat: ticketMap['createdat'],
                   photoevidence: photoevidence,

@@ -1,0 +1,2 @@
+/Users/edgarsalcido/Documents/EcoSat/mantiz_app/android/app/.cxx/RelWithDebInfo/6w5j496x/x86/CMakeFiles/edit_cache.dir
+/Users/edgarsalcido/Documents/EcoSat/mantiz_app/android/app/.cxx/RelWithDebInfo/6w5j496x/x86/CMakeFiles/rebuild_cache.dir
