@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/edgarsalcido/Development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/edgarsalcido/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/edgarsalcido/Documents/EcoSat/mantiz_app/android/app/.cxx/Debug/185i6n3p/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/edgarsalcido/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/edgarsalcido/Documents/EcoSat/mantiz_app/android/app/.cxx/Debug/185i6n3p/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

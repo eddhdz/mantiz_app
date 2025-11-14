@@ -1,0 +1,2 @@
+/Users/edgarsalcido/Documents/EcoSat/mantiz_app/android/app/.cxx/Debug/185i6n3p/x86_64/CMakeFiles/edit_cache.dir
+/Users/edgarsalcido/Documents/EcoSat/mantiz_app/android/app/.cxx/Debug/185i6n3p/x86_64/CMakeFiles/rebuild_cache.dir

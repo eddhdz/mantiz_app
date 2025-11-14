@@ -8,7 +8,7 @@ include("/Users/edgarsalcido/Library/Android/sdk/ndk/26.3.11579264/build/cmake/a
 set(CMAKE_SYSTEM "Android-1")
 set(CMAKE_SYSTEM_NAME "Android")
 set(CMAKE_SYSTEM_VERSION "1")
-set(CMAKE_SYSTEM_PROCESSOR "aarch64")
+set(CMAKE_SYSTEM_PROCESSOR "armv7-a")
 
 set(CMAKE_CROSSCOMPILING "TRUE")
 
