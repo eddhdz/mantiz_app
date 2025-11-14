@@ -69,11 +69,13 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(56),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     child: TextField(
                       controller: _filterController,
                       decoration: InputDecoration(
-                        hintText: 'Buscar por id, razón, folio, título, tipo, área, estatus...',
+                        hintText:
+                            'Buscar por id, razón, folio, título, tipo, área, estatus...',
                         prefixIcon: const Icon(Icons.search),
                         suffixIcon: _filterController.text.isNotEmpty
                             ? IconButton(
@@ -107,23 +109,32 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                           Navigator.pushNamed(
                             context,
                             Routes.detailTicket,
-                            arguments: widget.tickets[index],
+                            arguments: vm.visibleTickets[index],
                           );
                         },
                         child: Card(
                           elevation: 7,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
                           color: veryLightGray,
                           child: Column(children: <Widget>[
                             Row(children: [
                               //! Id ...
                               Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   child: Row(children: <Widget>[
                                     const SizedBox(width: 5),
                                     const GeneralText(
-                                        mensaje: 'Id:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left),
+                                        mensaje: 'Id:',
+                                        maxLines: 1,
+                                        overFlow: TextOverflow.ellipsis,
+                                        size: 14,
+                                        weight: FontWeight.bold,
+                                        color: blackPanter,
+                                        align: TextAlign.left),
                                     GeneralText(
                                         mensaje: ticket.ticketId.toString(),
                                         maxLines: 1,
@@ -138,7 +149,8 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                               Expanded(child: Container()),
                               //! Folio ...
                               Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   child: Row(children: <Widget>[
                                     const SizedBox(width: 5),
                                     const GeneralText(
@@ -163,7 +175,8 @@ class _ThirdPageViewState extends State<ThirdPageView> {
 
                             //! Título ...
                             Container(
-                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
                                 child: Row(children: <Widget>[
                                   const SizedBox(width: 5),
                                   const GeneralText(
@@ -189,7 +202,8 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                             //! Reason ...
                             const SizedBox(height: 5),
                             Container(
-                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
                                 child: Row(children: <Widget>[
                                   const SizedBox(width: 5),
                                   const GeneralText(
@@ -216,7 +230,8 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                             Row(children: [
                               //! Type ...
                               Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   child: Row(children: <Widget>[
                                     const SizedBox(width: 5),
                                     const GeneralText(
@@ -241,7 +256,8 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                               Expanded(child: Container()),
                               //! Area ...
                               Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   child: Row(children: <Widget>[
                                     const SizedBox(width: 5),
                                     const GeneralText(
@@ -267,7 +283,8 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                             Row(children: [
                               //! Estatus ...
                               Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
                                   child: Row(children: <Widget>[
                                     const SizedBox(width: 5),
                                     const GeneralText(
@@ -284,19 +301,45 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                                         overFlow: TextOverflow.ellipsis,
                                         size: 14,
                                         weight: FontWeight.bold,
-                                        color: (ticket.status.toLowerCase() == 'actualizado' ||
-                                                ticket.status.toLowerCase() == 'abierto' ||
-                                                ticket.status.toLowerCase() == 'asignado' ||
-                                                ticket.status.toLowerCase() == 'aprobado' ||
-                                                ticket.status.toLowerCase() == 'agendado')
+                                        color: (ticket.status
+                                                        .toLowerCase() ==
+                                                    'actualizado' ||
+                                                ticket.status
+                                                        .toLowerCase() ==
+                                                    'abierto' ||
+                                                ticket
+                                                        .status
+                                                        .toLowerCase() ==
+                                                    'asignado' ||
+                                                ticket
+                                                        .status
+                                                        .toLowerCase() ==
+                                                    'aprobado' ||
+                                                ticket
+                                                        .status
+                                                        .toLowerCase() ==
+                                                    'agendado')
                                             ? orangePrincipal
-                                            : (ticket.status.toLowerCase() == 'suspendido' ||
-                                                    ticket.status.toLowerCase() == 'cancelado' ||
-                                                    ticket.status.toLowerCase() == 'rechazado')
+                                            : (ticket
+                                                            .status
+                                                            .toLowerCase() ==
+                                                        'suspendido' ||
+                                                    ticket.status
+                                                            .toLowerCase() ==
+                                                        'cancelado' ||
+                                                    ticket.status
+                                                            .toLowerCase() ==
+                                                        'rechazado')
                                                 ? redPrincipal
-                                                : (ticket.status.toLowerCase() == 'rechazado' || ticket.status.toLowerCase() == 'creado')
+                                                : (ticket.status.toLowerCase() ==
+                                                            'rechazado' ||
+                                                        ticket.status
+                                                                .toLowerCase() ==
+                                                            'creado')
                                                     ? blueLightGlobalColor
-                                                    : (ticket.status.toLowerCase() == 'finalizado')
+                                                    : (ticket.status
+                                                                .toLowerCase() ==
+                                                            'finalizado')
                                                         ? greenPrincipal
                                                         : blackPanter,
                                         align: TextAlign.left),
@@ -310,10 +353,13 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                                   await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return CustomAsignTo(user: widget.tickets[index].attendance.asignedto);
+                                        return CustomAsignTo(
+                                            user: widget.tickets[index]
+                                                .attendance.asignedto);
                                       });
                                 },
-                                icon: const Icon(Icons.account_circle_outlined, size: 35),
+                                icon: const Icon(Icons.account_circle_outlined,
+                                    size: 35),
                               )
                             ])
                           ]),
