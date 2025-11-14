@@ -200,8 +200,7 @@ class DoneTicketDialog extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           behavior: SnackBarBehavior.floating,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
+                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                           padding: const EdgeInsets.all(10),
                           duration: const Duration(seconds: 3),
                         ));
@@ -234,8 +233,7 @@ class DoneTicketDialog extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             behavior: SnackBarBehavior.floating,
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 15),
+                            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                             padding: const EdgeInsets.all(10),
                             duration: const Duration(seconds: 3),
                           ));
@@ -243,17 +241,14 @@ class DoneTicketDialog extends StatelessWidget {
                       }
 
                       if (provider.status == DataStatus.success) {
-                        final addMessageProvider =
-                            Provider.of<AddMessageProvider>(
+                        final addMessageProvider = Provider.of<AddMessageProvider>(
                           // ignore: use_build_context_synchronously
                           context,
                           listen: false,
                         );
-                        String message =
-                            'Ticket finalizado desde app movil: $finishReason';
+                        String message = 'Ticket finalizado desde app movil: $finishReason';
 
-                        await addMessageProvider.addMessage(
-                            ticketId, userId, message);
+                        await addMessageProvider.addMessage(ticketId, userId, message);
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Row(
@@ -273,8 +268,7 @@ class DoneTicketDialog extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           behavior: SnackBarBehavior.floating,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
+                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                           padding: const EdgeInsets.all(10),
                           duration: const Duration(seconds: 3),
                         ));
@@ -282,7 +276,7 @@ class DoneTicketDialog extends StatelessWidget {
                         Navigator.pushNamedAndRemoveUntil(
                             // ignore: use_build_context_synchronously
                             context,
-                            Routes.startingPoint,
+                            Routes.newTicket,
                             (route) => false);
                       }
                     } else {
@@ -304,8 +298,7 @@ class DoneTicketDialog extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         behavior: SnackBarBehavior.floating,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 15),
+                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                         padding: const EdgeInsets.all(10),
                         duration: const Duration(seconds: 3),
                       ));
