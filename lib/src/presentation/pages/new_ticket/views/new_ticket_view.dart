@@ -57,6 +57,7 @@ class _NewTicketViewState extends State<NewTicketView> {
         child: Scaffold(
           backgroundColor: whiteGlobalColor,
           appBar: AppBar(
+              leading: Container(),
               backgroundColor: whiteGlobalColor,
               title: const GeneralText(
                   mensaje: 'Nuevo ticket', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.center),
@@ -418,7 +419,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                                       }
 
                                       if (vm.finishSaveTicket) {
-                                        desc = 'Ticket guardado satisfactoriamente';
+                                        desc = 'Ticket guardado satisfactoriamente ||Continúa agregando tickets o presiona <Cancelar> para salir.';
                                         url = 'lib/src/assets/customs/Information@4x.png';
                                       } else {
                                         desc = 'Ocurrió un error al guardar el ticket, vuelve a intentar el procedimiento';
