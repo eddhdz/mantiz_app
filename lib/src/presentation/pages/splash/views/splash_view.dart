@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mantiz/src/domain/enums.dart';
 import 'package:mantiz/src/domain/providers/session/session_provider.dart';
-import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
 
-import '../../../../domain/repositories/authentication/authentication_repository.dart';
 import '../../../routes/routes.dart';
 import '../../../global/colors.dart';
 import '../../../../domain/repositories/connectivity/connectivity_repository.dart';
@@ -36,8 +34,7 @@ class _SplashViewState extends State<SplashView> {
     );
 
     FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-    final sessionRepository =
-        Provider.of<SessionProvider>(context, listen: false);
+    final sessionRepository = Provider.of<SessionProvider>(context, listen: false);
     final hasInternet = await connectivityRepository.hasInternet;
     final mobileUuid = await secureStorage.read(key: 'mobileuuid');
     final firebaseToken = await secureStorage.read(key: 'firebasetoken');
@@ -54,7 +51,7 @@ class _SplashViewState extends State<SplashView> {
           firebaseToken,
         );
         if (sessionRepository.status == DataStatus.success) {
-          _goTo(Routes.startingPoint);
+          _goTo(Routes.newTicket);
         } else {
           _goTo(Routes.logIn);
         }

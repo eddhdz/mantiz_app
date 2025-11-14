@@ -107,7 +107,7 @@ class _ThirdPageViewState extends State<ThirdPageView> {
                           Navigator.pushNamed(
                             context,
                             Routes.detailTicket,
-                            arguments: widget.tickets[index],
+                            arguments: vm.visibleTickets[index],
                           );
                         },
                         child: Card(

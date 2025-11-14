@@ -2,16 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Para ofrecerte una mejor experiencia, necesitamos acceder a los servicios de ubicación</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Permitir acceso a la galeria del dispositivo.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Asegura tus informes con pruebas visuales. Concede a Rondines el permiso de cámara para tomar fotos que respalden tus reportes.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Used to capture audio for image picker plugin.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Para elegir tu foto de perfil.</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -34,6 +26,24 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Asegura tus informes con pruebas visuales. Concede a Rondines el permiso de cámara para tomar fotos que respalden tus reportes.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Para ofrecerte una mejor experiencia, necesitamos acceder a los servicios de ubicación</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Used to capture audio for image picker plugin.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Permitir acceso a la galeria del dispositivo.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para elegir tu foto de perfil.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -51,9 +61,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>
