@@ -56,7 +56,7 @@ class TicketDetailModel {
   final String area;
   final String status;
   final PriceModel? price;
-  final String? photo;
+  final PhotoModel? photo;
   final CreatedByModel createdby;
   final CreatedByModel? updatedby;
   final AssignmentModel? assignment; // Puede ser null
@@ -99,7 +99,7 @@ class TicketDetailModel {
       status: json['status'],
 
       price: json['price'] != null ? PriceModel.fromJson(json['price']) : null,
-      photo: json['photo'],
+      photo: json['photo'] != null ? PhotoModel.fromJson(json['photo']) : null,
       updatedby: json['updatedby'] != null
           ? CreatedByModel.fromJson(json['updatedby'])
           : null,
@@ -172,7 +172,7 @@ class DeviceModel {
 class PriceModel {
   final int priceId;
   final String price;
-  final String reason;
+  final String? reason;
   final String createdat;
   final CreatedByModel createdby;
 
@@ -230,7 +230,7 @@ class AssignmentModel {
   final int assigmentId;
   final String asignedat;
   final String graceat;
-  final String reason;
+  final String? reason;
   final CreatedByModel asignedby;
   final CreatedByModel asignedto;
 
@@ -306,7 +306,7 @@ class FollowupModel {
 class CancelModel {
   final int cancelId;
   final String canceledat;
-  final String reason;
+  final String? reason;
   final CreatedByModel canceledby;
 
   CancelModel({
@@ -329,7 +329,7 @@ class CancelModel {
 class DoneModel {
   final int doneId;
   final String doneat;
-  final String reason;
+  final String? reason;
   final PhotoModel? photo; // Puede ser null
   final String? photo360; // Puede ser null
   final CreatedByModel doneby;
@@ -387,7 +387,7 @@ class FinishModel {
 class OpenModel {
   final int openId;
   final String openedat;
-  final String reason;
+  final String? reason;
   final PhotoModel? photo;
   final String? photo360;
   final CreatedByModel openedby;
@@ -416,7 +416,7 @@ class OpenModel {
 class RejectModel {
   final int rejectId;
   final String rejectedat;
-  final String reason;
+  final String? reason;
   final PhotoModel? photo;
   final String? photo360;
   final CreatedByModel rejectedby;
@@ -471,7 +471,7 @@ class ScheduleModel {
 class SuspendModel {
   final int suspendId;
   final String suspendedat;
-  final String reason;
+  final String? reason;
   final CreatedByModel suspendedby;
 
   SuspendModel({
