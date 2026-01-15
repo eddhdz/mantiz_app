@@ -13,7 +13,8 @@ void main() async {
   //! Push notifications service ...
   await PushNotificationService.initializeApp();
 
-  final GlobalKey<ScaffoldMessengerState> messengerKey = GlobalKey<ScaffoldMessengerState>();
+  final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   PushNotificationService.messageBody.listen((message) {
     final snackBar = SnackBar(content: Text(message));

@@ -33,3 +33,9 @@ const Color veryLightGray = Color(0xFFEEEEEE);
 //SIDON colors
 const Color sidonGreenLight = Color(0XFF00A681);
 const Color sidonGreenDark = Color(0XFF155238);
+//SIDON colors#2
+const Color sidonPrimaryColor = Color(0XFF208D79);
+const Color sidonSecondaryColor = Color(0XFFD9EEEC);
+const Color sidonAccentColor = Color(0XFF40E9C9);
+const Color sidonTextColor = Color(0XFF08444E);
+const Color sidonBackgroundDarkColor = Color(0XFF131F1D);
