@@ -121,8 +121,6 @@ class NewTicketViewVM with ChangeNotifier {
       createdAt: DateTime.now(),
     );
 
-    var a = 1000;
-
     final result = await Provider.of<NewTicketRepository>(context, listen: false).savePhoto(photo);
 
     result.when((failure) {

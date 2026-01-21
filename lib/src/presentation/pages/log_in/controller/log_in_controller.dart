@@ -104,7 +104,7 @@ class LogInController extends ChangeNotifier {
       _secureStorage.write(key: 'mobileuuid', value: mobileUuid);
       _secureStorage.write(key: 'firebasetoken', value: firebasetoken);
       debugPrint('Guarde mi token y es: $firebasetoken');
-      Navigator.pushReplacementNamed(context, Routes.newTicket);
+      Navigator.pushReplacementNamed(context, Routes.home);
     });
   }
 

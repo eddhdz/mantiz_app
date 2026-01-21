@@ -27,7 +27,7 @@ class ThirdPageController extends ChangeNotifier {
     visibleTickets = allTickets.where((t) {
       final reason = t.reason.toString().toLowerCase();
       final ticketId = t.ticketId.toString().toLowerCase();
-      final folio = t.folio.toLowerCase();
+      final folio = t.showFolio.toLowerCase();
       final title = (t.title ?? '').toLowerCase();
       final type = t.type.toLowerCase();
       final area = t.area.toLowerCase();
