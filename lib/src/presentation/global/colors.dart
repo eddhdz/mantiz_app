@@ -28,11 +28,13 @@ const Color darkGray = Color(0xFF212121);
 const Color mediumDarkGray = Color(0xFF424242);
 const Color mediumGray = Color(0xFF757575);
 const Color lightGray = Color(0xFFBDBDBD);
-const Color veryLightGray = Color(0xFFEEEEEE);
+const Color veryLightGray = Color(0XFFF6F8F7);
 
 //SIDON colors
 const Color sidonGreenLight = Color(0XFF00A681);
 const Color sidonGreenDark = Color(0XFF155238);
+const Color sidonBlueChat = Color(0XFF2c55a6);
+
 //SIDON colors#2
 const Color sidonPrimaryColor = Color(0XFF208D79);
 const Color sidonSecondaryColor = Color(0XFFD9EEEC);

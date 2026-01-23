@@ -12,10 +12,12 @@ import 'package:provider/provider.dart';
 class TicketTrackingView extends StatefulWidget {
   final int fkMaintenance;
   final int currentUserId;
+  final String folio;
   const TicketTrackingView({
     super.key,
     required this.fkMaintenance,
     required this.currentUserId,
+    required this.folio,
   });
 
   @override
@@ -68,8 +70,9 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: sidonSecondaryColor,
       appBar: AppBar(
-        title: const Text('Seguimiento'),
+        title: Text('Servicio # ${widget.folio}'),
         centerTitle: true,
       ),
       body: Column(
@@ -111,12 +114,12 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
               }
             },
           )),
-          const Divider(
-            height: 1,
-          ),
-          _buildMessageComposer(),
+          Container(
+              padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
+              color: whiteGlobalColor,
+              child: _buildMessageComposer()),
           const SizedBox(
-            height: 20,
+            height: 0,
           ),
         ],
       ),
@@ -129,8 +132,8 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
   }) {
     final alignment =
         isMyMessage ? Alignment.centerRight : Alignment.centerLeft;
-    final color = isMyMessage ? darkGray : lightGray;
-    final textColor = isMyMessage ? veryLightGray : darkGray;
+    final color = isMyMessage ? sidonPrimaryColor : sidonBlueChat;
+    final textColor = isMyMessage ? whiteGlobalColor : darkGray;
 
     return Container(
       alignment: alignment,
@@ -159,9 +162,7 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
           children: [
             Text(
               message.body,
-              style: TextStyle(
-                color: textColor,
-              ),
+              style: TextStyle(color: textColor, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 4),
             Text(
@@ -169,7 +170,7 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
                   .format(DateTime.parse(message.createdat)),
               style: TextStyle(
                 fontSize: 10,
-                color: textColor.withValues(alpha: 0.8),
+                color: textColor.withValues(alpha: 0.9),
               ),
             ),
             const SizedBox(
@@ -180,7 +181,7 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
               style: TextStyle(
                   fontSize: 10,
                   color: textColor.withValues(
-                    alpha: 0.8,
+                    alpha: 0.9,
                   )),
             )
           ],
@@ -213,7 +214,7 @@ class _TicketTrackingViewState extends State<TicketTrackingView> {
           const SizedBox(width: 8.0),
           Container(
             decoration: const BoxDecoration(
-              color: mediumDarkGray,
+              color: sidonPrimaryColor,
               shape: BoxShape.circle,
             ),
             child: IconButton(

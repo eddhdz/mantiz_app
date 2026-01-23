@@ -66,13 +66,15 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
         ),
       );
     case Routes.trackingTicket:
-      if (args is List && args.length >= 2) {
+      if (args is List && args.length >= 3) {
         final int fkMaintenance = args[0] as int;
         final int currentUserId = args[1] as int;
+        final String folio = args[2] as String;
         return MaterialPageRoute(
           builder: (_) => TicketTrackingView(
             fkMaintenance: fkMaintenance,
             currentUserId: currentUserId,
+            folio: folio,
           ),
         );
       }
