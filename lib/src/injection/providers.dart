@@ -106,15 +106,15 @@ import '../domain/repositories/home/home_repository.dart';
 import '../domain/repositories/licence/licence_repository.dart';
 import '../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../presentation/constants/app_constants.dart';
-import '../presentation/pages/home/views/home_view_vm.dart';
 import '../presentation/pages/log_in/controller/log_in_controller.dart';
-import '../presentation/pages/new_ticket/views/new_ticket_view_vm.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+
+import '../presentation/pages/new_ticket/views/new_ticket_view_vm.dart';
 
 List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider.value(value: HomeRedesignVm()),

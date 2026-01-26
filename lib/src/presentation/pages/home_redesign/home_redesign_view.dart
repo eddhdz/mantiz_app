@@ -8,6 +8,8 @@ import 'package:mantiz/src/presentation/pages/home_redesign/home_redesign_vm.dar
 
 import 'package:provider/provider.dart';
 
+import '../../routes/routes.dart';
+
 class HomeRedesignView extends StatefulWidget {
   const HomeRedesignView({super.key});
 
@@ -446,17 +448,20 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
 
   // ListViewer to show ...
   Widget _viewerListByDay(TaskCardData? task, HomeRedesignVm vm) {
-    return (task != null)
-        ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Column(
-              children: List.generate(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Column(
+        children: (task != null)
+            ? List.generate(
                 task.tasks.length,
                 (index) => _cardToAllLists(task.tasks[index]),
+              )
+            : List.generate(
+                1,
+                (index) => _cardEmpty(),
               ),
-            ),
-          )
-        : Container();
+      ),
+    );
   }
 
   Widget _viewerListToday(TaskCardData? task, HomeRedesignVm vm) {
@@ -626,16 +631,16 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                   ? Container()
                   : IconButton(
                       onPressed: () async {
-                        await vm.toggleCollapse('tomorrow');
+                        await vm.toggleCollapse('upcoming');
                       },
                       icon: Icon(
-                        vm.tomorrowIsCollapsed ? Icons.expand_more : Icons.expand_less,
+                        vm.upcomingIsCollapsed ? Icons.expand_more : Icons.expand_less,
                         color: sidonBackgroundDarkColor,
                       )),
             ],
           ),
           const SizedBox(height: 12),
-          (task != null && !vm.tomorrowIsCollapsed)
+          (task != null && !vm.upcomingIsCollapsed)
               ? Column(
                   children: List.generate(
                     task.tasks.length,
@@ -689,6 +694,16 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                 maxLines: 2,
                 overFlow: TextOverflow.ellipsis,
                 size: 16,
+                weight: FontWeight.normal,
+                color: sidonBackgroundDarkColor,
+                align: TextAlign.start,
+              ),
+              const SizedBox(height: 5),
+              GeneralText(
+                mensaje: ticket.ticket.reason ?? '',
+                maxLines: 2,
+                overFlow: TextOverflow.ellipsis,
+                size: 13,
                 weight: FontWeight.normal,
                 color: sidonBackgroundDarkColor,
                 align: TextAlign.start,
@@ -795,10 +810,50 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
     );
   }
 
+  // Card empty ...
+  Widget _cardEmpty() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: whiteGlobalColor,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: sidonBackgroundDarkColor,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+        border: const Border(
+          left: BorderSide(
+            color: sidonPrimaryColor,
+            width: 4,
+          ),
+        ),
+      ),
+      child: const Padding(
+        padding: EdgeInsets.all(12),
+        child: Center(
+          child: GeneralText(
+            mensaje: 'Sin tickets para esta fecha.',
+            maxLines: 1,
+            overFlow: TextOverflow.ellipsis,
+            size: 16,
+            weight: FontWeight.bold,
+            color: sidonBackgroundDarkColor,
+            align: TextAlign.center,
+          ),
+        ),
+      ),
+    );
+  }
+
   // FAB
   Widget _buildFAB() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, Routes.newTicket);
+      },
       backgroundColor: const Color(0xFF1DE9B6),
       shape: const CircleBorder(),
       child: const Icon(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mantiz/src/presentation/pages/first_page/view/first_page_view.dart';
 import 'package:mantiz/src/presentation/pages/home_redesign/home_redesign_view.dart';
+import 'package:mantiz/src/presentation/pages/new_ticket_redesign/new_ticket_redesign_view.dart';
 import 'package:mantiz/src/presentation/pages/second_page/view/second_page_view.dart';
 import 'package:mantiz/src/presentation/pages/starting_point.dart/view/starting_point_view.dart';
 import 'package:mantiz/src/presentation/pages/third_page/view/third_page_view.dart';
@@ -35,8 +36,12 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       );
     case Routes.newTicket:
       return MaterialPageRoute(
-        builder: (_) => const NewTicketView(),
+        builder: (_) => const NewTicketRedesignView(),
       );
+    // case Routes.newTicket:
+    //   return MaterialPageRoute(
+    //     builder: (_) => const NewTicketView(),
+    //   );
     case Routes.startingPoint:
       return MaterialPageRoute(
         builder: (_) => const StartingPointView(),

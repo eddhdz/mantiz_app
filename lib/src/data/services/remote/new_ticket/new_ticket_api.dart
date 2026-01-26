@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
 import '../../../../presentation/constants/app_constants.dart';
@@ -28,6 +30,8 @@ class NewTicketApi {
     );
 
     return result.when((failure) {
+      print('Falla en Photo: $failure');
+
       if (failure.statusCode == null) {
         return Either.left(GeneralFailure.noData);
       } else if (failure.exception is NetworkException) {
@@ -40,11 +44,27 @@ class NewTicketApi {
         return Either.left(GeneralFailure.unknown);
       }
     }, (responseBody) {
+      print('Foto OK: $responseBody');
+
       return Either.right(responseBody);
     });
   }
 
   Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel ticket) async {
+    print('ticketId: ${ticket.ticketId}');
+    print('fkTypeMaintenance: ${ticket.fkTypeMaintenance}');
+    print('fkCBO: ${ticket.fkCBO}');
+    print('fkTypeStatusMaintenance: ${ticket.fkTypeStatusMaintenance}');
+    print('fkZone: ${ticket.fkZone}');
+    print('folio: ${ticket.folio}');
+    print('title: ${ticket.title}');
+    print('reason: ${ticket.reason}');
+    print('photo: ${ticket.photo}');
+    print('createdat: ${ticket.createdat.toIso8601String()}');
+    print('createdby: ${ticket.createdby}');
+    print('useruuid: ${ticket.useruuid}');
+    print('devicefailuresids: ${ticket.devicefailuresids}');
+
     final result = await _http.request(
       '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/maintenances/add',
       method: HttpMethod.post,
@@ -65,7 +85,31 @@ class NewTicketApi {
       },
     );
 
+    // final result = await _http.request(
+    //   '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/maintenances/add',
+    //   method: HttpMethod.post,
+    //   body: {
+    //     'ticketId': 0,
+    //     'fkTypeMaintenance': 1,
+    //     'fkCBO': 1,
+    //     'fkTypeStatusMaintenance': 1,
+    //     'fkZone': 1,
+    //     'folio': 0,
+    //     'title': 'Manual',
+    //     'reason': 'Prueba manual',
+    //     'photo': null,
+    //     'createdat': DateTime.now().add(const Duration(days: 1)).toIso8601String(),
+    //     'createdby': 0,
+    //     'useruuid': 'c4ca4238a0b923820dcc509a6f75849b',
+    //     'devicefailuresids': '1'
+    //   },
+    // );
+
     return result.when((failure) {
+      print('Falla en Ticket: $failure');
+      print('Status code Ticket: ${failure.statusCode}');
+      print('Exception code Ticket: ${failure.exception}');
+
       if (failure.statusCode == null) {
         return Either.left(GeneralFailure.noData);
       } else if (failure.exception is NetworkException) {
@@ -78,6 +122,8 @@ class NewTicketApi {
         return Either.left(GeneralFailure.unknown);
       }
     }, (responseBody) {
+      print('Ticket OK: $responseBody');
+
       return Either.right(true);
     });
   }

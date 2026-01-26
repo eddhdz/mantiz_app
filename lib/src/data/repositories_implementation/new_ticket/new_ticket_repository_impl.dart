@@ -25,6 +25,8 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
   Future<Either<GeneralFailure, PhotoEvidenceModel>> savePhoto(SavePhotoModel photo) async {
     final saveResult = await _newTicketApi.savePhoto(photo);
 
+    var a = 1000;
+
     return saveResult.when((failure) {
       return Either.left(failure);
     }, (save) {
@@ -125,8 +127,8 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
             }
 
             branchOfficeModel = BranchOfficeModel(
-                boId: int.parse(branch['boId'].toString()),
-                branchofficeId: branch['branchofficeId'].toString(),
+                boId: int.parse(branch['branchofficeId'].toString()),
+                branchofficeId: branch['uuidBO'].toString(),
                 branchoffice: branch['branchoffice'],
                 address: branch['address'],
                 latitude: branch['latitude'],

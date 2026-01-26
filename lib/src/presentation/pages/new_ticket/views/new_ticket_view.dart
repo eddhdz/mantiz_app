@@ -94,7 +94,8 @@ class _NewTicketViewState extends State<NewTicketView> {
                                               objectsColor: mediumGray,
                                               textColor: blackPanter,
                                               obscureText: false,
-                                              validator: (value) => vm.generalValidator(value),
+                                              validator: (value) => null,
+                                              // validator: (value) => vm.generalValidator(value),
                                               onChange: (value) {
                                                 vm.onChangeDescription(value);
 
@@ -146,7 +147,7 @@ class _NewTicketViewState extends State<NewTicketView> {
                                           borderSide: BorderSide(width: 3, color: mediumGray),
                                           borderRadius: BorderRadius.all(Radius.circular(10)),
                                         )),
-                                        validator: (value) => vm.validatorCustomer(value),
+                                        // validator: (value) => vm.validatorCustomer(value),
                                       )),
 
                                   //!
