@@ -28,6 +28,8 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
       vmInit.initProcess();
 
       vmInit.loadMaintenances(context);
+
+      vmInit.chargeTypesForUser();
     });
   }
 
@@ -74,7 +76,11 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _buildFAB(),
+      floatingActionButton: (vm.typeUser != null)
+          ? (vm.typeUser!.toLowerCase() == 'administrator' || vm.typeUser!.toLowerCase() == 'customer' || vm.typeUser!.toLowerCase() == 'partner')
+              ? _buildFAB()
+              : null
+          : _buildFAB(),
     );
   }
 

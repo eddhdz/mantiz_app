@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/data/models/branch_office_model.dart';
-import 'package:provider/provider.dart';
 
+import '../../../data/models/branch_office_model.dart';
 import '../../../data/models/maintenances_model.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/repositories/home/home_repository.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
+
 class HomeRedesignVm with ChangeNotifier {
+  final secure = const FlutterSecureStorage();
+
   // Propiedades de la clase ...
   List<MaintenancesModel> _allMaintenances = [];
   List<MaintenancesModel> get allMaintenances => _allMaintenances;
@@ -37,6 +41,12 @@ class HomeRedesignVm with ChangeNotifier {
 
   String _monthYear = '';
   String get monthYear => _monthYear;
+
+  String? _typeUser = '';
+  String? get typeUser => _typeUser;
+
+  String? _typeRole = '';
+  String? get typeRole => _typeRole;
 
   List<String> _weekDays = [];
   List<String> get weekDays => _weekDays;
@@ -153,6 +163,13 @@ class HomeRedesignVm with ChangeNotifier {
     // Obtener mes y año
     _monthYear = _getMonthYearString(startOfWeek);
     _weekNumber = _getWeekNumber(startOfWeek);
+
+    notifyListeners();
+  }
+
+  Future<void> chargeTypesForUser() async {
+    _typeUser = await secure.read(key: 'typeuser');
+    _typeRole = await secure.read(key: 'typerol');
 
     notifyListeners();
   }

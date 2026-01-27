@@ -33,6 +33,8 @@ class _TechnicalDataFormState extends State<TechnicalDataForm> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       vmInit.loadCustomer(context);
+
+      vmInit.chargeTypesForUser();
     });
   }
 
@@ -111,73 +113,81 @@ class _TechnicalDataFormState extends State<TechnicalDataForm> {
                           minLines: 1,
                           maxLines: 3))),
               const SizedBox(height: 10),
-              Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  child: const GeneralText(
-                      mensaje: 'Cliente:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)),
-              const SizedBox(height: 10),
-              Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: DropdownButtonFormField<CustomerModel>(
-                    value: vm.selectedCustomer,
-                    items: vm.customers.map((CustomerModel customer) {
-                      return DropdownMenuItem<CustomerModel>(
-                          value: customer,
-                          child: GeneralText(
-                              mensaje: customer.customer,
-                              maxLines: 1,
-                              overFlow: TextOverflow.ellipsis,
-                              size: 15,
-                              weight: FontWeight.normal,
-                              color: blackPanter,
-                              align: TextAlign.start));
-                    }).toList(),
-                    onChanged: (CustomerModel? value) {
-                      if (value != null) {
-                        vm.customerSelectedAction(context, value);
-                      }
-                    },
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                      borderSide: BorderSide(width: 3, color: mediumGray),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    )),
-                    // validator: (value) => vm.validatorCustomer(value),
-                  )),
-              const SizedBox(height: 10),
-              Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  child: const GeneralText(
-                      mensaje: 'Sucursal:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)),
-              const SizedBox(height: 10),
-              Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: DropdownButtonFormField<BranchOfficeModel>(
-                    value: vm.selectedBranch,
-                    items: vm.branchs.map((BranchOfficeModel branch) {
-                      return DropdownMenuItem<BranchOfficeModel>(
-                          value: branch,
-                          child: GeneralText(
-                              mensaje: branch.branchoffice,
-                              maxLines: 1,
-                              overFlow: TextOverflow.ellipsis,
-                              size: 15,
-                              weight: FontWeight.normal,
-                              color: blackPanter,
-                              align: TextAlign.start));
-                    }).toList(),
-                    onChanged: (BranchOfficeModel? value) {
-                      if (value != null) {
-                        vm.branchSelectedAction(context, value);
-                      }
-                    },
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                      borderSide: BorderSide(width: 3, color: mediumGray),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    )),
-                    // validator: (value) => vm.validatorBranch(value),
-                  )),
+              (vm.typeUser!.toLowerCase() == 'customer' || vm.typeUser!.toLowerCase() == 'partner')
+                  ? Container()
+                  : Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: const GeneralText(
+                          mensaje: 'Cliente:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)),
+              SizedBox(height: (vm.typeUser!.toLowerCase() == 'customer' || vm.typeUser!.toLowerCase() == 'partner') ? 0 : 10),
+              (vm.typeUser!.toLowerCase() == 'customer' || vm.typeUser!.toLowerCase() == 'partner')
+                  ? Container()
+                  : Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: DropdownButtonFormField<CustomerModel>(
+                        value: vm.selectedCustomer,
+                        items: vm.customers.map((CustomerModel customer) {
+                          return DropdownMenuItem<CustomerModel>(
+                              value: customer,
+                              child: GeneralText(
+                                  mensaje: customer.customer,
+                                  maxLines: 1,
+                                  overFlow: TextOverflow.ellipsis,
+                                  size: 15,
+                                  weight: FontWeight.normal,
+                                  color: blackPanter,
+                                  align: TextAlign.start));
+                        }).toList(),
+                        onChanged: (CustomerModel? value) {
+                          if (value != null) {
+                            vm.customerSelectedAction(context, value);
+                          }
+                        },
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: mediumGray),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        )),
+                        // validator: (value) => vm.validatorCustomer(value),
+                      )),
+              SizedBox(height: (vm.typeUser!.toLowerCase() == 'customer' || vm.typeUser!.toLowerCase() == 'partner') ? 0 : 10),
+              (vm.typeUser!.toLowerCase() == 'customer')
+                  ? Container()
+                  : Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: const GeneralText(
+                          mensaje: 'Sucursal:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 15, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left)),
+              SizedBox(height: (vm.typeUser!.toLowerCase() == 'customer') ? 0 : 10),
+              (vm.typeUser!.toLowerCase() == 'customer')
+                  ? Container()
+                  : Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: DropdownButtonFormField<BranchOfficeModel>(
+                        value: vm.selectedBranch,
+                        items: vm.branchs.map((BranchOfficeModel branch) {
+                          return DropdownMenuItem<BranchOfficeModel>(
+                              value: branch,
+                              child: GeneralText(
+                                  mensaje: branch.branchoffice,
+                                  maxLines: 1,
+                                  overFlow: TextOverflow.ellipsis,
+                                  size: 15,
+                                  weight: FontWeight.normal,
+                                  color: blackPanter,
+                                  align: TextAlign.start));
+                        }).toList(),
+                        onChanged: (BranchOfficeModel? value) {
+                          if (value != null) {
+                            vm.branchSelectedAction(context, value);
+                          }
+                        },
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: mediumGray),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        )),
+                        // validator: (value) => vm.validatorBranch(value),
+                      )),
               const SizedBox(height: 10),
               Container(
                   margin: const EdgeInsets.only(left: 10),

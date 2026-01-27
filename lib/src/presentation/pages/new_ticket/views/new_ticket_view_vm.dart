@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'dart:io';
 
 import '../../../../data/models/device_model.dart';
 import '../../../../data/models/failure_model.dart';
@@ -12,13 +13,15 @@ import '../../../../domain/repositories/new_ticket/new_ticket_repository.dart';
 import '../../../global/colors.dart';
 import '../../../global/widgets/texts/general_text.dart';
 
-import 'dart:convert';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:video_player/video_player.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NewTicketViewVM with ChangeNotifier {
+  final secure = const FlutterSecureStorage();
+
   final formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
 
@@ -90,6 +93,12 @@ class NewTicketViewVM with ChangeNotifier {
   String? _nameFile;
   String? get nameFile => _nameFile;
 
+  String? _typeUser = '';
+  String? get typeUser => _typeUser;
+
+  String? _typeRole = '';
+  String? get typeRole => _typeRole;
+
   int _currentStep = 0;
   int get currentStep => _currentStep;
 
@@ -123,6 +132,13 @@ class NewTicketViewVM with ChangeNotifier {
     _finishSaveTicket = false;
     _currentStep = 0;
     _failureDescription = '';
+
+    notifyListeners();
+  }
+
+  Future<void> chargeTypesForUser() async {
+    _typeUser = await secure.read(key: 'typeuser');
+    _typeRole = await secure.read(key: 'typerol');
 
     notifyListeners();
   }
