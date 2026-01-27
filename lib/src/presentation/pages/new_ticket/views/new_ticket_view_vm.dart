@@ -143,11 +143,9 @@ class NewTicketViewVM with ChangeNotifier {
         createdAt: DateTime.now(),
       );
 
-      print('DEBUG savePhoto: Starting photo save with name=$_nameFile, type=$_typeFile');
       final result = await Provider.of<NewTicketRepository>(context, listen: false).savePhoto(photo);
 
       result.when((failure) {
-        print('DEBUG savePhoto: Failure received: $failure');
         final message = {
           GeneralFailure.noData: 'No information',
           GeneralFailure.unknown: 'Error',
@@ -163,7 +161,6 @@ class NewTicketViewVM with ChangeNotifier {
         _finishSavePhoto = false;
         notifyListeners();
       }, (photo) {
-        print('DEBUG savePhoto: Success received with uuid=${photo.uuid}');
         if (photo.uuid.isNotEmpty) {
           _photoEvidenceModel = photo;
           _finishSavePhoto = true;
@@ -171,9 +168,7 @@ class NewTicketViewVM with ChangeNotifier {
         _isLoading = false;
         notifyListeners();
       });
-    } catch (e, stackTrace) {
-      print('DEBUG savePhoto: Exception occurred: $e');
-      print('StackTrace: $stackTrace');
+    } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error inesperado en foto: ${e.toString()}')));
       }
@@ -215,11 +210,9 @@ class NewTicketViewVM with ChangeNotifier {
           useruuid: '',
           devicefailuresids: _selectedFailures!.id.toString());
 
-      print('DEBUG saveTicket: Sending ticket with title=$title, reason=$_description');
       final result = await Provider.of<NewTicketRepository>(context, listen: false).saveTicket(ticket);
 
       result.when((failure) {
-        print('DEBUG saveTicket: Failure received: $failure');
         final message = {
           GeneralFailure.noData: 'No information',
           GeneralFailure.unknown: 'Error',
@@ -235,16 +228,13 @@ class NewTicketViewVM with ChangeNotifier {
         _finishSaveTicket = false;
         notifyListeners();
       }, (guardado) {
-        print('DEBUG saveTicket: Success received, guardado=$guardado');
         if (guardado) {
           _finishSaveTicket = true;
         }
         _isLoading = false;
         notifyListeners();
       });
-    } catch (e, stackTrace) {
-      print('DEBUG saveTicket: Exception occurred: $e');
-      print('StackTrace: $stackTrace');
+    } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error inesperado en ticket: ${e.toString()}')));
       }
@@ -307,8 +297,6 @@ class NewTicketViewVM with ChangeNotifier {
       default:
         _typeFile = 'no conocido';
     }
-
-    print('Tipo: $_typeFile nombre: $_nameFile');
 
     notifyListeners();
   }
@@ -576,51 +564,6 @@ class NewTicketViewVM with ChangeNotifier {
     _selectedFailures = failure;
     notifyListeners();
   }
-
-  //! Validator's ...
-  // String? validatorFail(FailureModel? failure) {
-  //   if (failure == null) {
-  //     return 'Debe seleccionar al menos una falla en pantalla';
-  //   }
-  // }
-
-  // String? validatorZone(ZoneModel? zone) {
-  //   if (zone == null) {
-  //     return 'Debe seleccionar al menos una zona en pantalla';
-  //   }
-  // }
-
-  // String? validatorDevice(DeviceModel? device) {
-  //   if (device == null) {
-  //     return 'Debe seleccionar al menos un equipo en pantalla';
-  //   }
-
-  //   return null;
-  // }
-
-  // String? validatorBranch(BranchOfficeModel? branch) {
-  //   if (branch == null) {
-  //     return 'Debe seleccionar al menos una sucursal en pantalla';
-  //   }
-
-  //   return null;
-  // }
-
-  // String? validatorCustomer(CustomerModel? customer) {
-  //   if (customer == null) {
-  //     return 'Debe seleccionar al menos un cliente en pantalla';
-  //   }
-
-  //   return null;
-  // }
-
-  // String? generalValidator(String? value) {
-  //   if (value == null || value.isEmpty) {
-  //     return 'El campo debe tener información';
-  //   }
-
-  //   return null;
-  // }
 
   //! Asignación de valores ...
   void onChangeDescription(String value) {

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/presentation/global/widgets/customs/custom_asign_to.dart';
-import 'package:mantiz/src/presentation/pages/third_page/controller/third_page_controller.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../data/models/ticket_model.dart';
 import '../../../global/colors.dart';
 import '../../../global/widgets/buttons/initial_floating_button.dart';
+import '../../../global/widgets/customs/custom_asign_to.dart';
 import '../../../global/widgets/texts/general_text.dart';
 import '../../../routes/routes.dart';
-import '../../starting_point.dart/controller/starting_point_controller.dart';
+import '../controller/third_page_controller.dart';
+
+import 'package:provider/provider.dart';
 
 class ThirdPageView extends StatefulWidget {
   final List<TicketModel> tickets;

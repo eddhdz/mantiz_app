@@ -25,8 +25,6 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
   Future<Either<GeneralFailure, PhotoEvidenceModel>> savePhoto(SavePhotoModel photo) async {
     final saveResult = await _newTicketApi.savePhoto(photo);
 
-    var a = 1000;
-
     return saveResult.when((failure) {
       return Either.left(failure);
     }, (save) {

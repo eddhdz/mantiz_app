@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:mantiz/src/data/models/ticket_detail/ticket_list_response_model.dart';
-import 'package:mantiz/src/domain/providers/session/user_session_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/detail_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
 
-import '../../../../data/models/models.dart';
+import '../../../../data/models/ticket_detail/ticket_list_response_model.dart';
 import '../../../../data/models/ticket_model.dart';
-
 import '../../../../domain/enums.dart';
-import '../../../../domain/providers/ticket_detail/assigned_to_provider.dart';
+import '../../../../domain/providers/session/user_session_provider.dart';
+import '../../../../domain/providers/ticket_detail/detail_provider.dart';
 import '../../../global/widgets/speed_dials/speed_dial_detail_ticket.dart';
 import '../../../routes/routes.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class DetailTicketView extends StatefulWidget {
   final TicketModel ticket;
@@ -33,8 +26,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DetailProvider>(context, listen: false)
-          .fetchDetail(widget.ticket.ticketId);
+      Provider.of<DetailProvider>(context, listen: false).fetchDetail(widget.ticket.ticketId);
     });
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -92,8 +84,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
       ),
       body: Consumer<DetailProvider>(
         builder: (context, provider, child) {
-          if (provider.status == DataStatus.loading ||
-              provider.detail == null) {
+          if (provider.status == DataStatus.loading || provider.detail == null) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -115,8 +106,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 // Sección de detalles del ticket
                 Card(
                   elevation: 4,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -124,18 +114,14 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'General',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         buildDetailRow('Título', ticketData!.title),
                         buildDetailRow('Estatus', ticketData.status),
                         buildDetailRow('Área', ticketData.area),
                         buildDetailRow('Descripción', ticketData.reason),
-                        buildDetailRow(
-                            'Fecha de creación', widget.ticket.createdat),
+                        buildDetailRow('Fecha de creación', widget.ticket.createdat),
                       ],
                     ),
                   ),
@@ -177,8 +163,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 // Sección de contacto
                 Card(
                   elevation: 4,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -186,10 +171,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'Contacto',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         buildDetailRow('Creado por', whoCreated!.name),
@@ -204,8 +186,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 // Otros detalles
                 Card(
                   elevation: 4,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -213,32 +194,17 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'Otros Detalles',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         (ticketData.followup.schedule == null)
                             ? buildDetailRow('Agendado para', 'Sin agendar')
-                            : buildDetailRow(
-                                'Agendado para',
-                                formatter.format(DateTime.parse(ticketData
-                                    .followup.schedule!.scheduledat))),
+                            : buildDetailRow('Agendado para', formatter.format(DateTime.parse(ticketData.followup.schedule!.scheduledat))),
                         (ticketData.followup.schedule == null)
                             ? buildDetailRow('Tiempo estimado', 'Sin registro')
-                            : buildDetailRow(
-                                'Tiempo estimado',
-                                _formatTime(
-                                    ticketData.followup.schedule!.atentionat)),
-                        (ticketData.price == null)
-                            ? buildDetailRow('Cotización', '\$0.00 MXN')
-                            : buildDetailRow(
-                                'Cotización', ticketData.price!.price),
-                        (ticketData.assignment == null)
-                            ? buildDetailRow('Asignado a', 'Sin asignar')
-                            : buildDetailRow('Asignado a',
-                                ticketData.assignment!.asignedto.name),
+                            : buildDetailRow('Tiempo estimado', _formatTime(ticketData.followup.schedule!.atentionat)),
+                        (ticketData.price == null) ? buildDetailRow('Cotización', '\$0.00 MXN') : buildDetailRow('Cotización', ticketData.price!.price),
+                        (ticketData.assignment == null) ? buildDetailRow('Asignado a', 'Sin asignar') : buildDetailRow('Asignado a', ticketData.assignment!.asignedto.name),
                       ],
                     ),
                   ),
@@ -291,8 +257,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
       ),
       floatingActionButton: Consumer<DetailProvider>(
         builder: (context, provider, child) {
-          if (provider.status == DataStatus.loading ||
-              provider.detail == null) {
+          if (provider.status == DataStatus.loading || provider.detail == null) {
             return const SizedBox.shrink();
           }
 

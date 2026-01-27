@@ -9,8 +9,6 @@ class StartingPointApi {
   StartingPointApi(this._http);
 
   Future<Either<GeneralFailure, dynamic>> loadMaintenances(String? userUuid) async {
-    Map<String, dynamic> body;
-
     if (userUuid == null || userUuid.isEmpty) {
       return Either.left(GeneralFailure.noData);
     }

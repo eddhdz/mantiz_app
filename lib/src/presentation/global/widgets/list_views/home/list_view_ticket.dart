@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/data/models/ticket_model.dart';
 
 import '../../../../../data/models/models.dart';
-// import '../../../../routes/routes.dart';
+import '../../../../../data/models/ticket_model.dart';
 import '../../../colors.dart';
 import '../../texts/general_text.dart';
 
@@ -19,8 +18,10 @@ class ListViewTicket extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: showBO.length,
         itemBuilder: (BuildContext context, int index) {
-          final branch = showBO[index];
-          final tickets = branch.tickets;
+          return Container();
+
+          // final branch = showBO[index];
+          // final tickets = branch.tickets;
 
           // return Wrap(children: <Widget>[
           //   Column(children: <Widget>[SizedBox(child: cardTicket(showTickets[index], context))])

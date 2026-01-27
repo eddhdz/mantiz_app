@@ -32,8 +32,6 @@ class Http {
         ...headers,
       };
 
-      print('url: $url');
-
       late final Response response;
       final bodyString = jsonEncode(body);
 

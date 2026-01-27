@@ -1,7 +1,6 @@
-import 'package:mantiz/src/presentation/constants/app_constants.dart';
-
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
+import '../../../../presentation/constants/app_constants.dart';
 import '../../../http/http.dart';
 
 class HomeApi {
@@ -10,8 +9,6 @@ class HomeApi {
   HomeApi(this._http);
 
   Future<Either<GeneralFailure, dynamic>> loadMaintenances(String? userUuid) async {
-    Map<String, dynamic> body;
-
     if (userUuid == null || userUuid.isEmpty) {
       return Either.left(GeneralFailure.noData);
     }

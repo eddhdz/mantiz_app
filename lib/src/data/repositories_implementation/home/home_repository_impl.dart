@@ -1,16 +1,11 @@
 import 'dart:convert';
 
-// import 'package:flutter/material.dart';
-
-import 'package:mantiz/src/data/models/attendance_model.dart';
-import 'package:mantiz/src/data/models/device_model.dart';
-import 'package:mantiz/src/data/models/photo_evidence_model.dart';
-
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/repositories/home/home_repository.dart';
+import '../../models/attendance_model.dart';
 import '../../models/models.dart';
-// import '../../models/photo_evidence_model.dart';
+import '../../models/photo_evidence_model.dart';
 import '../../models/ticket_model.dart';
 import '../../services/remote/home/home_api.dart';
 
@@ -24,17 +19,6 @@ class HomeRepositoryImpl implements HomeRepository {
 
   @override
   Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances() async {
-    // String? fkPartnerLicence = await _storage.read(key: 'fkPartnerLicence');
-    // String? fkProfileCustomer = await _storage.read(key: 'FkCustomer');
-    // String? fkProfileSupplier = await _storage.read(key: 'FkSupplierProfile');
-    // String? currentFkProfile = fkProfileCustomer ?? fkProfileSupplier ?? fkPartnerLicence;
-    // String role = 'partner';
-
-    // if (fkProfileCustomer != null && fkProfileSupplier == null) {
-    //   role = 'customer';
-    // } else if (fkProfileCustomer == null && fkProfileSupplier != null) {
-    //   role = 'supplier';
-    // }
     String? userUuid = await _storage.read(key: 'useruuid');
 
     final homeResult = await _homeApi.loadMaintenances(userUuid);

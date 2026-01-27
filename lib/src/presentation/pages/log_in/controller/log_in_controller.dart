@@ -1,17 +1,16 @@
 import 'dart:convert';
 
+import '../../../../domain/repositories/authentication/authentication_repository.dart';
+import '../../../routes/routes.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mantiz/src/data/models/authentication/login_response_model.dart';
-import 'package:mantiz/src/domain/providers/session/session_provider.dart';
 import 'package:mantiz/src/domain/providers/session/user_session_provider.dart';
 import 'package:mantiz/src/presentation/global/push_notifications/push_notifications_service.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../domain/repositories/authentication/authentication_repository.dart';
-import '../../../routes/routes.dart';
 
 class LogInController extends ChangeNotifier {
   final AuthenticationRepository _authenticationRepository;
