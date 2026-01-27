@@ -496,10 +496,10 @@ class SuspendModel {
 // -----------------------------------------------------------------------------
 
 class PhotoModel {
-  final String uuid;
-  final String uuidapp;
-  final String name;
-  final String type;
+  final String? uuid;
+  final String? uuidapp;
+  final String? name;
+  final String? type;
   final String? url; // Asumiendo que puede venir como String vacío o null
 
   PhotoModel({

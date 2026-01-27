@@ -1,5 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:mantiz/src/data/repositories_implementation/session/logout_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/session/session_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/starting_point/starting_point_impl.dart';
@@ -20,6 +21,7 @@ import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suppli
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspend_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/suspended_by_repository_impl.dart';
 import 'package:mantiz/src/data/repositories_implementation/ticket_detail/tracking_repository_impl.dart';
+import 'package:mantiz/src/data/services/remote/images/images_service.dart';
 import 'package:mantiz/src/data/services/remote/session/logout_service.dart';
 import 'package:mantiz/src/data/services/remote/session/session_service.dart';
 import 'package:mantiz/src/data/services/remote/starting_point/starting_point_api.dart';
@@ -62,6 +64,7 @@ import 'package:mantiz/src/domain/providers/ticket_detail/supplier_provider.dart
 import 'package:mantiz/src/domain/providers/ticket_detail/suspend_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/tracking_provider.dart';
+import 'package:mantiz/src/domain/repositories/image/image_repository.dart';
 import 'package:mantiz/src/domain/repositories/session/logout_repository.dart';
 import 'package:mantiz/src/domain/repositories/session/session_repository.dart';
 import 'package:mantiz/src/domain/repositories/starting_point/starting_point_repository.dart';
@@ -92,12 +95,14 @@ import '../data/http/http.dart';
 import '../data/repositories_implementation/authentication/authentication_repository_impl.dart';
 import '../data/repositories_implementation/connectivity/connectivity_repository_impl.dart';
 import '../data/repositories_implementation/home/home_repository_impl.dart';
+import '../data/repositories_implementation/image/image_repository_impl.dart';
 import '../data/repositories_implementation/licence/licence_repository_impl.dart';
 import '../data/repositories_implementation/new_ticket/new_ticket_repository_impl.dart';
 import '../data/services/remote/authentication/authentication_service.dart';
 import '../data/services/remote/home/home_api.dart';
 import '../data/services/remote/licence/licence_service.dart';
 import '../data/services/remote/new_ticket/new_ticket_api.dart';
+import '../domain/providers/image/image_provider.dart';
 import '../domain/providers/licence/licence_provider.dart';
 import '../domain/repositories/authentication/authentication_repository.dart';
 import '../domain/repositories/connectivity/connectivity_repository.dart';
@@ -472,5 +477,20 @@ List<SingleChildWidget> appProviders = [
   ChangeNotifierProvider<ApproveProvider>(
     create: (context) =>
         ApproveProvider(approveRepository: context.read<ApproveRepository>()),
+  ),
+
+// -----------------------------------------------------------------------------
+// IMAGEN:  Provider para obtener imagenes
+// -----------------------------------------------------------------------------
+
+  Provider<ImageRepository>(
+    create: (context) => ImageRepositoryImpl(
+        imagesService:
+            ImagesService(http: Http(http.Client(), AppConstants.testUrl))),
+  ),
+
+  ChangeNotifierProvider<ImagesProvider>(
+    create: (context) =>
+        ImagesProvider(imageRepository: context.read<ImageRepository>()),
   ),
 ];

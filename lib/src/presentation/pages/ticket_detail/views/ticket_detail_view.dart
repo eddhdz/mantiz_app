@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mantiz/src/data/models/photo_evidence_model.dart';
 import 'package:mantiz/src/data/models/ticket_detail/ticket_list_response_model.dart';
+import 'package:mantiz/src/domain/providers/image/image_provider.dart';
 import 'package:mantiz/src/domain/providers/session/user_session_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/detail_provider.dart';
 import 'package:mantiz/src/presentation/global/colors.dart';
@@ -8,6 +10,7 @@ import 'package:mantiz/src/presentation/global/colors.dart';
 import '../../../../data/models/ticket_model.dart';
 
 import '../../../../domain/enums.dart';
+import '../../../global/widgets/image/image_widget.dart';
 import '../../../global/widgets/speed_dials/speed_dial_detail_ticket.dart';
 import '../../../routes/routes.dart';
 
@@ -52,6 +55,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
   @override
   Widget build(BuildContext context) {
     final userSession = Provider.of<UserSessionProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -121,12 +125,16 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           final TicketDetailModel? ticketData = provider.detail;
           final DateFormat formatter = DateFormat('dd/MM/yyyy');
           final whoCreated = ticketData?.createdby;
+          final PhotoModel? photoEvidence = ticketData!.photo;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if (photoEvidence != null)
+                  TicketImageWidget(photo: photoEvidence),
+                const SizedBox(height: 16),
                 // Sección de detalles del ticket
                 Card(
                   elevation: 4,
@@ -315,33 +323,31 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 ),
                 const SizedBox(height: 16),
 
-                Wrap(
-                  spacing: 20, // Espacio horizontal entre botones
-                  runSpacing: 20, // Espacio vertical entre filas
-                  alignment: WrapAlignment.center, // Centra los elementos
-                  children: [
-                    buildVerticalButton(
-                      context: context,
-                      icon: Icons.check,
-                      label: "Realizado",
-                      onPressed: () {},
-                    ),
-                    // buildVerticalButton(
-                    //   context: context,
-                    //   icon: Icons.calendar_month_outlined,
-                    //   label: "Agendar",
-                    //   onPressed: () {},
-                    // ),
-                    // buildVerticalButton(
-                    //   context: context,
-                    //   icon: Icons.person_add_alt_1,
-                    //   label: "Asignar",
-                    //   onPressed: () {},
-                    // ),
-                    // El cuarto se pondría al lado del tercero,
-                    // y el quinto bajaría a una nueva fila.
-                  ],
-                )
+                // Wrap(
+                //   spacing: 20, // Espacio horizontal entre botones
+                //   runSpacing: 20, // Espacio vertical entre filas
+                //   alignment: WrapAlignment.center, // Centra los elementos
+                //   children: [
+                //     buildVerticalButton(
+                //       context: context,
+                //       icon: Icons.check,
+                //       label: "Realizado",
+                //       onPressed: () {},
+                //     ),
+                //     // buildVerticalButton(
+                //     //   context: context,
+                //     //   icon: Icons.calendar_month_outlined,
+                //     //   label: "Agendar",
+                //     //   onPressed: () {},
+                //     // ),
+                //     // buildVerticalButton(
+                //     //   context: context,
+                //     //   icon: Icons.person_add_alt_1,
+                //     //   label: "Asignar",
+                //     //   onPressed: () {},
+                //     // ),
+                //   ],
+                // )
 
                 //! Mapa de la locación de la sucursal
                 //! PENDIENTE DE AGREGAR DEBIDO AL CAMBIO EN EL MODELO
@@ -387,25 +393,25 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           );
         },
       ),
-      // floatingActionButton: Consumer<DetailProvider>(
-      //   builder: (context, provider, child) {
-      //     if (provider.status == DataStatus.loading ||
-      //         provider.detail == null) {
-      //       return const SizedBox.shrink();
-      //     }
+      floatingActionButton: Consumer<DetailProvider>(
+        builder: (context, provider, child) {
+          if (provider.status == DataStatus.loading ||
+              provider.detail == null) {
+            return const SizedBox.shrink();
+          }
 
-      //     final TicketDetailModel ticketData = provider.detail!;
-      //     if (ticketData.status.toLowerCase() == 'realizado') {
-      //       return const SizedBox.shrink();
-      //     }
+          final TicketDetailModel ticketData = provider.detail!;
+          if (ticketData.status.toLowerCase() == 'realizado') {
+            return const SizedBox.shrink();
+          }
 
-      //     return SpeedDialDetailTicket(
-      //       ticketId: ticketData.ticketId,
-      //       userId: userSession.currentUser!.userId,
-      //       status: ticketData.status,
-      //     );
-      //   },
-      // ),
+          return SpeedDialDetailTicket(
+            ticketId: ticketData.ticketId,
+            userId: userSession.currentUser!.userId,
+            status: ticketData.status,
+          );
+        },
+      ),
     );
   }
 
