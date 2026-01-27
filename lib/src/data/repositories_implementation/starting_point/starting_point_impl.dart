@@ -98,7 +98,8 @@ class StartingPointImpl implements StartingPointRepository {
               TicketModel ticketModel = TicketModel.init();
               ticketModel = TicketModel(
                   ticketId: int.parse(ticketMap['ticketId'].toString()),
-                  folio: ticketMap['showFolio'],
+                  folio: int.parse(ticketMap['showFolio'].toString()),
+                  showFolio: ticketMap['showFolio'],
                   title: ticketMap['title'] ?? '',
                   reason: ticketMap['reason'] ?? '',
                   type: ticketMap['type'],
@@ -117,6 +118,7 @@ class StartingPointImpl implements StartingPointRepository {
             var branchofficeMap = Map<String, dynamic>.from(branch);
             BranchOfficeModel branchofficeModel = BranchOfficeModel.init();
             branchofficeModel = BranchOfficeModel(
+                boId: int.parse(branchofficeMap['boId'].toString()),
                 branchofficeId: branchofficeMap['branchofficeId'],
                 branchoffice: branchofficeMap['branchoffice'],
                 address: branchofficeMap['address'],

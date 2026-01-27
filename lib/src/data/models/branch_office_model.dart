@@ -2,6 +2,7 @@ import 'package:mantiz/src/data/models/ticket_model.dart';
 import 'package:mantiz/src/data/models/zone_model.dart';
 
 class BranchOfficeModel {
+  int boId;
   String branchofficeId;
   String branchoffice;
   String address;
@@ -12,7 +13,8 @@ class BranchOfficeModel {
   List<ZoneModel> zones;
 
   BranchOfficeModel(
-      {required this.branchofficeId,
+      {required this.boId,
+      required this.branchofficeId,
       required this.branchoffice,
       required this.address,
       required this.latitude,
@@ -22,7 +24,8 @@ class BranchOfficeModel {
       required this.zones});
 
   BranchOfficeModel.init()
-      : branchofficeId = '',
+      : boId = 0,
+        branchofficeId = '',
         branchoffice = '',
         address = '',
         latitude = '',

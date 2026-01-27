@@ -52,7 +52,7 @@ class _SplashViewState extends State<SplashView> {
           firebaseToken,
         );
         if (sessionRepository.status == DataStatus.success) {
-          _goTo(Routes.newTicket);
+          _goTo(Routes.home);
         } else {
           _goTo(Routes.logIn);
         }

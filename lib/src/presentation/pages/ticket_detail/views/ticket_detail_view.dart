@@ -8,13 +8,13 @@ import 'package:mantiz/src/domain/providers/ticket_detail/detail_provider.dart';
 import 'package:mantiz/src/presentation/global/colors.dart';
 
 import '../../../../data/models/ticket_model.dart';
-
 import '../../../../domain/enums.dart';
 import '../../../global/widgets/image/image_widget.dart';
 import '../../../global/widgets/speed_dials/speed_dial_detail_ticket.dart';
 import '../../../routes/routes.dart';
 
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class DetailTicketView extends StatefulWidget {
   final TicketModel ticket;
@@ -31,8 +31,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DetailProvider>(context, listen: false)
-          .fetchDetail(widget.ticket.ticketId);
+      Provider.of<DetailProvider>(context, listen: false).fetchDetail(widget.ticket.ticketId);
     });
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -111,8 +110,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
       ),
       body: Consumer<DetailProvider>(
         builder: (context, provider, child) {
-          if (provider.status == DataStatus.loading ||
-              provider.detail == null) {
+          if (provider.status == DataStatus.loading || provider.detail == null) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -148,10 +146,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'General',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         buildDetailRow(
@@ -225,10 +220,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'Contacto',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         buildDetailRow(
@@ -265,10 +257,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'Otros Detalles',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         (ticketData.followup.schedule == null)
@@ -395,8 +384,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
       ),
       floatingActionButton: Consumer<DetailProvider>(
         builder: (context, provider, child) {
-          if (provider.status == DataStatus.loading ||
-              provider.detail == null) {
+          if (provider.status == DataStatus.loading || provider.detail == null) {
             return const SizedBox.shrink();
           }
 

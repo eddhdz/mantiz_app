@@ -11,8 +11,6 @@ class NewTicketApi {
   NewTicketApi(this._http);
 
   Future<Either<GeneralFailure, dynamic>> savePhoto(SavePhotoModel photo) async {
-    var a = 1000;
-
     final result = await _http.request(
       (photo.type.toLowerCase().contains('image'))
           ? '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/images/add'
@@ -28,8 +26,6 @@ class NewTicketApi {
         'createdAt': photo.createdAt.toIso8601String()
       },
     );
-
-    var b = 1000;
 
     return result.when((failure) {
       if (failure.statusCode == null) {
@@ -49,8 +45,6 @@ class NewTicketApi {
   }
 
   Future<Either<GeneralFailure, bool>> saveTicket(SaveTicketModel ticket) async {
-    var a = 1000;
-
     final result = await _http.request(
       '${AppConstants.symbol}${AppConstants.usersPortTest}/mobile/v1/maintenances/add',
       method: HttpMethod.post,
@@ -70,8 +64,6 @@ class NewTicketApi {
         'devicefailuresids': ticket.devicefailuresids
       },
     );
-
-    var b = 1000;
 
     return result.when((failure) {
       if (failure.statusCode == null) {

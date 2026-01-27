@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 const Color blueNeutralGlobalColor = Color(0XFF529DD6);
 const Color blueStrongGlobalColor = Color(0XFF0D2D47);
 const Color blueLightGlobalColor = Color(0XFF3371A0);
+const Color blueSuperLightColor = Color(0XFFE6F0FF);
 
 //! grays ...
 const Color lockWidget = Color(0XFFBFBFBF);
@@ -23,12 +24,21 @@ const Color orangePrincipal = Color(0XFFFF5F18);
 
 //! greens ...
 const Color greenPrincipal = Color(0XFF2A8453);
+const Color mintGreen = Color(0XFFE6F7EF);
+
+//! Pinks ...
+const Color palePink = Color(0XFFFCE8EC);
+
+//! Yellows ...
+const Color softYellow = Color(0XFFFFF8E1);
+
 // Gray scale
 const Color darkGray = Color(0xFF212121);
 const Color mediumDarkGray = Color(0xFF424242);
 const Color mediumGray = Color(0xFF757575);
 const Color lightGray = Color(0xFFBDBDBD);
-const Color veryLightGray = Color(0XFFF6F8F7);
+const Color veryLightGray = Color(0xFFEEEEEE);
+const Color ultraLightGray = Color(0xFFF2F2F2);
 
 //SIDON colors
 const Color sidonGreenLight = Color(0XFF00A681);

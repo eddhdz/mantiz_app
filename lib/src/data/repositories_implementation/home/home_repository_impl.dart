@@ -1,16 +1,11 @@
 import 'dart:convert';
 
-// import 'package:flutter/material.dart';
-
-import 'package:mantiz/src/data/models/attendance_model.dart';
-import 'package:mantiz/src/data/models/device_model.dart';
-import 'package:mantiz/src/data/models/photo_evidence_model.dart';
-
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/repositories/home/home_repository.dart';
+import '../../models/attendance_model.dart';
 import '../../models/models.dart';
-// import '../../models/photo_evidence_model.dart';
+import '../../models/photo_evidence_model.dart';
 import '../../models/ticket_model.dart';
 import '../../services/remote/home/home_api.dart';
 
@@ -23,19 +18,7 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl(this._homeApi, this._storage);
 
   @override
-  Future<Either<GeneralFailure, List<MaintenancesModel>>>
-      loadMaintenances() async {
-    // String? fkPartnerLicence = await _storage.read(key: 'fkPartnerLicence');
-    // String? fkProfileCustomer = await _storage.read(key: 'FkCustomer');
-    // String? fkProfileSupplier = await _storage.read(key: 'FkSupplierProfile');
-    // String? currentFkProfile = fkProfileCustomer ?? fkProfileSupplier ?? fkPartnerLicence;
-    // String role = 'partner';
-
-    // if (fkProfileCustomer != null && fkProfileSupplier == null) {
-    //   role = 'customer';
-    // } else if (fkProfileCustomer == null && fkProfileSupplier != null) {
-    //   role = 'supplier';
-    // }
+  Future<Either<GeneralFailure, List<MaintenancesModel>>> loadMaintenances() async {
     String? userUuid = await _storage.read(key: 'useruuid');
 
     final homeResult = await _homeApi.loadMaintenances(userUuid);
@@ -57,15 +40,12 @@ class HomeRepositoryImpl implements HomeRepository {
             List<TicketModel> tickets = [];
 
             for (var ticket in branch['tickets']) {
-              var b = 1000;
-
               var ticketMap = Map<String, dynamic>.from(ticket);
 
               //! CreatedBy ...
               UserModel createdBy = UserModel.onInit();
               if (ticketMap['createdby'] != null) {
-                var createdByMap =
-                    Map<String, dynamic>.from(ticketMap['createdby']);
+                var createdByMap = Map<String, dynamic>.from(ticketMap['createdby']);
                 createdBy = UserModel(
                   useruuid: createdByMap['useruuid'],
                   name: createdByMap['name'],
@@ -74,13 +54,10 @@ class HomeRepositoryImpl implements HomeRepository {
                 );
               }
 
-              var a = 1000;
-
               //! PhotoEvidence ...
               PhotoEvidenceModel photoevidence = PhotoEvidenceModel.onInit();
               if (ticketMap['photoevidence'] != null) {
-                var photoevidenceMap =
-                    Map<String, dynamic>.from(ticketMap['photoevidence']);
+                var photoevidenceMap = Map<String, dynamic>.from(ticketMap['photoevidence']);
                 photoevidence = PhotoEvidenceModel(
                   uuid: photoevidenceMap['uuid'],
                   uuidapp: photoevidenceMap['uuidapp'],
@@ -90,18 +67,14 @@ class HomeRepositoryImpl implements HomeRepository {
                 );
               }
 
-              var c = 1000;
-
               AttendanceModel attendance = AttendanceModel.init();
               if (ticketMap['attendance'] != null) {
-                var attendanceMap =
-                    Map<String, dynamic>.from(ticketMap['attendance']);
+                var attendanceMap = Map<String, dynamic>.from(ticketMap['attendance']);
 
                 //! AsignedTo ...
                 UserModel asignedto = UserModel.onInit();
                 if (attendanceMap['asignedto'] != null) {
-                  var asignedtoMap =
-                      Map<String, dynamic>.from(attendanceMap['asignedto']);
+                  var asignedtoMap = Map<String, dynamic>.from(attendanceMap['asignedto']);
 
                   asignedto = UserModel(
                     useruuid: asignedtoMap['useruuid'],
@@ -110,8 +83,6 @@ class HomeRepositoryImpl implements HomeRepository {
                     phone: asignedtoMap['phone'],
                   );
                 }
-
-                var d = 1000;
 
                 //! Attendance ...
                 attendance = AttendanceModel(
@@ -123,14 +94,12 @@ class HomeRepositoryImpl implements HomeRepository {
                 );
               }
 
-              var e = 1000;
-
-              var f = 1000;
               //! Ticket ...
               TicketModel ticketModel = TicketModel.init();
               ticketModel = TicketModel(
                   ticketId: int.parse(ticketMap['ticketId'].toString()),
-                  folio: ticketMap['folio'],
+                  folio: int.parse(ticketMap['folio'].toString()),
+                  showFolio: ticketMap['showFolio'],
                   title: ticketMap['title'],
                   reason: ticketMap['reason'],
                   type: ticketMap['type'],
@@ -146,11 +115,10 @@ class HomeRepositoryImpl implements HomeRepository {
               tickets.add(ticketModel);
             }
 
-            var g = 1000;
-
             var branchofficeMap = Map<String, dynamic>.from(branch);
             BranchOfficeModel branchofficeModel = BranchOfficeModel.init();
             branchofficeModel = BranchOfficeModel(
+                boId: int.parse(branchofficeMap['boId'].toString()),
                 branchofficeId: branchofficeMap['branchofficeId'],
                 branchoffice: branchofficeMap['branchoffice'],
                 address: branchofficeMap['address'],

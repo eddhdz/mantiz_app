@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/presentation/pages/first_page/view/first_page_view.dart';
-import 'package:mantiz/src/presentation/pages/second_page/view/second_page_view.dart';
-import 'package:mantiz/src/presentation/pages/starting_point.dart/view/starting_point_view.dart';
-import 'package:mantiz/src/presentation/pages/third_page/view/third_page_view.dart';
 
-import '../../data/models/models.dart';
 import '../../data/models/ticket_model.dart';
+import '../pages/home_redesign/home_redesign_view.dart';
+import '../pages/new_ticket_redesign/new_ticket_redesign_view.dart';
+import '../pages/starting_point.dart/view/starting_point_view.dart';
 import '../pages/views.dart';
+
 import 'routes.dart';
 
 Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -24,30 +23,41 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (_) => const LogInView(),
       );
+    // case Routes.home:
+    //   return MaterialPageRoute(
+    //     builder: (_) => const HomeView(),
+    //   );
     case Routes.home:
       return MaterialPageRoute(
-        builder: (_) => const HomeView(),
+        builder: (_) => const HomeRedesignView(),
       );
     case Routes.newTicket:
       return MaterialPageRoute(
-        builder: (_) => const NewTicketView(),
+        builder: (_) => const NewTicketRedesignView(),
       );
+
+    // case Routes.newTicket:
+    //   return MaterialPageRoute(
+    //     builder: (_) => const NewTicketView(),
+    //   );
+
     case Routes.startingPoint:
       return MaterialPageRoute(
         builder: (_) => const StartingPointView(),
       );
-    case Routes.first_page:
-      return MaterialPageRoute(
-        builder: (_) => const FirstPageView(maintenances: []),
-      );
-    case Routes.second_page:
-      return MaterialPageRoute(
-        builder: (_) => const SecondPageView(branchOffices: []),
-      );
-    case Routes.third_page:
-      return MaterialPageRoute(
-        builder: (_) => const ThirdPageView(tickets: []),
-      );
+
+    // case Routes.first_page:
+    //   return MaterialPageRoute(
+    //     builder: (_) => const FirstPageView(maintenances: []),
+    //   );
+    // case Routes.second_page:
+    //   return MaterialPageRoute(
+    //     builder: (_) => const SecondPageView(branchOffices: []),
+    //   );
+    // case Routes.third_page:
+    //   return MaterialPageRoute(
+    //     builder: (_) => const ThirdPageView(tickets: []),
+    //   );
 
     case Routes.detailTicket:
       if (settings.arguments is TicketModel) {
@@ -65,6 +75,7 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
           ),
         ),
       );
+
     case Routes.trackingTicket:
       if (args is List && args.length >= 3) {
         final int fkMaintenance = args[0] as int;

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../../../domain/enums.dart';
 import '../../../../domain/providers/ticket_detail/add_message_provider.dart';
 import '../../../../domain/providers/ticket_detail/price_provider.dart';
-import '../../../routes/routes.dart';
 import '../../colors.dart';
 
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 class PriceTicketDialog extends StatelessWidget {
   final int fkMaintenance;

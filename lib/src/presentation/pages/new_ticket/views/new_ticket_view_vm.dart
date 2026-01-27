@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -9,26 +10,22 @@ import '../../../../data/models/zone_model.dart';
 import '../../../../domain/enums.dart';
 import '../../../../data/models/models.dart';
 import '../../../../domain/repositories/new_ticket/new_ticket_repository.dart';
+import '../../../global/colors.dart';
+import '../../../global/widgets/texts/general_text.dart';
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:video_player/video_player.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NewTicketViewVM with ChangeNotifier {
+  final secure = const FlutterSecureStorage();
+
   final formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
 
   //! Get's ...
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
-  bool _finishSavePhoto = false;
-  bool get finishSavePhoto => _finishSavePhoto;
-
-  bool _finishSaveTicket = false;
-  bool get finishSaveTicket => _finishSaveTicket;
 
   List<CustomerModel> _customers = [];
   List<CustomerModel> get customers => _customers;
@@ -63,6 +60,27 @@ class NewTicketViewVM with ChangeNotifier {
   XFile? _mediaFile;
   XFile? get mediaFile => _mediaFile;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  bool _finishSavePhoto = false;
+  bool get finishSavePhoto => _finishSavePhoto;
+
+  bool _finishSaveTicket = false;
+  bool get finishSaveTicket => _finishSaveTicket;
+
+  bool _saveNextStep = false;
+  bool get saveNextStep => _saveNextStep;
+
+  bool? _isVideo;
+  bool? get isVideo => _isVideo;
+
+  bool? _isLongVideo;
+  bool? get isLongVideo => _isLongVideo;
+
+  String _failureDescription = '';
+  String get failureDescription => _failureDescription;
+
   String? _base64;
   String? get base64 => _base64;
 
@@ -74,6 +92,15 @@ class NewTicketViewVM with ChangeNotifier {
 
   String? _nameFile;
   String? get nameFile => _nameFile;
+
+  String? _typeUser = '';
+  String? get typeUser => _typeUser;
+
+  String? _typeRole = '';
+  String? get typeRole => _typeRole;
+
+  int _currentStep = 0;
+  int get currentStep => _currentStep;
 
   PhotoEvidenceModel? _photoEvidenceModel;
   PhotoEvidenceModel? get photoEvidenceModel => _photoEvidenceModel;
@@ -100,8 +127,18 @@ class NewTicketViewVM with ChangeNotifier {
     _selectedZones = null;
     _selectedDevice = null;
     _selectedFailures = null;
+    _isLongVideo = null;
     _finishSavePhoto = false;
     _finishSaveTicket = false;
+    _currentStep = 0;
+    _failureDescription = '';
+
+    notifyListeners();
+  }
+
+  Future<void> chargeTypesForUser() async {
+    _typeUser = await secure.read(key: 'typeuser');
+    _typeRole = await secure.read(key: 'typerol');
 
     notifyListeners();
   }
@@ -111,38 +148,50 @@ class NewTicketViewVM with ChangeNotifier {
     _finishSavePhoto = false;
     notifyListeners();
 
-    SavePhotoModel photo = SavePhotoModel(
-      uuidapp: '97b290acab82d5937fb87a28b06181a3',
-      uuid: null,
-      name: _nameFile!,
-      type: _typeFile!,
-      url: '',
-      im64: _base64!,
-      createdAt: DateTime.now(),
-    );
+    try {
+      SavePhotoModel photo = SavePhotoModel(
+        uuidapp: '97b290acab82d5937fb87a28b06181a3',
+        uuid: null,
+        name: _nameFile!,
+        type: _typeFile!,
+        url: '',
+        im64: _base64!,
+        createdAt: DateTime.now(),
+      );
 
-    var a = 1000;
+      final result = await Provider.of<NewTicketRepository>(context, listen: false).savePhoto(photo);
 
-    final result = await Provider.of<NewTicketRepository>(context, listen: false).savePhoto(photo);
+      result.when((failure) {
+        final message = {
+          GeneralFailure.noData: 'No information',
+          GeneralFailure.unknown: 'Error',
+          GeneralFailure.network: 'No Internet',
+          GeneralFailure.clientError: 'Client side connection failure',
+          GeneralFailure.serverError: 'Server side connection failure',
+        }[failure];
 
-    result.when((failure) {
-      final message = {
-        GeneralFailure.noData: 'No information',
-        GeneralFailure.unknown: 'Error',
-        GeneralFailure.network: 'No Internet',
-        GeneralFailure.clientError: 'Client side connection failure',
-        GeneralFailure.serverError: 'Server side connection failure',
-      }[failure];
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
-    }, (photo) async {
-      if (photo.uuid.isNotEmpty) {
-        _photoEvidenceModel = photo;
-        _finishSavePhoto = true;
-
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
+        }
+        _isLoading = false;
+        _finishSavePhoto = false;
         notifyListeners();
+      }, (photo) {
+        if (photo.uuid.isNotEmpty) {
+          _photoEvidenceModel = photo;
+          _finishSavePhoto = true;
+        }
+        _isLoading = false;
+        notifyListeners();
+      });
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error inesperado en foto: ${e.toString()}')));
       }
-    });
+      _isLoading = false;
+      _finishSavePhoto = false;
+      notifyListeners();
+    }
   }
 
   Future<void> saveTicket(BuildContext context) async {
@@ -150,24 +199,28 @@ class NewTicketViewVM with ChangeNotifier {
     _finishSaveTicket = false;
     notifyListeners();
 
-    String title = '${_selectedBranch!.clave}-${_selectedZones!.zone}-${_selectedDevice!.code}';
+    try {
+      String title = '${_selectedBranch!.clave}-${_selectedZones!.zone}-${_selectedDevice!.code}';
 
-    if (title.isEmpty) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El título no se cargo en el proceso.')));
+      if (title.isEmpty) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El título no se cargo en el proceso.')));
+        }
+        _isLoading = false;
+        notifyListeners();
+        return;
       }
-    } else {
+
       SaveTicketModel ticket = SaveTicketModel(
           ticketId: 0,
           fkTypeMaintenance: 1,
-          fkCBO: _selectedBranch!.branchofficeId,
+          fkCBO: _selectedBranch!.boId.toString(),
           fkTypeStatusMaintenance: 1,
           fkZone: _selectedZones!.zoneId.toString(),
           folio: '0',
           title: title,
           reason: _description,
-          photo: jsonEncode(photoEvidenceModel!.toJson()),
-          // photo: photoEvidenceModel.toString(),
+          photo: jsonEncode(photoEvidenceModel!),
           createdat: DateTime.now(),
           createdby: 0,
           useruuid: '',
@@ -184,65 +237,82 @@ class NewTicketViewVM with ChangeNotifier {
           GeneralFailure.serverError: 'Server side connection failure',
         }[failure];
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
-      }, (guardado) async {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message!)));
+        }
+        _isLoading = false;
+        _finishSaveTicket = false;
+        notifyListeners();
+      }, (guardado) {
         if (guardado) {
           _finishSaveTicket = true;
-
-          notifyListeners();
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo determinar por quien fue creado el ticket <Partner, Supplier o Customer>')));
         }
+        _isLoading = false;
+        notifyListeners();
       });
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error inesperado en ticket: ${e.toString()}')));
+      }
+      _isLoading = false;
+      _finishSaveTicket = false;
+      notifyListeners();
     }
   }
 
   Future<void> _checkFileType(XFile file) async {
     String extension = p.extension(file.path).toLowerCase();
-    _nameFile = _typeFile = null;
+    _nameFile = _typeFile = _isVideo = null;
 
     switch (extension) {
       case '.jpg':
         _typeFile = 'image/jpg';
         _nameFile = '.jpg';
+        _isVideo = false;
         break;
       case '.jpeg':
         _typeFile = 'image/jpeg';
         _nameFile = '.jpeg';
+        _isVideo = false;
         break;
       case '.png':
         _typeFile = 'image/png';
         _nameFile = '.png';
+        _isVideo = false;
         break;
       case '.gif':
         _typeFile = 'image/gif';
         _nameFile = '.gif';
+        _isVideo = false;
         break;
       case '.mp4':
         _typeFile = 'video/mp4';
         _nameFile = '.mp4';
+        _isVideo = true;
         break;
       case '.mov':
         _typeFile = 'video/mov';
         _nameFile = '.mov';
+        _isVideo = true;
         break;
       case '.avi':
         _typeFile = 'video/avi';
         _nameFile = '.avi';
+        _isVideo = true;
         break;
       case '.wmv':
         _typeFile = 'video/wmv';
         _nameFile = '.wmv';
+        _isVideo = true;
         break;
       case '.mkv':
         _typeFile = 'video/mkv';
         _nameFile = '.mkv';
+        _isVideo = true;
         break;
       default:
         _typeFile = 'no conocido';
     }
-
-    print('Tipo: $_typeFile nombre: $_nameFile');
 
     notifyListeners();
   }
@@ -279,6 +349,9 @@ class NewTicketViewVM with ChangeNotifier {
 
   Future<void> pickVideo(BuildContext context) async {
     try {
+      _isLongVideo = null;
+      notifyListeners();
+
       final XFile? pickedFile = await _picker.pickVideo(
         source: ImageSource.gallery, // o ImageSource.camera para grabar
         maxDuration: const Duration(seconds: 10),
@@ -288,9 +361,8 @@ class NewTicketViewVM with ChangeNotifier {
         // Procesar video seleccionado
         final duration = await getVideoDuration(pickedFile.path);
         if (duration.inSeconds > 10) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El video debe durar menos de 10 segundos')));
-          }
+          _isLongVideo = true;
+          notifyListeners();
 
           return;
         }
@@ -298,6 +370,9 @@ class NewTicketViewVM with ChangeNotifier {
         _checkFileType(pickedFile);
 
         _convertToBase64(pickedFile);
+
+        _isLongVideo = false;
+        notifyListeners();
       }
     } catch (ex) {
       if (context.mounted) {
@@ -444,6 +519,22 @@ class NewTicketViewVM with ChangeNotifier {
     notifyListeners();
   }
 
+  //! Review of possible failures before the saving process ...
+  Future<void> getPosibleError() async {
+    _failureDescription = '';
+    notifyListeners();
+
+    if (_base64 == null) _failureDescription += '* Debes tener cargada una imágen.|';
+    if (_description.isEmpty) _failureDescription += '* Debes establecer una Descripción en el proceso.|';
+    if (_selectedCustomer == null) _failureDescription += '* Debes tener seleccionado un cliente en la pantalla.|';
+    if (_selectedBranch == null) _failureDescription += '* Debes tener seleccionado una sucursal en la pantalla.|';
+    if (_selectedZones == null) _failureDescription += '* Debes tener seleccionado una zona en la pantalla.|';
+    if (_selectedDevice == null) _failureDescription += '* Debes tener seleccionado un dispositivo en la pantalla.|';
+    if (_selectedFailures == null) _failureDescription += '* Debes tener seleccionado una falla en la pantalla.|';
+
+    notifyListeners();
+  }
+
   //! Selected ...
   Future<void> customerSelectedAction(BuildContext context, CustomerModel customer) async {
     _selectedCustomer = customer;
@@ -490,41 +581,106 @@ class NewTicketViewVM with ChangeNotifier {
     notifyListeners();
   }
 
-  //! Validator's ...
-  String? validatorDevice(DeviceModel? device) {
-    if (device == null) {
-      return 'Debe seleccionar al menos un equipo en pantalla';
-    }
-
-    return null;
-  }
-
-  String? validatorBranch(BranchOfficeModel? branch) {
-    if (branch == null) {
-      return 'Debe seleccionar al menos una sucursal en pantalla';
-    }
-
-    return null;
-  }
-
-  String? validatorCustomer(CustomerModel? customer) {
-    if (customer == null) {
-      return 'Debe seleccionar al menos un cliente en pantalla';
-    }
-
-    return null;
-  }
-
-  String? generalValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'El campo debe tener información';
-    }
-
-    return null;
-  }
-
   //! Asignación de valores ...
   void onChangeDescription(String value) {
     _description = value;
+  }
+
+  Future<void> onNextStep() async {
+    if (_currentStep < 1) {
+      _currentStep += 1;
+      _saveNextStep = false;
+      notifyListeners();
+    } else {
+      _saveNextStep = true;
+      notifyListeners();
+    }
+  }
+
+  Future<void> onBeforeStep() async {
+    if (_currentStep > 0) {
+      _currentStep -= 1;
+      notifyListeners();
+    }
+  }
+
+  Future<void> onDelete() async {
+    _mediaFile = null;
+    _base64 = null;
+    _pathVideoImage = null;
+    _typeFile = null;
+    _evidence = null;
+
+    notifyListeners();
+  }
+
+  Future<void> showMediaSourceDialog({
+    required BuildContext context,
+    required bool isVideo,
+    required Future<void> Function(BuildContext context) onCamera,
+    required Future<void> Function(BuildContext context) onGallery,
+  }) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: GeneralText(
+            mensaje: isVideo ? 'Selecciona fuente de video' : 'Selecciona fuente de imágen',
+            maxLines: 1,
+            overFlow: TextOverflow.ellipsis,
+            size: 13,
+            weight: FontWeight.bold,
+            color: sidonBackgroundDarkColor,
+            align: TextAlign.left,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton.icon(
+                icon: Icon(
+                  isVideo ? Icons.videocam : Icons.camera_alt,
+                  color: sidonPrimaryColor,
+                ),
+                label: GeneralText(
+                  mensaje: isVideo ? 'Tomar video' : 'Tomar foto',
+                  maxLines: 1,
+                  overFlow: TextOverflow.ellipsis,
+                  size: 14,
+                  weight: FontWeight.normal,
+                  color: sidonBackgroundDarkColor,
+                  align: TextAlign.left,
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+
+                  await onCamera(context);
+                },
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton.icon(
+                icon: const Icon(
+                  Icons.photo_library,
+                  color: sidonPrimaryColor,
+                ),
+                label: const GeneralText(
+                  mensaje: 'Galería',
+                  maxLines: 1,
+                  overFlow: TextOverflow.ellipsis,
+                  size: 14,
+                  weight: FontWeight.normal,
+                  color: sidonBackgroundDarkColor,
+                  align: TextAlign.left,
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+
+                  await onGallery(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
