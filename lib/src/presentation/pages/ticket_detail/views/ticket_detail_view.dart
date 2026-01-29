@@ -31,7 +31,8 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DetailProvider>(context, listen: false).fetchDetail(widget.ticket.ticketId);
+      Provider.of<DetailProvider>(context, listen: false)
+          .fetchDetail(widget.ticket.ticketId);
     });
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,7 +55,6 @@ class _DetailTicketViewState extends State<DetailTicketView> {
   @override
   Widget build(BuildContext context) {
     final userSession = Provider.of<UserSessionProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -110,7 +110,8 @@ class _DetailTicketViewState extends State<DetailTicketView> {
       ),
       body: Consumer<DetailProvider>(
         builder: (context, provider, child) {
-          if (provider.status == DataStatus.loading || provider.detail == null) {
+          if (provider.status == DataStatus.loading ||
+              provider.detail == null) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -146,7 +147,10 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'General',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         buildDetailRow(
@@ -220,7 +224,10 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'Contacto',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         buildDetailRow(
@@ -257,7 +264,10 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                       children: [
                         Text(
                           'Otros Detalles',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
                         (ticketData.followup.schedule == null)
@@ -312,31 +322,53 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 ),
                 const SizedBox(height: 16),
 
-                // Wrap(
-                //   spacing: 20, // Espacio horizontal entre botones
-                //   runSpacing: 20, // Espacio vertical entre filas
-                //   alignment: WrapAlignment.center, // Centra los elementos
-                //   children: [
-                //     buildVerticalButton(
-                //       context: context,
-                //       icon: Icons.check,
-                //       label: "Realizado",
-                //       onPressed: () {},
-                //     ),
-                //     // buildVerticalButton(
-                //     //   context: context,
-                //     //   icon: Icons.calendar_month_outlined,
-                //     //   label: "Agendar",
-                //     //   onPressed: () {},
-                //     // ),
-                //     // buildVerticalButton(
-                //     //   context: context,
-                //     //   icon: Icons.person_add_alt_1,
-                //     //   label: "Asignar",
-                //     //   onPressed: () {},
-                //     // ),
-                //   ],
-                // )
+                Consumer<DetailProvider>(
+                  builder: (context, value, child) {
+                    if (provider.status == DataStatus.loading ||
+                        provider.detail == null) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final TicketDetailModel ticketData = provider.detail!;
+                    if (ticketData.status.toLowerCase() == 'realizado') {
+                      return const SizedBox.shrink();
+                    }
+                    return Wrap(
+                      spacing: 20, // Espacio horizontal entre botones
+                      runSpacing: 20, // Espacio vertical entre filas
+                      alignment: WrapAlignment.center, // Centra los elementos
+                      children: [
+                        buildVerticalButton(
+                          context: context,
+                          icon: Icons.check,
+                          label: "Realizado",
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.validation,
+                              arguments: [
+                                ticketData.ticketId,
+                                userSession.currentUser!.userId,
+                              ],
+                            );
+                          },
+                        ),
+                        // buildVerticalButton(
+                        //   context: context,
+                        //   icon: Icons.calendar_month_outlined,
+                        //   label: "Agendar",
+                        //   onPressed: () {},
+                        // ),
+                        // buildVerticalButton(
+                        //   context: context,
+                        //   icon: Icons.person_add_alt_1,
+                        //   label: "Asignar",
+                        //   onPressed: () {},
+                        // ),
+                      ],
+                    );
+                  },
+                )
 
                 //! Mapa de la locación de la sucursal
                 //! PENDIENTE DE AGREGAR DEBIDO AL CAMBIO EN EL MODELO
@@ -382,24 +414,25 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           );
         },
       ),
-      floatingActionButton: Consumer<DetailProvider>(
-        builder: (context, provider, child) {
-          if (provider.status == DataStatus.loading || provider.detail == null) {
-            return const SizedBox.shrink();
-          }
+      // floatingActionButton: Consumer<DetailProvider>(
+      //   builder: (context, provider, child) {
+      //     if (provider.status == DataStatus.loading ||
+      //         provider.detail == null) {
+      //       return const SizedBox.shrink();
+      //     }
 
-          final TicketDetailModel ticketData = provider.detail!;
-          if (ticketData.status.toLowerCase() == 'realizado') {
-            return const SizedBox.shrink();
-          }
+      //     final TicketDetailModel ticketData = provider.detail!;
+      //     if (ticketData.status.toLowerCase() == 'realizado') {
+      //       return const SizedBox.shrink();
+      //     }
 
-          return SpeedDialDetailTicket(
-            ticketId: ticketData.ticketId,
-            userId: userSession.currentUser!.userId,
-            status: ticketData.status,
-          );
-        },
-      ),
+      //     return SpeedDialDetailTicket(
+      //       ticketId: ticketData.ticketId,
+      //       userId: userSession.currentUser!.userId,
+      //       status: ticketData.status,
+      //     );
+      //   },
+      // ),
     );
   }
 

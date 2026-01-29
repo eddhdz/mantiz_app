@@ -4,6 +4,7 @@ import '../../data/models/ticket_model.dart';
 import '../pages/home_redesign/home_redesign_view.dart';
 import '../pages/new_ticket_redesign/new_ticket_redesign_view.dart';
 import '../pages/starting_point.dart/view/starting_point_view.dart';
+import '../pages/ticket_detail/views/validation_view.dart';
 import '../pages/views.dart';
 
 import 'routes.dart';
@@ -87,6 +88,14 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
             currentUserId: currentUserId,
             folio: folio,
           ),
+        );
+      }
+    case Routes.validation:
+      if (args is List && args.length >= 2) {
+        final int ticketId = args[0] as int;
+        final int userId = args[1] as int;
+        return MaterialPageRoute(
+          builder: (_) => ValidationView(ticketId: ticketId, userId: userId),
         );
       }
     default:
