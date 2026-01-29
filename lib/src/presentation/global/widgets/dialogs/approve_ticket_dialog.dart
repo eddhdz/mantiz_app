@@ -211,28 +211,30 @@ class ApproveTicketDialog extends StatelessWidget {
                             '',
                           );
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: const Row(
-                              children: [
-                                Icon(
-                                  Icons.check_circle_outline,
-                                  color: veryLightGray,
-                                ),
-                                Text(
-                                  'Ocurrio un error al guardar la foto, vuelve a intentar el procedimiento',
-                                  style: TextStyle(color: veryLightGray),
-                                )
-                              ],
-                            ),
-                            backgroundColor: mediumGray,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                            padding: const EdgeInsets.all(10),
-                            duration: const Duration(seconds: 3),
-                          ));
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.check_circle_outline,
+                                    color: veryLightGray,
+                                  ),
+                                  Text(
+                                    'Ocurrio un error al guardar la foto, vuelve a intentar el procedimiento',
+                                    style: TextStyle(color: veryLightGray),
+                                  )
+                                ],
+                              ),
+                              backgroundColor: mediumGray,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                              padding: const EdgeInsets.all(10),
+                              duration: const Duration(seconds: 3),
+                            ));
+                          }
                         }
                       }
 

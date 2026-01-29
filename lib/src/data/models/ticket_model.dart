@@ -4,7 +4,8 @@ import 'package:mantiz/src/data/models/user_model.dart';
 
 class TicketModel {
   int ticketId;
-  String folio;
+  int folio;
+  String showFolio;
   String? title;
   String? reason;
   String type;
@@ -21,6 +22,7 @@ class TicketModel {
   TicketModel({
     required this.ticketId,
     required this.folio,
+    required this.showFolio,
     required this.title,
     required this.reason,
     required this.type,
@@ -37,7 +39,8 @@ class TicketModel {
 
   TicketModel.init()
       : ticketId = 0,
-        folio = '',
+        folio = 0,
+        showFolio = '',
         title = '',
         reason = '',
         type = '',

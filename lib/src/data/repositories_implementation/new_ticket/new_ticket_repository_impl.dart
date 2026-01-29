@@ -30,8 +30,6 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
     }, (save) {
       final json = Map<String, dynamic>.from(jsonDecode(save));
 
-      var a = 1000;
-
       PhotoEvidenceModel photo = PhotoEvidenceModel.onInit();
       for (var item in json['list'] as List) {
         photo = PhotoEvidenceModel(
@@ -70,8 +68,6 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
     String? userUuid = await _storage.read(key: 'useruuid');
 
     final newResult = await _newTicketApi.loadCustomers(userUuid);
-
-    var a = 1000;
 
     return newResult.when(
       (failure) {
@@ -129,7 +125,8 @@ class NewTicketRepositoryImpl implements NewTicketRepository {
             }
 
             branchOfficeModel = BranchOfficeModel(
-                branchofficeId: branch['branchofficeId'].toString(),
+                boId: int.parse(branch['branchofficeId'].toString()),
+                branchofficeId: branch['uuidBO'].toString(),
                 branchoffice: branch['branchoffice'],
                 address: branch['address'],
                 latitude: branch['latitude'],

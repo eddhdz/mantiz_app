@@ -8,7 +8,8 @@ class Routes {
   static const detailTicket = '/detail_ticket';
   static const trackingTicket = '/tracking_ticket';
   static const startingPoint = '/starting_point';
-  static const first_page = '/first_page';
-  static const second_page = '/second_page';
-  static const third_page = '/third_page';
+  static const validation = '/validation';
+  // static const first_page = '/first_page';
+  // static const second_page = '/second_page';
+  // static const third_page = '/third_page';
 }

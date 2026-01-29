@@ -21,8 +21,6 @@ class HomeViewVm with ChangeNotifier {
 
   void selectMaintenanceById(BuildContext context, String idCustomer) {
     try {
-      var a = 1000;
-
       _selectedMaintenance = allMaintenances.firstWhere((m) => m.id.toString().toLowerCase() == idCustomer.toLowerCase());
       notifyListeners();
     } catch (ex) {
@@ -37,8 +35,6 @@ class HomeViewVm with ChangeNotifier {
     notifyListeners();
 
     final result = await Provider.of<HomeRepository>(context, listen: false).loadMaintenances();
-
-    var a = 1000;
 
     result.when((failure) {
       final message = {

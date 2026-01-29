@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:mantiz/src/domain/enums.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/schedule_provider.dart';
-import 'package:provider/provider.dart';
 
+import '../../../../domain/enums.dart';
 import '../../../../domain/providers/ticket_detail/add_message_provider.dart';
-import '../../../routes/routes.dart';
+import '../../../../domain/providers/ticket_detail/schedule_provider.dart';
 import '../../colors.dart';
+
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleTicketDialog extends StatefulWidget {
   final int fkMaintenance;

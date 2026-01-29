@@ -31,6 +31,7 @@ class Http {
         "Content-Type": "application/json",
         ...headers,
       };
+
       late final Response response;
       final bodyString = jsonEncode(body);
 
@@ -78,11 +79,21 @@ class Http {
       };
 
       if (statusCode >= 200 && statusCode < 300) {
-        final json = Map<String, dynamic>.from(jsonDecode(response.body));
-        if (json['response']['id'] > 0) {
+        try {
+          final json = Map<String, dynamic>.from(jsonDecode(response.body));
+          // Verificar si tiene response y si id es válido (compatibilidad con múltiples formatos)
+          if (json.containsKey('response') && json['response'] is Map) {
+            final responseObj = Map<String, dynamic>.from(json['response'] as Map);
+            if (responseObj.containsKey('id') && responseObj['id'] is int && responseObj['id'] <= 0) {
+              return Either.left(HttpFailure(statusCode: statusCode));
+            }
+          }
+          // Si llega aquí con status 2xx, es un éxito
+          return Either.right(response.body);
+        } catch (e) {
+          // Si no puede parsear o hay error, pero status es 200, considerarlo éxito
           return Either.right(response.body);
         }
-        return Either.left(HttpFailure(statusCode: statusCode));
       }
       return Either.left(HttpFailure(statusCode: statusCode));
     } catch (e, s) {

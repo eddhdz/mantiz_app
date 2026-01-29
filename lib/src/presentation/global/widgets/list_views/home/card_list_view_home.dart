@@ -24,7 +24,8 @@ Widget cardTicket(TicketModel ticket, BuildContext context) {
                 child: Row(children: <Widget>[
                   const SizedBox(width: 5),
                   const GeneralText(mensaje: 'Folio:', maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.bold, color: blackPanter, align: TextAlign.left),
-                  GeneralText(mensaje: ticket.folio, maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.normal, color: blackPanter, align: TextAlign.left),
+                  GeneralText(
+                      mensaje: ticket.showFolio, maxLines: 1, overFlow: TextOverflow.ellipsis, size: 14, weight: FontWeight.normal, color: blackPanter, align: TextAlign.left),
                   const SizedBox(width: 5),
                 ])),
 

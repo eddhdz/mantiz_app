@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/add_message_provider.dart';
 
 import '../../../../domain/enums.dart';
+import '../../../../domain/providers/ticket_detail/add_message_provider.dart';
 import '../../../../domain/providers/ticket_detail/assign_provider.dart';
 import '../../../../domain/providers/ticket_detail/branchoffice_provider.dart';
 import '../../../../domain/providers/ticket_detail/supervisor_provider.dart';
 import '../../../../domain/providers/ticket_detail/supplier_provider.dart';
-import '../../../routes/routes.dart';
+import '../../colors.dart';
 
 import 'package:provider/provider.dart';
-
-import '../../colors.dart';
 
 class AssignSupervisorDialog extends StatefulWidget {
   final String fkPartnerLicence;

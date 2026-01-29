@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mantiz/src/data/models/photo_evidence_model.dart';
 import 'package:mantiz/src/data/models/ticket_detail/ticket_list_response_model.dart';
+import 'package:mantiz/src/domain/providers/image/image_provider.dart';
 import 'package:mantiz/src/domain/providers/session/user_session_provider.dart';
 import 'package:mantiz/src/domain/providers/ticket_detail/detail_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/prized_by_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/schedule_for_provider.dart';
-import 'package:mantiz/src/domain/providers/ticket_detail/suspended_by_provider.dart';
+import 'package:mantiz/src/presentation/global/colors.dart';
 
-import '../../../../data/models/models.dart';
 import '../../../../data/models/ticket_model.dart';
-
 import '../../../../domain/enums.dart';
-import '../../../../domain/providers/ticket_detail/assigned_to_provider.dart';
+import '../../../global/widgets/image/image_widget.dart';
 import '../../../global/widgets/speed_dials/speed_dial_detail_ticket.dart';
 import '../../../routes/routes.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class DetailTicketView extends StatefulWidget {
   final TicketModel ticket;
@@ -59,7 +57,23 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     final userSession = Provider.of<UserSessionProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Detalle del servicio"),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text("Servicio #${widget.ticket.folio}"),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              decoration: BoxDecoration(
+                color: sidonSecondaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                widget.ticket.status,
+                style: const TextStyle(fontSize: 15, color: sidonTextColor),
+              ),
+            )
+          ],
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -85,9 +99,13 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                     arguments: [
                       widget.ticket.ticketId,
                       userSession.currentUser!.userId,
+                      widget.ticket.folio,
                     ]);
               },
-              icon: const Icon(Icons.chat_rounded))
+              icon: const Icon(
+                Icons.chat_rounded,
+                color: sidonBlueChat,
+              ))
         ],
       ),
       body: Consumer<DetailProvider>(
@@ -106,15 +124,20 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           final TicketDetailModel? ticketData = provider.detail;
           final DateFormat formatter = DateFormat('dd/MM/yyyy');
           final whoCreated = ticketData?.createdby;
+          final PhotoModel? photoEvidence = ticketData!.photo;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if (photoEvidence != null)
+                  TicketImageWidget(photo: photoEvidence),
+                const SizedBox(height: 16),
                 // Sección de detalles del ticket
                 Card(
                   elevation: 4,
+                  color: veryLightGray,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   child: Padding(
@@ -130,12 +153,26 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
-                        buildDetailRow('Título', ticketData!.title),
-                        buildDetailRow('Estatus', ticketData.status),
-                        buildDetailRow('Área', ticketData.area),
-                        buildDetailRow('Descripción', ticketData.reason),
                         buildDetailRow(
-                            'Fecha de creación', widget.ticket.createdat),
+                          'Título',
+                          ticketData!.title,
+                          CrossAxisAlignment.start,
+                        ),
+                        buildDetailRow(
+                          'Área',
+                          ticketData.area,
+                          CrossAxisAlignment.start,
+                        ),
+                        buildDetailRow(
+                          'Descripción',
+                          ticketData.reason,
+                          CrossAxisAlignment.start,
+                        ),
+                        buildDetailRow(
+                          'Fecha de creación',
+                          widget.ticket.createdat,
+                          CrossAxisAlignment.start,
+                        ),
                       ],
                     ),
                   ),
@@ -177,6 +214,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 // Sección de contacto
                 Card(
                   elevation: 4,
+                  color: veryLightGray,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   child: Padding(
@@ -192,9 +230,21 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const Divider(),
-                        buildDetailRow('Creado por', whoCreated!.name),
-                        buildDetailRow('Teléfono', whoCreated.phone),
-                        buildDetailRow('Correo', whoCreated.email),
+                        buildDetailRow(
+                          'Creado por',
+                          whoCreated!.name,
+                          CrossAxisAlignment.start,
+                        ),
+                        buildDetailRow(
+                          'Teléfono',
+                          whoCreated.phone,
+                          CrossAxisAlignment.start,
+                        ),
+                        buildDetailRow(
+                          'Correo',
+                          whoCreated.email,
+                          CrossAxisAlignment.start,
+                        ),
                       ],
                     ),
                   ),
@@ -204,6 +254,7 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                 // Otros detalles
                 Card(
                   elevation: 4,
+                  color: veryLightGray,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   child: Padding(
@@ -220,30 +271,104 @@ class _DetailTicketViewState extends State<DetailTicketView> {
                         ),
                         const Divider(),
                         (ticketData.followup.schedule == null)
-                            ? buildDetailRow('Agendado para', 'Sin agendar')
+                            ? buildDetailRow(
+                                'Agendado para',
+                                'Sin agendar',
+                                CrossAxisAlignment.start,
+                              )
                             : buildDetailRow(
                                 'Agendado para',
-                                formatter.format(DateTime.parse(ticketData
-                                    .followup.schedule!.scheduledat))),
+                                formatter.format(DateTime.parse(
+                                    ticketData.followup.schedule!.scheduledat)),
+                                CrossAxisAlignment.start,
+                              ),
                         (ticketData.followup.schedule == null)
-                            ? buildDetailRow('Tiempo estimado', 'Sin registro')
+                            ? buildDetailRow(
+                                'Tiempo estimado',
+                                'Sin registro',
+                                CrossAxisAlignment.start,
+                              )
                             : buildDetailRow(
                                 'Tiempo estimado',
                                 _formatTime(
-                                    ticketData.followup.schedule!.atentionat)),
+                                    ticketData.followup.schedule!.atentionat),
+                                CrossAxisAlignment.start,
+                              ),
                         (ticketData.price == null)
-                            ? buildDetailRow('Cotización', '\$0.00 MXN')
+                            ? buildDetailRow(
+                                'Cotización',
+                                '\$0.00 MXN',
+                                CrossAxisAlignment.start,
+                              )
                             : buildDetailRow(
-                                'Cotización', ticketData.price!.price),
+                                'Cotización',
+                                ticketData.price!.price,
+                                CrossAxisAlignment.start,
+                              ),
                         (ticketData.assignment == null)
-                            ? buildDetailRow('Asignado a', 'Sin asignar')
-                            : buildDetailRow('Asignado a',
-                                ticketData.assignment!.asignedto.name),
+                            ? buildDetailRow(
+                                'Asignado a',
+                                'Sin asignar',
+                                CrossAxisAlignment.start,
+                              )
+                            : buildDetailRow(
+                                'Asignado a',
+                                ticketData.assignment!.asignedto.name,
+                                CrossAxisAlignment.start,
+                              ),
                       ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
+
+                Consumer<DetailProvider>(
+                  builder: (context, value, child) {
+                    if (provider.status == DataStatus.loading ||
+                        provider.detail == null) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final TicketDetailModel ticketData = provider.detail!;
+                    if (ticketData.status.toLowerCase() == 'realizado') {
+                      return const SizedBox.shrink();
+                    }
+                    return Wrap(
+                      spacing: 20, // Espacio horizontal entre botones
+                      runSpacing: 20, // Espacio vertical entre filas
+                      alignment: WrapAlignment.center, // Centra los elementos
+                      children: [
+                        buildVerticalButton(
+                          context: context,
+                          icon: Icons.check,
+                          label: "Realizado",
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.validation,
+                              arguments: [
+                                ticketData.ticketId,
+                                userSession.currentUser!.userId,
+                              ],
+                            );
+                          },
+                        ),
+                        // buildVerticalButton(
+                        //   context: context,
+                        //   icon: Icons.calendar_month_outlined,
+                        //   label: "Agendar",
+                        //   onPressed: () {},
+                        // ),
+                        // buildVerticalButton(
+                        //   context: context,
+                        //   icon: Icons.person_add_alt_1,
+                        //   label: "Asignar",
+                        //   onPressed: () {},
+                        // ),
+                      ],
+                    );
+                  },
+                )
 
                 //! Mapa de la locación de la sucursal
                 //! PENDIENTE DE AGREGAR DEBIDO AL CAMBIO EN EL MODELO
@@ -289,41 +414,44 @@ class _DetailTicketViewState extends State<DetailTicketView> {
           );
         },
       ),
-      floatingActionButton: Consumer<DetailProvider>(
-        builder: (context, provider, child) {
-          if (provider.status == DataStatus.loading ||
-              provider.detail == null) {
-            return const SizedBox.shrink();
-          }
+      // floatingActionButton: Consumer<DetailProvider>(
+      //   builder: (context, provider, child) {
+      //     if (provider.status == DataStatus.loading ||
+      //         provider.detail == null) {
+      //       return const SizedBox.shrink();
+      //     }
 
-          final TicketDetailModel ticketData = provider.detail!;
-          if (ticketData.status.toLowerCase() == 'realizado') {
-            return const SizedBox.shrink();
-          }
+      //     final TicketDetailModel ticketData = provider.detail!;
+      //     if (ticketData.status.toLowerCase() == 'realizado') {
+      //       return const SizedBox.shrink();
+      //     }
 
-          return SpeedDialDetailTicket(
-            ticketId: ticketData.ticketId,
-            userId: userSession.currentUser!.userId,
-            status: ticketData.status,
-          );
-        },
-      ),
+      //     return SpeedDialDetailTicket(
+      //       ticketId: ticketData.ticketId,
+      //       userId: userSession.currentUser!.userId,
+      //       status: ticketData.status,
+      //     );
+      //   },
+      // ),
     );
   }
 
   // Widget de ayuda para construir filas de detalles de forma consistente
-  Widget buildDetailRow(String label, String value) {
+  Widget buildDetailRow(
+      String label, String value, CrossAxisAlignment alignment) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: alignment,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             '$label: ',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.w300),
           ),
-          Expanded(
-            child: Text(value),
+          Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -340,5 +468,47 @@ class _DetailTicketViewState extends State<DetailTicketView> {
     }
     double hours = minutes / 60;
     return '${hours.toStringAsFixed(1)} horas';
+  }
+
+  Widget buildVerticalButton({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+    Color color = sidonSecondaryColor, // Color púrpura de tus diseños previos
+  }) {
+    final double itemWidth = (MediaQuery.of(context).size.width - 60) / 2;
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        width: itemWidth,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: sidonPrimaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize
+              .min, // Hace que el botón solo ocupe el espacio necesario
+          children: [
+            Icon(
+              icon,
+              size: 30,
+              color: color,
+            ),
+            const SizedBox(height: 4), // Espacio entre icono y texto
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

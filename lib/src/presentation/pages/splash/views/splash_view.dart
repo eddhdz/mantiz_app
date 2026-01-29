@@ -34,7 +34,8 @@ class _SplashViewState extends State<SplashView> {
     );
 
     FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-    final sessionRepository = Provider.of<SessionProvider>(context, listen: false);
+    final sessionRepository =
+        Provider.of<SessionProvider>(context, listen: false);
     final hasInternet = await connectivityRepository.hasInternet;
     final mobileUuid = await secureStorage.read(key: 'mobileuuid');
     final firebaseToken = await secureStorage.read(key: 'firebasetoken');
@@ -51,7 +52,7 @@ class _SplashViewState extends State<SplashView> {
           firebaseToken,
         );
         if (sessionRepository.status == DataStatus.success) {
-          _goTo(Routes.newTicket);
+          _goTo(Routes.home);
         } else {
           _goTo(Routes.logIn);
         }
@@ -67,16 +68,17 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: sidonGreenDark,
+    return Scaffold(
+      backgroundColor: sidonPrimaryColor,
       body: Center(
-        child: Text('MANTIZ',
-            style: TextStyle(
-              color: veryLightGray,
-              fontSize: 40,
-              fontWeight: FontWeight.w400,
-            )),
-      ),
+          child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.asset(
+          'lib/src/assets/logos/mantiz_icono.png',
+          width: 150,
+          fit: BoxFit.cover,
+        ),
+      )),
     );
   }
 }
