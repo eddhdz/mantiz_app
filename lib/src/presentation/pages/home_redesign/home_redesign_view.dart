@@ -37,7 +37,9 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
   Widget build(BuildContext context) {
     final vm = Provider.of<HomeRedesignVm>(context);
 
-    final bool isToday = vm.selectedDate.day == DateTime.now().day && vm.selectedDate.month == DateTime.now().month && vm.selectedDate.year == DateTime.now().year;
+    final bool isToday = vm.selectedDate.day == DateTime.now().day &&
+        vm.selectedDate.month == DateTime.now().month &&
+        vm.selectedDate.year == DateTime.now().year;
 
     return Scaffold(
       backgroundColor: sidonSecondaryColor,
@@ -58,7 +60,9 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                   ? ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       children: [
-                        vm.isLoading ? const Center(child: CircularProgressIndicator()) : _buildTodaySection(vm),
+                        vm.isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : _buildTodaySection(vm),
                         if (!vm.isLoading) _buildTomorrowSection(vm),
                         if (!vm.isLoading) _buildUpcomingSection(vm),
                         const SizedBox(height: 20),
@@ -77,7 +81,9 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: (vm.typeUser != null)
-          ? (vm.typeUser!.toLowerCase() == 'administrator' || vm.typeUser!.toLowerCase() == 'customer' || vm.typeUser!.toLowerCase() == 'partner')
+          ? (vm.typeUser!.toLowerCase() == 'administrator' ||
+                  vm.typeUser!.toLowerCase() == 'customer' ||
+                  vm.typeUser!.toLowerCase() == 'partner')
               ? _buildFAB()
               : null
           : _buildFAB(),
@@ -107,7 +113,8 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
         Stack(
           children: [
             IconButton(
-              icon: const Icon(Icons.notifications_outlined, color: whiteGlobalColor),
+              icon: const Icon(Icons.notifications_outlined,
+                  color: whiteGlobalColor),
               onPressed: () {},
             ),
             Positioned(
@@ -202,8 +209,12 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                       (index) {
                         final dayDate = vm.daysOfWeek[index];
                         final today = DateTime.now();
-                        final isToday = dayDate.day == today.day && dayDate.month == today.month && dayDate.year == today.year;
-                        final isSelected = dayDate.day == vm.selectedDate.day && dayDate.month == vm.selectedDate.month && dayDate.year == vm.selectedDate.year;
+                        final isToday = dayDate.day == today.day &&
+                            dayDate.month == today.month &&
+                            dayDate.year == today.year;
+                        final isSelected = dayDate.day == vm.selectedDate.day &&
+                            dayDate.month == vm.selectedDate.month &&
+                            dayDate.year == vm.selectedDate.year;
 
                         return GestureDetector(
                           onTap: () async {
@@ -221,7 +232,10 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                                       ? sidonTextColor
                                       : sidonSecondaryColor,
                               borderRadius: BorderRadius.circular(14),
-                              border: isToday ? Border.all(color: Colors.amber[100]!, width: 2) : null,
+                              border: isToday
+                                  ? Border.all(
+                                      color: Colors.amber[100]!, width: 2)
+                                  : null,
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -232,7 +246,9 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                                   overFlow: TextOverflow.ellipsis,
                                   size: 11,
                                   weight: FontWeight.w500,
-                                  color: isToday || isSelected ? whiteGlobalColor : sidonBackgroundDarkColor,
+                                  color: isToday || isSelected
+                                      ? whiteGlobalColor
+                                      : sidonBackgroundDarkColor,
                                   align: TextAlign.center,
                                 ),
                                 const SizedBox(height: 6),
@@ -242,7 +258,9 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                                   overFlow: TextOverflow.ellipsis,
                                   size: 16,
                                   weight: FontWeight.bold,
-                                  color: isToday || isSelected ? whiteGlobalColor : sidonBackgroundDarkColor,
+                                  color: isToday || isSelected
+                                      ? whiteGlobalColor
+                                      : sidonBackgroundDarkColor,
                                   align: TextAlign.center,
                                 ),
                               ],
@@ -491,7 +509,8 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                   ),
                   const SizedBox(width: 15),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: lightGray,
                       borderRadius: BorderRadius.circular(12),
@@ -514,7 +533,9 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                         await vm.toggleCollapse('today');
                       },
                       icon: Icon(
-                        vm.todayIsCollapsed ? Icons.expand_more : Icons.expand_less,
+                        vm.todayIsCollapsed
+                            ? Icons.expand_more
+                            : Icons.expand_less,
                         color: sidonBackgroundDarkColor,
                       )),
             ],
@@ -554,7 +575,8 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                   ),
                   const SizedBox(width: 15),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: lightGray,
                       borderRadius: BorderRadius.circular(12),
@@ -577,7 +599,9 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                         await vm.toggleCollapse('tomorrow');
                       },
                       icon: Icon(
-                        vm.tomorrowIsCollapsed ? Icons.expand_more : Icons.expand_less,
+                        vm.tomorrowIsCollapsed
+                            ? Icons.expand_more
+                            : Icons.expand_less,
                         color: sidonBackgroundDarkColor,
                       )),
             ],
@@ -617,7 +641,8 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                   ),
                   const SizedBox(width: 15),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: lightGray,
                       borderRadius: BorderRadius.circular(12),
@@ -640,7 +665,9 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                         await vm.toggleCollapse('upcoming');
                       },
                       icon: Icon(
-                        vm.upcomingIsCollapsed ? Icons.expand_more : Icons.expand_less,
+                        vm.upcomingIsCollapsed
+                            ? Icons.expand_more
+                            : Icons.expand_less,
                         color: sidonBackgroundDarkColor,
                       )),
             ],
@@ -684,9 +711,11 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
         padding: const EdgeInsets.all(12),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               GeneralText(
-                mensaje: '${ticket.ticket.showFolio} - ${ticket.ticket.createdat}',
+                mensaje:
+                    '${ticket.ticket.showFolio} - ${ticket.ticket.createdat}',
                 maxLines: 1,
                 overFlow: TextOverflow.ellipsis,
                 size: 13,
@@ -729,19 +758,26 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   decoration: BoxDecoration(
-                    color: (ticket.ticket.status.toLowerCase() == 'actualizado' ||
+                    color: (ticket.ticket.status.toLowerCase() ==
+                                'actualizado' ||
                             ticket.ticket.status.toLowerCase() == 'abierto' ||
                             ticket.ticket.status.toLowerCase() == 'asignado' ||
                             ticket.ticket.status.toLowerCase() == 'aprobado' ||
                             ticket.ticket.status.toLowerCase() == 'agendado')
                         ? blueSuperLightColor
                         : (ticket.ticket.status.toLowerCase() == 'suspendido' ||
-                                ticket.ticket.status.toLowerCase() == 'cancelado' ||
-                                ticket.ticket.status.toLowerCase() == 'rechazado')
+                                ticket.ticket.status.toLowerCase() ==
+                                    'cancelado' ||
+                                ticket.ticket.status.toLowerCase() ==
+                                    'rechazado')
                             ? palePink
-                            : (ticket.ticket.status.toLowerCase() == 'rechazado' || ticket.ticket.status.toLowerCase() == 'creado')
+                            : (ticket.ticket.status.toLowerCase() ==
+                                        'rechazado' ||
+                                    ticket.ticket.status.toLowerCase() ==
+                                        'creado')
                                 ? softYellow
-                                : (ticket.ticket.status.toLowerCase() == 'finalizado')
+                                : (ticket.ticket.status.toLowerCase() ==
+                                        'finalizado')
                                     ? mintGreen
                                     : ultraLightGray,
                     borderRadius: BorderRadius.circular(12),
@@ -752,19 +788,34 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                       overFlow: TextOverflow.ellipsis,
                       size: 14,
                       weight: FontWeight.bold,
-                      color: (ticket.ticket.status.toLowerCase() == 'actualizado' ||
+                      color: (ticket.ticket.status.toLowerCase() ==
+                                  'actualizado' ||
                               ticket.ticket.status.toLowerCase() == 'abierto' ||
-                              ticket.ticket.status.toLowerCase() == 'asignado' ||
-                              ticket.ticket.status.toLowerCase() == 'aprobado' ||
+                              ticket.ticket.status
+                                      .toLowerCase() ==
+                                  'asignado' ||
+                              ticket
+                                      .ticket.status
+                                      .toLowerCase() ==
+                                  'aprobado' ||
                               ticket.ticket.status.toLowerCase() == 'agendado')
                           ? orangePrincipal
-                          : (ticket.ticket.status.toLowerCase() == 'suspendido' ||
-                                  ticket.ticket.status.toLowerCase() == 'cancelado' ||
-                                  ticket.ticket.status.toLowerCase() == 'rechazado')
+                          : (ticket
+                                          .ticket.status
+                                          .toLowerCase() ==
+                                      'suspendido' ||
+                                  ticket.ticket.status.toLowerCase() ==
+                                      'cancelado' ||
+                                  ticket.ticket.status.toLowerCase() ==
+                                      'rechazado')
                               ? redPrincipal
-                              : (ticket.ticket.status.toLowerCase() == 'rechazado' || ticket.ticket.status.toLowerCase() == 'creado')
+                              : (ticket.ticket.status.toLowerCase() ==
+                                          'rechazado' ||
+                                      ticket.ticket.status.toLowerCase() ==
+                                          'creado')
                                   ? blueLightGlobalColor
-                                  : (ticket.ticket.status.toLowerCase() == 'finalizado')
+                                  : (ticket.ticket.status.toLowerCase() ==
+                                          'finalizado')
                                       ? greenPrincipal
                                       : blackPanter,
                       align: TextAlign.left),
@@ -789,9 +840,14 @@ class _HomeRedesignViewState extends State<HomeRedesignView> {
                 Expanded(child: Container()),
                 TextButton.icon(
                   onPressed: () {
-                    // Acción al presionar
+                    Navigator.pushNamed(
+                      context,
+                      Routes.detailTicket,
+                      arguments: ticket.ticket,
+                    );
                   },
-                  icon: const Icon(Icons.arrow_forward, color: sidonPrimaryColor),
+                  icon:
+                      const Icon(Icons.arrow_forward, color: sidonPrimaryColor),
                   label: const Text(
                     'Detalle',
                     style: TextStyle(
